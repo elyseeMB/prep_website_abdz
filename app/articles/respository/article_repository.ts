@@ -9,6 +9,8 @@ interface StoreArticleDTO {
   title: string
   summary: string
   contentHTML: string
+  slug?: string
+  stateId: number
 }
 
 interface UpdateArticleDTO {
@@ -46,6 +48,15 @@ export class ArticleRepository {
   }
 
   async create(payload: StoreArticleDTO, categoryId?: number | string) {
+    const a = await ArticleModel.create({
+      title: payload.title,
+      summary: payload.summary,
+      content: payload.contentHTML,
+      slug: payload.slug,
+      stateId: payload.stateId,
+    })
+    a.related('categories').attach([categoryId!])
+    return
     const trx = await db.transaction()
     try {
       const [articleId] = await trx
@@ -54,6 +65,8 @@ export class ArticleRepository {
           title: payload.title,
           summary: payload.summary,
           content: payload.contentHTML,
+          slug: payload.slug,
+          state_id: payload.stateId,
           created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
           updated_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
         })

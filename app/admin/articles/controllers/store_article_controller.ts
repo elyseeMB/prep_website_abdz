@@ -14,8 +14,10 @@ export default class StoreArticleController {
     vine.object({
       title: vine.string().minLength(3).maxLength(100),
       summary: vine.string().minLength(5).maxLength(255),
+      slug: vine.string().minLength(3).maxLength(100).nullable(),
       markdown: vine.string().minLength(3),
       categoryId: vine.number(),
+      stateId: vine.number(),
     })
   )
 
@@ -33,14 +35,18 @@ export default class StoreArticleController {
   }
 
   async execute({ request, response }: HttpContext) {
-    const { title, summary, markdown, categoryId } = await request.validateUsing(
+    const { title, summary, markdown, slug, categoryId, stateId } = await request.validateUsing(
       StoreArticleController.validator
     )
+
+    console.log(slug)
     await this.repository.create(
       {
         title,
         summary,
         contentHTML: markdown,
+        stateId,
+        slug,
       },
       categoryId
     )

@@ -2,6 +2,9 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { CategoryRepository } from '../../taxonomies/categories/repositories/category_repository.js'
 import { inject } from '@adonisjs/core'
 import Category from '#models/category'
+import { CamelCaseNamingStrategy } from '@adonisjs/lucid/orm'
+import SlugService from '#articles/services/slug_service'
+import Article from '#models/article'
 
 @inject()
 export default class HomeController {
@@ -10,12 +13,15 @@ export default class HomeController {
   async render({ inertia }: HttpContext) {
     // const doc = this.categoryRepository.all()
 
-    // const a = this.builder().display()
+    // const cat = this.builder().display()
 
-    const articleCount = await this.categoryRepository.getList()
+    const doc = await this.categoryRepository.getList()
 
-    console.log(articleCount.map((s) => s))
+    const categories = doc.reduce((acc, value) => {
+      acc[value.$attributes.name] = { article: value.articles, count: value.$extras }
+      return acc
+    }, {})
 
-    return inertia.render('home')
+    return inertia.render('home', { categories })
   }
 }
