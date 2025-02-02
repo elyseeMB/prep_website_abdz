@@ -21,6 +21,7 @@ export default function List({
   currentUser: PropsCurrentUser
   vm: Props<Items[]>
 }) {
+  // console.log(vm)
   return (
     <div className="md:container md:mx-auto p-8">
       <h1> hello {currentUser.name} </h1>

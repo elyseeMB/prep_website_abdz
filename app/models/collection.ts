@@ -1,0 +1,65 @@
+import { DateTime } from 'luxon'
+import { BaseModel, beforeSave, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import SlugService from '#articles/services/slug_service'
+import CollectionTypes from '#collections/enums/collection_types'
+import Status from '#collections/enums/status'
+import States from '#enums/state'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import Article from './article.js'
+
+export default class Collection extends BaseModel {
+  @column({ isPrimary: true })
+  declare id: number
+
+  @column()
+  declare parentId: number | null
+
+  @column()
+  declare collectionTypeId: CollectionTypes
+
+  @column()
+  declare statusId: Status
+
+  @column()
+  declare stateId: States
+
+  @column()
+  declare name: string
+
+  @column()
+  declare slug: string
+
+  @column()
+  declare sortOrder: number
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+
+  @belongsTo(() => Collection)
+  declare parent: BelongsTo<typeof Collection>
+
+  @manyToMany(() => Article, {
+    pivotTable: 'collection_articles',
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order'],
+  })
+  declare articles: ManyToMany<typeof Article>
+
+  @hasMany(() => Collection, {
+    foreignKey: 'parentId',
+  })
+  declare children: HasMany<typeof Collection>
+
+  @beforeSave()
+  static async slugifyName(collection: Collection) {
+    if (collection.$dirty.name && !collection.$dirty.slug) {
+      const slugify = new SlugService<typeof Collection>({
+        startegy: 'dbIncrement',
+        fields: ['name'],
+      })
+      collection.slug = await slugify.make(Collection, 'name', collection.name)
+    }
+  }
+}

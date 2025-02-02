@@ -4,6 +4,10 @@ import { ArticleIdentifier } from '../domain/article_identitfier.js'
 import Category from '#models/category'
 import ArticleModel from '#models/article'
 import { DateTime } from 'luxon'
+import ArticleBuilder from '../builder/article_builder.js'
+import { HttpContext } from '@adonisjs/core/http'
+import ArticleTypes from '#enums/article_types'
+import { inject } from '@adonisjs/core'
 
 interface StoreArticleDTO {
   title: string
@@ -20,20 +24,58 @@ interface UpdateArticleDTO {
   content: string
 }
 
-export class ArticleRepository {
+@inject()
+export default class ArticleRepository {
+  constructor(protected ctx: HttpContext) {}
+
+  get user() {
+    return this.ctx.auth.isAuthenticated ? this.ctx.auth.user : undefined
+  }
+
+  builder() {
+    return ArticleBuilder.new(this.user)
+  }
+
+  getList(ArticleTypeIds: ArticleTypes[] | ArticleTypes | null = null) {
+    return this.builder()
+      .if(ArticleTypeIds, (builder) => builder.whereType(ArticleTypeIds))
+      .display()
+  }
+
+  getBlogs() {
+    return this.getList().whereType([ArticleTypes.BLOG, ArticleTypes.NEWS]).exec()
+  }
+
+  getLatest(
+    limit: number | undefined = undefined,
+    articleTypeIds: ArticleTypes[] | ArticleTypes | null = null
+  ) {
+    return this.getList(articleTypeIds)
+      .if(limit, (query) => query.limit(limit!))
+      .orderPublished()
+  }
+
+  findBy(column: keyof ArticleModel, value: any) {
+    return this.builder()
+      .where(column, value)
+      .display({ skipPublishCheck: true })
+      .firstOrFail()
+      .exec()
+  }
+
   async all() {
     const articleRecords = await db
       .from('articles')
       .join('taxonomies', 'articles.id', 'taxonomies.article_id')
       .join('categories', 'taxonomies.category_id', 'categories.id')
-      .select(
+      .select([
         'articles.id as article_id',
         'articles.title',
         'articles.summary',
         'articles.content',
         'categories.id as category_id',
-        'categories.name as category_name'
-      )
+        'categories.name as category_name',
+      ])
       .orderBy('articles.created_at', 'desc')
       .exec()
     return articleRecords.map((article) => {
@@ -48,14 +90,14 @@ export class ArticleRepository {
   }
 
   async create(payload: StoreArticleDTO, categoryId?: number | string) {
-    const a = await ArticleModel.create({
+    const data = await ArticleModel.create({
       title: payload.title,
       summary: payload.summary,
       content: payload.contentHTML,
       slug: payload.slug,
       stateId: payload.stateId,
     })
-    a.related('categories').attach([categoryId!])
+    data.related('categories').attach([categoryId!])
     return
     const trx = await db.transaction()
     try {

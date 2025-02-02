@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { ArticleRepository } from '../../../articles/respository/article_repository.js'
+import ArticleRepository from '../../../articles/respository/article_repository.js'
 import vine from '@vinejs/vine'
 import { inject } from '@adonisjs/core'
 import { CategoryRepository } from '../../../taxonomies/categories/repositories/category_repository.js'

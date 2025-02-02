@@ -1,6 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import vine from '@vinejs/vine'
-import { ArticleRepository } from '../../../articles/respository/article_repository.js'
+import ArticleRepository from '../../../articles/respository/article_repository.js'
 import { inject } from '@adonisjs/core'
 import { CategoryRepository } from '../../../taxonomies/categories/repositories/category_repository.js'
 import { AllCategoryViewModel } from '../../../taxonomies/categories/view_models/all_category_view_model.js'
@@ -39,7 +39,6 @@ export default class StoreArticleController {
       StoreArticleController.validator
     )
 
-    console.log(slug)
     await this.repository.create(
       {
         title,

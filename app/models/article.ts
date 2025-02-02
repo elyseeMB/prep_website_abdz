@@ -4,6 +4,8 @@ import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 import Category from './category.js'
 import States from '#enums/state'
 import SlugService from '#articles/services/slug_service'
+import Collection from './collection.js'
+import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -25,7 +27,13 @@ export default class Article extends BaseModel {
   declare stateId: States
 
   @column()
+  declare viewCount: number
+
+  @column()
   declare publishAt: DateTime | null
+
+  @column()
+  declare articleTypeId: number
 
   @manyToMany(() => Category, {
     pivotTable: 'taxonomies',
@@ -33,6 +41,11 @@ export default class Article extends BaseModel {
     pivotRelatedForeignKey: 'category_id',
   })
   declare categories: ManyToMany<typeof Category>
+
+  @manyToMany(() => Collection, {
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order'],
+  })
+  declare collections: ManyToMany<typeof Collection>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -55,12 +68,21 @@ export default class Article extends BaseModel {
   @computed()
   get isPublished(): boolean {
     const isDeclare = this.stateId === States.PUBLIC
-
     if (!this.publishAt) {
       return isDeclare
     }
     return isDeclare
   }
 
-  static published = scope((query) => query.where('state_id', States.PUBLIC))
+  static published = scope<
+    typeof Article,
+    (query: ModelQueryBuilderContract<typeof Article>) => void
+  >((query) => query.where('state_id', States.PUBLIC))
+
+  static forDisplay = scope<
+    typeof Article,
+    (query: ModelQueryBuilderContract<typeof Article>) => void
+  >((query) => {
+    query.preload('categories')
+  })
 }
