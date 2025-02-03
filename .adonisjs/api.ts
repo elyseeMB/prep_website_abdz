@@ -12,6 +12,13 @@ export interface ApiDefinition {
 const routes = [
   {
     params: [],
+    name: 'home',
+    path: '/',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
     name: 'login_route_show',
     path: '/login',
     method: ["GET","HEAD"],
@@ -64,6 +71,13 @@ const routes = [
     name: 'admin.articles.update',
     path: '/admin/articles/:id',
     method: ["PUT"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'admin.pages.blogs',
+    path: '/admin/views',
+    method: ["GET","HEAD"],
     types: {} as unknown,
   },
 ] as const;

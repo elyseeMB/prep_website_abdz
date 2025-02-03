@@ -1,12 +1,23 @@
+import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class PagesController {
-  async dashboard({ inertia, auth, response }: HttpContext) {
-    const user = auth.getUserOrFail()
+  private user = this.ctx.auth.getUserOrFail()
 
-    if (!user.isAdmin) {
+  constructor(protected ctx: HttpContext) {}
+
+  async dashboard({ inertia, response }: HttpContext) {
+    if (!this.user.isAdmin) {
       return response.redirect().back()
     }
     return inertia.render('admin/pages/dashboard')
+  }
+
+  blogs({ inertia, response }: HttpContext) {
+    if (!this.user.isAdmin) {
+      return response.redirect().back()
+    }
+    return inertia.render('admin/articles/blogs')
   }
 }

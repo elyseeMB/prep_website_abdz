@@ -15,6 +15,8 @@ router
     router.post('articles', [StoreArticleController, 'execute']).as('articles.store')
     router.get('articles/:id/edit', [UpdateArticleController, 'render']).as('articles.edit')
     router.put('articles/:id', [UpdateArticleController, 'execute']).as('articles.update')
+
+    router.get('views', [PagesController, 'blogs']).as('pages.blogs')
   })
   .prefix('admin')
   .as('admin')

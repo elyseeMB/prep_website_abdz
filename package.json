@@ -99,5 +99,6 @@
       "strtok3": "8.0.1"
     }
   },
-  "prettier": "@adonisjs/prettier-config"
+  "prettier": "@adonisjs/prettier-config",
+  "workspaces": {}
 }
