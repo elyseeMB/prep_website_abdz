@@ -1,0 +1,16 @@
+{
+  "name": "@packages/tooling",
+  "type": "module",
+  "exports": {
+    "./unocss": "./src/unocss/unocss.config.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "unocss": "^65.4.3"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.2"
+  }
+}
