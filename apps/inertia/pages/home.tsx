@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react'
+import { Footer } from '@website/design-system'
 
 export default function Home({ categories }: any) {
   return (
@@ -336,12 +337,8 @@ export default function Home({ categories }: any) {
             </article>
           </div>
         </div>
-
-        <div className="text-sm text-center [&>code]:font-medium [&>code]:text-[#a599ff] bg-sand-12 text-sand-1 fixed bottom-0 left-0 right-0 py-2">
-          Route for this page is registered in <code>start/routes.ts</code> file, rendering{' '}
-          <code>inertia/pages/home.tsx</code> template
-        </div>
       </div>
+      <Footer />
     </>
   )
 }

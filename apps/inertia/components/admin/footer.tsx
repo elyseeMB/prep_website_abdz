@@ -1,3 +1,9 @@
+import { FooterSection } from '@website/design-system/src/organisms/footer/footer_section'
+
 export function Footer() {
-  return <div className="footer">footer</div>
+  return (
+    <footer>
+      <FooterSection>hello world !</FooterSection>
+    </footer>
+  )
 }
