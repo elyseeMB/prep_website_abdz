@@ -1,8 +1,8 @@
 {
-  "name": "design-system",
+  "name": "@website/design-system",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -16,6 +16,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@packages/tooling": "workspace:*",
     "@chromatic-com/storybook": "3.2.4",
     "@eslint/js": "^9.17.0",
     "@storybook/addon-essentials": "8.5.3",
@@ -36,7 +37,8 @@
     "storybook": "8.5.3",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "unocss": "^65.4.3"
   },
   "eslintConfig": {
     "extends": [

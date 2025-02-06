@@ -1,4 +1,5 @@
 import { client } from '~/pages/login.js'
+import { Button } from '@website/design-system'
 
 type Items = {
   id: number
@@ -26,6 +27,8 @@ export default function List({
     <div className="md:container md:mx-auto p-8">
       <h1> hello {currentUser.name} </h1>
       <ul role="list" className="divide-y divide-gray-100">
+        <Button primary={true} label="Bonjour je suis le vscode" />
+
         {vm.map((article) => (
           <a key={article.id} href={useShowUrl(article.id.toString())}>
             <li className="flex justify-between gap-x-6 py-5">
