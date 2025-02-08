@@ -1,9 +1,14 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { Icon, IconName } from "./icon.tsx";
+import { Icon, iconNames } from "./icon.tsx";
 
 const meta = {
   component: Icon,
   title: "Atoms/Icon",
+  argTypes: {
+    name: {
+      options: iconNames,
+    },
+  },
   parameters: {
     layout: "centered",
   },
@@ -14,12 +19,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Base: Story = {
-  argTypes: {
-    name: {
-      options: IconName,
-    },
-  },
   args: {
-    name: "close",
+    name: "i-ri-admin-fill",
   },
 };

@@ -16,12 +16,13 @@ export default class HomeController {
     // const cat = this.builder().display()
 
     const doc = await this.categoryRepository.getList()
+    console.log(doc)
 
-    const categories = doc.reduce((acc, value) => {
-      acc[value.$attributes.name] = { article: value.articles, count: value.$extras }
-      return acc
-    }, {})
+    // const categories = doc.reduce((acc, value) => {
+    //   acc[value.$attributes.name] = { article: value.articles, count: value.$extras }
+    //   return acc
+    // }, {})
 
-    return inertia.render('home', { categories })
+    return inertia.render('home')
   }
 }

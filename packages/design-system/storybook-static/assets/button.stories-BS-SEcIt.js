@@ -1,0 +1,6 @@
+import{j as u}from"./jsx-runtime-z8MfsBtr.js";import"./index-C9rmetsa.js";function o({primary:n=!1,label:s,backgroundColor:l}){const i=n?"btn-primary":"btn-secondary",m={backgroundColor:l};return u.jsx("button",{style:m,className:["btn",i].join(" "),children:s})}o.__docgenInfo={description:"",methods:[],displayName:"Button",props:{primary:{required:!1,tsType:{name:"boolean"},description:"",defaultValue:{value:"false",computed:!1}},label:{required:!0,tsType:{name:"string"},description:""},backgroundColor:{required:!1,tsType:{name:"string"},description:""},size:{required:!1,tsType:{name:"union",raw:'"small" | "medium" | "large"',elements:[{name:"literal",value:'"small"'},{name:"literal",value:'"medium"'},{name:"literal",value:'"large"'}]},description:""}}};const d={component:o,parameters:{layout:"centered"},title:"Atoms/Button",argTypes:{backgroundColor:{control:"color"}}},e={args:{primary:!0,label:"Button +"}};var r,a,t;e.parameters={...e.parameters,docs:{...(r=e.parameters)==null?void 0:r.docs,source:{originalSource:`{
+  args: {
+    primary: true,
+    label: "Button +"
+  }
+}`,...(t=(a=e.parameters)==null?void 0:a.docs)==null?void 0:t.source}}};const y=["primary"];export{y as __namedExportsOrder,d as default,e as primary};

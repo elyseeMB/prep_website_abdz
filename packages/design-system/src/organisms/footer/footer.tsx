@@ -1,3 +1,5 @@
+import "./footer.css";
+import { Icon } from "../../atoms/icon/icon.tsx";
 import { FooterSection } from "./footer_section.tsx";
 import { IconFooter } from "./icon.tsx";
 
@@ -21,19 +23,19 @@ export function Footer() {
           <ul className="links">
             <a href="">
               <li>Home</li>
-              <IconFooter />
+              <Icon classname="text-xl" name="i-ri-arrow-right-line" />
             </a>
             <a href="">
               <li>Career</li>
-              <IconFooter />
+              <Icon classname="text-xl" name="i-ri-arrow-right-line" />
             </a>
             <a href="">
               <li>Blog</li>
-              <IconFooter />
+              <Icon classname="text-xl" name="i-ri-arrow-right-line" />
             </a>
             <a href="">
               <li>Contact</li>
-              <IconFooter />
+              <Icon classname="text-xl" name="i-ri-arrow-right-line" />
             </a>
           </ul>
         </div>

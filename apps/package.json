@@ -56,7 +56,8 @@
     "prettier": "^3.4.2",
     "ts-node-maintained": "^10.9.4",
     "typescript": "~5.7.2",
-    "vite": "^6.0.3"
+    "vite": "^6.0.3",
+    "unocss": "^65.4.3"
   },
   "dependencies": {
     "@adonisjs/auth": "^9.2.4",
@@ -78,7 +79,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "reflect-metadata": "^0.2.2",
-    "@website/design-system": "workspace:*"
+    "@website/design-system": "workspace:*",
+    "@packages/tooling": "workspace:*"
   },
   "hotHook": {
     "boundaries": [

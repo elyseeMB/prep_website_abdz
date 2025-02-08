@@ -11,6 +11,7 @@
     "unocss": "^65.4.3"
   },
   "devDependencies": {
+    "@iconify-json/ri": "^1.2.5",
     "typescript": "~5.7.2"
   }
 }
