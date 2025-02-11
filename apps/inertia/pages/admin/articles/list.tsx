@@ -1,5 +1,5 @@
 import { client } from '~/pages/login.js'
-import { Button } from '@website/design-system'
+import { Button, Tag } from '@website/design-system'
 
 type Items = {
   id: number
@@ -43,11 +43,7 @@ export default function List({
                 <p className="mt-1 text-xs/5 text-gray-500">
                   id : <span>{article.id}</span>
                 </p>
-                <span
-                  className={`inline-flex items-center rounded-md bg-${article.categoryId === 1 ? 'yellow' : 'blue'}-50 px-2 py-1 text-xs font-medium text-${article.categoryId === 1 ? 'yellow' : 'blue'}-800 ring-1 ring-${article.categoryId === 1 ? 'yellow' : 'blue'}-600/20 ring-inset`}
-                >
-                  {article.categoryName}
-                </span>
+                <Tag>{article.categoryName}</Tag>
               </div>
             </li>
           </a>

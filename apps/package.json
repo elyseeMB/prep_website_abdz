@@ -49,6 +49,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
+    "@unocss/reset": "^65.4.3",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.17.0",
     "hot-hook": "^0.4.0",
@@ -56,8 +57,8 @@
     "prettier": "^3.4.2",
     "ts-node-maintained": "^10.9.4",
     "typescript": "~5.7.2",
-    "vite": "^6.0.3",
-    "unocss": "^65.4.3"
+    "unocss": "^65.4.3",
+    "vite": "^6.0.3"
   },
   "dependencies": {
     "@adonisjs/auth": "^9.2.4",
@@ -70,17 +71,17 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^4.0.0",
     "@inertiajs/react": "^2.0.1",
+    "@packages/tooling": "workspace:*",
     "@tuyau/client": "^0.2.3",
     "@tuyau/core": "^0.3.0",
     "@vinejs/vine": "^3.0.0",
+    "@website/design-system": "workspace:*",
     "better-sqlite3": "^11.8.0",
     "edge.js": "^6.2.0",
     "luxon": "^3.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "reflect-metadata": "^0.2.2",
-    "@website/design-system": "workspace:*",
-    "@packages/tooling": "workspace:*"
+    "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
     "boundaries": [

@@ -2,6 +2,8 @@
 /// <reference path="../../config/inertia.ts" />
 
 import '../css/app.css'
+import '@unocss/reset/tailwind.css'
+import '@website/design-system/src/css/index.css'
 import 'virtual:uno.css'
 import { hydrateRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'

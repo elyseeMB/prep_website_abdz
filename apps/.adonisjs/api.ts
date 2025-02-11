@@ -12,27 +12,6 @@ export interface ApiDefinition {
 const routes = [
   {
     params: [],
-    name: 'home',
-    path: '/',
-    method: ["GET","HEAD"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
-    name: 'login_route_show',
-    path: '/login',
-    method: ["GET","HEAD"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
-    name: 'login_route',
-    path: '/login',
-    method: ["POST"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
     name: 'admin.pages.dashboard',
     path: '/admin/dashboard',
     method: ["GET","HEAD"],
@@ -78,6 +57,34 @@ const routes = [
     name: 'admin.pages.blogs',
     path: '/admin/views',
     method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'home',
+    path: '/',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'login_route_show',
+    path: '/login',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'login_route',
+    path: '/login',
+    method: ["POST"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'comments.store',
+    path: '/comment',
+    method: ["POST"],
     types: {} as unknown,
   },
 ] as const;

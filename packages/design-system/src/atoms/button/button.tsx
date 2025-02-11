@@ -1,4 +1,3 @@
-import "./button.css";
 import React, { PropsWithChildren } from "react";
 
 type Props = PropsWithChildren<{
@@ -27,7 +26,7 @@ export function Button({
     <button
       type={type}
       style={style}
-      className={["btn", mode, className].join(" ")}
+      className={["btn text-orange", mode, className].join(" ")}
     >
       {children}
     </button>

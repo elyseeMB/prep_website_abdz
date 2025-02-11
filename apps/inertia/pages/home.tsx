@@ -1,10 +1,26 @@
-import { Head } from '@inertiajs/react'
-import { Footer, Icon } from '@website/design-system'
+import { Head, useForm } from '@inertiajs/react'
+import { Footer, Icon, Form, FormField, FormSecondaryButton } from '@website/design-system'
+import { FormEvent } from 'react'
+import { client } from './login.js'
+import { useAuth } from '~/hooks/useAuth.js'
 
 export default function Home({ categories }: any) {
+  const currentUser = useAuth()
+
+  const commentForm = useForm({
+    body: '',
+  })
+
+  const handleComment = () => {
+    const url = client.$url('comments.store')
+    console.log(url)
+    commentForm.post(url)
+  }
+
   return (
     <>
-      <Icon name="i-ri-admin-fill" classname="text-orange" />
+      <h1 className="text-orange">fjdsklf</h1>
+      {/* <Icon name="i-ri-admin-fill" classname="text-orange" /> */}
       <Head title="Homepage" />
 
       <div className="fixed xl:absolute left-8 right-8 top-0 bottom-0 xl:inset-0 max-w-screen-xl mx-auto before:content-[''] before:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] before:absolute before:top-0 before:left-0 before:h-full before:w-px after:content-[''] after:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] after:absolute after:top-0 after:right-0 after:h-full after:w-px"></div>
@@ -26,6 +42,19 @@ export default function Home({ categories }: any) {
         {/* Bento with documentation, Adocasts, packages and Discord */}
         <div className="isolate mt-10 max-w-screen-xl mx-auto px-16 xl:px-8 grid grid-cols-1 xl:grid-cols-2 xl:grid-rows-3 gap-8">
           <h1>hello </h1>
+
+          <Form onSubmit={handleComment}>
+            <FormField
+              type="textarea"
+              onChange={(ev) => commentForm.setData('body', ev.currentTarget.value)}
+              defaultValue={commentForm.data.body}
+              name="body"
+            >
+              body
+            </FormField>
+            <FormSecondaryButton>send</FormSecondaryButton>
+          </Form>
+
           <article className="row-span-3 relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-col gap-8">
             <div className="relative opacity-80">
               <svg fill="none" viewBox="0 0 240 105">

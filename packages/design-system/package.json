@@ -16,9 +16,9 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@packages/tooling": "workspace:*",
     "@chromatic-com/storybook": "3.2.4",
     "@eslint/js": "^9.17.0",
+    "@packages/tooling": "workspace:*",
     "@storybook/addon-essentials": "8.5.3",
     "@storybook/addon-interactions": "8.5.3",
     "@storybook/addon-onboarding": "8.5.3",
@@ -28,6 +28,7 @@
     "@storybook/test": "8.5.3",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@unocss/reset": "^65.4.3",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
@@ -37,8 +38,8 @@
     "storybook": "8.5.3",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5",
-    "unocss": "^65.4.3"
+    "unocss": "^65.4.3",
+    "vite": "^6.0.5"
   },
   "eslintConfig": {
     "extends": [

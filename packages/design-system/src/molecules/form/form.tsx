@@ -48,7 +48,7 @@ export function FormPrimaryButton({
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
 }>) {
   return (
-    <Button className={className} primary={true} {...props}>
+    <Button className={className} type="submit" primary={true} {...props}>
       {children}
     </Button>
   );
@@ -62,7 +62,7 @@ export function FormSecondaryButton({
   className?: string;
 }>) {
   return (
-    <Button className={className} primary={false} {...props}>
+    <Button className={className} primary={false} type="submit" {...props}>
       {children}
     </Button>
   );
