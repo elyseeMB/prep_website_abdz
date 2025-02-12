@@ -11,6 +11,9 @@ export default class Profile extends BaseModel {
   declare userId: number
 
   @column()
+  declare name: string
+
+  @column()
   declare biography: string | null
 
   @column()

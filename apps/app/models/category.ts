@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, manyToMany, scope } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, manyToMany, scope } from '@adonisjs/lucid/orm'
 import Article from './article.js'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Taxonomy from './taxonomy.js'
 import States from '#enums/state'
+import User from './user.js'
 
 export default class Category extends BaseModel {
   @column({ isPrimary: true })
@@ -13,11 +14,19 @@ export default class Category extends BaseModel {
   @column()
   declare name: string
 
+  @column()
+  declare parentId: number | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @belongsTo(() => User, {
+    foreignKey: 'ownerId',
+  })
+  declare owner: BelongsTo<typeof User>
 
   @manyToMany(() => Article, {
     pivotTable: 'taxonomies',

@@ -12,4 +12,5 @@ export const CollectionFactory = factory
   })
   .relation('articles', () => ArticleFactory)
   .relation('children', () => CollectionFactory)
+  .relation('children', () => CollectionFactory)
   .build()

@@ -3,13 +3,23 @@ import { BaseModel, belongsTo, column, hasMany, manyToMany, scope } from '@adoni
 import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Article from './article.js'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
+import User from './user.js'
 
 export default class Taxonomy extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
+  declare ownerId: number
+
+  @column()
+  declare rootParentId: number | null
+
+  @column()
   declare parentId: number | null
+
+  @column()
+  declare level_index: number
 
   @column()
   declare name: string
@@ -19,6 +29,11 @@ export default class Taxonomy extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @belongsTo(() => User, {
+    foreignKey: 'ownerId',
+  })
+  declare owner: BelongsTo<typeof User>
 
   @belongsTo(() => Taxonomy, {
     foreignKey: 'parentId',

@@ -3,6 +3,7 @@ import { UserRole } from '#auth/enums/user_role'
 import { ArticleFactory } from '#database/factories/article_factory'
 import { CategoryFactory } from '#database/factories/category_factory'
 import { CollectionFactory } from '#database/factories/collection_factory'
+import { TaxonomyFactory } from '#database/factories/taxonomy_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import Article from '#models/article'
 import Category from '#models/category'
@@ -15,6 +16,9 @@ import { TransactionClientContract } from '@adonisjs/lucid/types/database'
 import { randomUUID } from 'crypto'
 
 export default class extends BaseSeeder {
+  getRandom<T>(array: T[]) {
+    return array[Math.floor(Math.random() * array.length)]
+  }
   async run() {
     // await User.create({
     //   id: parseInt(randomUUID(), 10),
@@ -59,9 +63,10 @@ export default class extends BaseSeeder {
     const trx = await db.transaction()
     try {
       await this.seedRoles(trx)
+      await this.seedUserAndContent(trx)
       // await this.factoryArticle(trx)
       // await this.collection(trx)
-      await this.user(trx)
+      // await this.user(trx)
       await trx.commit()
     } catch (error) {
       await trx.rollback()
@@ -101,10 +106,12 @@ export default class extends BaseSeeder {
 
   async user(trx: TransactionClientContract) {
     const baseUser = UserFactory.client(trx)
-    const admin = await baseUser.apply('admin').createMany(2)
+    const admin = await baseUser.apply('admin').create()
+    await this.seedCategories(trx, admin)
+
     const freeUser = await baseUser.apply('User').createMany(10)
-    const userIds = [...freeUser.map((user) => user.id), ...admin.map((userAdmin) => userAdmin.id)]
-    return userIds
+    // const userIds = [...freeUser.map((user) => user.id), ...admin.map((userAdmin) => userAdmin.id)]
+    // return userIds
   }
 
   seedRoles(trx: TransactionClientContract) {
@@ -140,6 +147,49 @@ export default class extends BaseSeeder {
       'Authorization',
     ]
     const catBase = CategoryFactory.client(trx)
-    const [] = await Promise.all(rootCategoryNames.map((name) => catBase.merge({ name })))
+    const [nameCat, ...other] = await Promise.all(
+      rootCategoryNames.map((name) => catBase.merge({ name }).create())
+    )
+    const adonisChilren = await Promise.all(
+      adonisChildrenNames.map((name) => catBase.merge({ name, parentId: nameCat.id }).create())
+    )
+    return [nameCat.id, ...other.map((t) => t.id), ...adonisChilren.map((t) => t.id)]
+  }
+
+  async seedUserAndContent(trx: TransactionClientContract) {
+    const password = 'password'
+
+    const baseUser = UserFactory.client(trx).with('profile').merge({ password })
+    const admin = await baseUser.apply('admin').create()
+    const OrdinaryUser = await baseUser.apply('User').createMany(10)
+    const userIds = [...OrdinaryUser.map((u) => u.id)]
+    const taxonomyIds = await this.seedCategories(trx, admin)
+
+    let rootSortOrder = 0
+    let moduleSortOrder = 0
+    await CollectionFactory.client(trx)
+      .merge({ name: "Let's Learn Adonisjs" })
+      .with('children', 5, (f) =>
+        f
+          .tap((row) => (row.sortOrder = moduleSortOrder++))
+          .with('articles', 5, (articles) =>
+            articles
+              .pivotAttributes(
+                [...new Array(5)].map((_, i) => ({
+                  root_collection_id: f.parent.parentId,
+                  sort_order: i,
+                  root_sort_order: rootSortOrder++,
+                }))
+              )
+              .with('comments', 6, (comments) =>
+                comments.tap((row) => (row.userId = this.getRandom(userIds)))
+              )
+              .factory.after('create', async (_, row) => {
+                await row.related('authors').sync([admin.id])
+                await row.related('categories').sync([this.getRandom(taxonomyIds)])
+              })
+          )
+      )
+      .create()
   }
 }

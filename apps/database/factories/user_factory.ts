@@ -3,6 +3,7 @@ import User from '#models/user'
 import { UserRole } from '#auth/enums/user_role'
 import { CommentFactory } from './comment_factory.js'
 import { ArticleFactory } from './article_factory.js'
+import { ProfileFactory } from './profile_factory.js'
 
 export const UserFactory = factory
   .define(User, async ({ faker }) => {
@@ -10,11 +11,12 @@ export const UserFactory = factory
       fullName: faker.internet.username(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      role: UserRole.User,
+      roleId: UserRole.User,
     }
   })
-  .state('User', (user) => (user.role = UserRole.User))
-  .state('admin', (user) => (user.role = UserRole.Admin))
+  .state('User', (user) => (user.roleId = UserRole.User))
+  .state('admin', (user) => (user.roleId = UserRole.Admin))
   .relation('comments', () => CommentFactory)
   .relation('articles', () => ArticleFactory)
+  .relation('profile', () => ProfileFactory)
   .build()
