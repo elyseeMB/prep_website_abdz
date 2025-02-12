@@ -12,10 +12,12 @@ export default class ListArticleController {
   async render({ inertia }: HttpContext) {
     const articles = await this.repository.all()
 
-    // const [test] = await this.repository.findBy(
-    //   'slug',
-    //   'acidus-speculum-amplexus-subvenio-molestiae--Infinity'
-    // )
+    const [test] = await this.repository.findBy(
+      'slug',
+      'bellum-summopere-velociter-aspicio-triduana-cito'
+    )
+
+    console.log(test.comments.map((c) => c.user))
 
     // await emitter.emit('article:sync', { article: test, views: 2 })
 

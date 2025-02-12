@@ -1,5 +1,6 @@
 import { User } from '#auth/domain/user'
 import ArticleTypes from '#enums/article_types'
+import States from '#enums/state'
 import Article from '#models/article'
 import { BaseBuilder } from '../../builder/base_builder.js'
 
@@ -39,6 +40,23 @@ export default class ArticleBuilder extends BaseBuilder<typeof Article, Article>
       }
     )
     return this
+  }
+
+  withComments() {
+    this.withCommentCount()
+    this.query.preload('comments', (query) =>
+      query
+        .whereIn('stateId', [States.PUBLIC, States.ARCHIVED])
+        .preload('user')
+        .orderBy('createdAt')
+    )
+    return this
+  }
+
+  withCommentCount() {
+    this.query.withCount('comments', (query) => {
+      query.where('stateId', States.PUBLIC)
+    })
   }
 
   orderPublished() {

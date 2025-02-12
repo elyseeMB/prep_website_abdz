@@ -1,11 +1,21 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column, computed, manyToMany, scope } from '@adonisjs/lucid/orm'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import {
+  BaseModel,
+  beforeSave,
+  column,
+  computed,
+  hasMany,
+  manyToMany,
+  scope,
+} from '@adonisjs/lucid/orm'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Category from './category.js'
 import States from '#enums/state'
 import SlugService from '#articles/services/slug_service'
 import Collection from './collection.js'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
+import Comment from './comment.js'
+import User from './user.js'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -35,6 +45,9 @@ export default class Article extends BaseModel {
   @column()
   declare articleTypeId: number
 
+  @hasMany(() => Comment)
+  declare comments: HasMany<typeof Comment>
+
   @manyToMany(() => Category, {
     pivotTable: 'taxonomies',
     pivotForeignKey: 'article_id',
@@ -46,6 +59,12 @@ export default class Article extends BaseModel {
     pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order'],
   })
   declare collections: ManyToMany<typeof Collection>
+
+  @manyToMany(() => User, {
+    pivotTable: 'author_articles',
+    pivotColumns: ['author_type_id'],
+  })
+  declare authors: ManyToMany<typeof User>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -83,6 +102,6 @@ export default class Article extends BaseModel {
     typeof Article,
     (query: ModelQueryBuilderContract<typeof Article>) => void
   >((query) => {
-    query.preload('categories')
+    query.preload('categories').preload('authors')
   })
 }

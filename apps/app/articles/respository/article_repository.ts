@@ -60,6 +60,7 @@ export default class ArticleRepository {
       .where(column, value)
       .display({ skipPublishCheck: true })
       .firstOrFail()
+      .withComments()
       .exec()
   }
 

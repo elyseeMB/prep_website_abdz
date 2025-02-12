@@ -10,17 +10,17 @@ import UtilityService from '#services/utility_service'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
-import { randomUUID } from 'crypto'
+import { randomInt, randomUUID } from 'crypto'
 
 export default class extends BaseSeeder {
   async run() {
-    await User.create({
-      id: parseInt(randomUUID(), 10),
-      fullName: 'johnDoe',
-      email: 'johnDoe@gmail.com',
-      password: 'je suis le password',
-      role: 2,
-    })
+    // await User.create({
+    //   id: parseInt(randomUUID(), 10),
+    //   fullName: 'johnDoe',
+    //   email: 'johnDoe@gmail.com',
+    //   password: 'je suis le password',
+    //   role: 2,
+    // })
 
     // await Category.createMany([
     //   { id: 1, name: 'Actualité' },
@@ -81,13 +81,18 @@ export default class extends BaseSeeder {
         f
           .tap((row) => (row.sortOrder = moduleOrder++))
           .with('articles', 5, (article) =>
-            article.pivotAttributes(
-              [...new Array(5)].map((_, i) => ({
-                root_collection_id: f.parent.parentId,
-                sort_order: i,
-                root_sort_order: rootSortOrder++,
-              }))
-            )
+            article
+              .pivotAttributes(
+                [...new Array(5)].map((_, i) => ({
+                  root_collection_id: f.parent.parentId,
+                  sort_order: i,
+                  root_sort_order: rootSortOrder++,
+                }))
+              )
+              .with('comments', 5, (comment) => comment.tap((row) => (row.userId = randomInt(10))))
+              .factory.after('create', async (_, row) => {
+                await row.related('authors').sync([1])
+              })
           )
       )
       .create()

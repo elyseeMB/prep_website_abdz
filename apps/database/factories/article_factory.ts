@@ -6,6 +6,8 @@ import States from '#enums/state'
 import { CategoryFactory } from './category_factory.js'
 import UtilityService from '#services/utility_service'
 import ArticleTypes from '#enums/article_types'
+import { UserFactory } from './user_factory.js'
+import { CommentFactory } from './comment_factory.js'
 
 export const ArticleFactory = factory
   .define(Article, async ({ faker }) => {
@@ -30,4 +32,6 @@ export const ArticleFactory = factory
   .state('News', (article) => (article.articleTypeId = ArticleTypes.NEWS))
   .state('draft', (article) => (article.stateId = States.DRAFT))
   .relation('categories', () => CategoryFactory)
+  .relation('authors', () => UserFactory)
+  .relation('comments', () => CommentFactory)
   .build()
