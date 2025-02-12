@@ -14,8 +14,8 @@ export class AllArticleViewModel {
       id: article.getIdentifier().toString(),
       title: article.props.title,
       summary: article.props.summary,
-      categoryName: article.props.categoryName,
-      categoryId: article.props.categoryId,
+      taxonomyName: article.props.taxonomyName,
+      taxonomyId: article.props.taxonomyId,
     }))
   }
 }

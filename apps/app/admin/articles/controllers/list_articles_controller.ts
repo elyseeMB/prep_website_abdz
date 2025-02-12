@@ -12,7 +12,9 @@ export default class ListArticleController {
   async render({ inertia }: HttpContext) {
     const articles = await this.repository.all()
 
-    const [test] = await this.repository.findBy('slug', 'pecto-cursim-contego-ultra-modi-decens')
+    const [test] = await this.repository
+      .findBy('slug', 'nostrum-derideo-barba-desino-solio-amo-deprimo-cohibeo')
+      .query.exec()
 
     console.log(test)
 

@@ -24,6 +24,9 @@ export default class Taxonomy extends BaseModel {
   @column()
   declare name: string
 
+  @column()
+  declare description: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
@@ -46,14 +49,17 @@ export default class Taxonomy extends BaseModel {
   declare children: HasMany<typeof Taxonomy>
 
   @manyToMany(() => Article, {
+    pivotTable: 'article_taxonomies',
+    pivotForeignKey: 'article_id',
+    pivotRelatedForeignKey: 'taxonomy_id',
     pivotColumns: ['sort_order'],
   })
   declare articles: ManyToMany<typeof Article>
 
-  // static hasContent = scope<
-  //   typeof Taxonomy,
-  //   (query: ModelQueryBuilderContract<typeof Taxonomy>) => void
-  // >((query) => {
-  //   query.whereHas('parent', (a) => a.apply((s) => s.published()))
-  // })
+  static hasContent = scope<
+    typeof Taxonomy,
+    (query: ModelQueryBuilderContract<typeof Taxonomy>) => void
+  >((query) =>
+    query.where((q) => q.whereHas('articles', (articles) => articles.apply((s) => s.published())))
+  )
 }

@@ -45,8 +45,4 @@ export class BaseBuilder<Model extends LucidModel, Record extends LucidRow> {
 
     return this
   }
-
-  exec() {
-    return this.query.exec()
-  }
 }

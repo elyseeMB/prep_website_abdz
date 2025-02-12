@@ -1,10 +1,8 @@
 import factory from '@adonisjs/lucid/factories'
 import Article from '#models/article'
-import Category from '#models/category'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import States from '#enums/state'
-import { CategoryFactory } from './category_factory.js'
-import UtilityService from '#services/utility_service'
+import { TaxonomyFactory } from './taxonomy_factory.js'
 import ArticleTypes from '#enums/article_types'
 import { UserFactory } from './user_factory.js'
 import { CommentFactory } from './comment_factory.js'
@@ -31,7 +29,7 @@ export const ArticleFactory = factory
   .state('Blog', (article) => (article.articleTypeId = ArticleTypes.BLOG))
   .state('News', (article) => (article.articleTypeId = ArticleTypes.NEWS))
   .state('draft', (article) => (article.stateId = States.DRAFT))
-  .relation('categories', () => CategoryFactory)
+  .relation('taxonomies', () => TaxonomyFactory)
   .relation('authors', () => UserFactory)
   .relation('comments', () => CommentFactory)
   .build()

@@ -11,24 +11,24 @@ type PropsArticleUpdate = {
   summary: string
   created_at: string
   updated_at: string
-  categoryId: number
-  categoryName: string
+  taxonomyId: number
+  taxonomyName: string
 }
 
 export default function Update({
   currentUser,
   article,
-  categories,
+  taxonomies,
 }: {
   currentUser: PropsCurrentUser
   article: { props: PropsArticleUpdate }
-  categories: { id: number; name: string }[]
+  taxonomies: { id: number; name: string }[]
 }) {
   const form = useForm({
     title: article.props.title,
     summary: article.props.summary,
     content: article.props.content,
-    categoryId: categories[0].id,
+    taxonomyId: taxonomies[0].id,
   })
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -89,24 +89,24 @@ export default function Update({
                 </dd>
               </div>
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt className="text-sm/6 font-medium text-gray-900">Categories</dt>
+                <dt className="text-sm/6 font-medium text-gray-900">taxonomies</dt>
                 <dd className="flex gap-4 justify-between mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <span
-                    className={`inline-flex items-center rounded-md bg-${article.props.categoryId === 1 ? 'yellow' : 'blue'}-50 px-2 py-1 text-xs font-medium text-${article.props.categoryId === 1 ? 'yellow' : 'blue'}-800 ring-1 ring-${article.props.categoryId === 1 ? 'yellow' : 'blue'}-600/20 ring-inset`}
+                    className={`inline-flex items-center rounded-md bg-${article.props.taxonomyId === 1 ? 'yellow' : 'blue'}-50 px-2 py-1 text-xs font-medium text-${article.props.taxonomyId === 1 ? 'yellow' : 'blue'}-800 ring-1 ring-${article.props.taxonomyId === 1 ? 'yellow' : 'blue'}-600/20 ring-inset`}
                   >
-                    {article.props.categoryName}
+                    {article.props.taxonomyName}
                   </span>
                   <select
                     className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
                     id="menu-button"
                     onChange={(ev) => {
-                      form.setData('categoryId', parseInt(ev.currentTarget.value, 10))
+                      form.setData('taxonomyId', parseInt(ev.currentTarget.value, 10))
                     }}
-                    name="categoryId"
+                    name="taxonomyId"
                   >
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
+                    {taxonomies.map((taxonomy) => (
+                      <option key={taxonomy.id} value={taxonomy.id}>
+                        {taxonomy.name}
                       </option>
                     ))}
                   </select>

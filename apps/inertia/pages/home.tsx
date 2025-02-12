@@ -4,7 +4,7 @@ import { FormEvent } from 'react'
 import { client } from './login.js'
 import { useAuth } from '~/hooks/useAuth.js'
 
-export default function Home({ categories }: any) {
+export default function Home({ taxonomies }: any) {
   const currentUser = useAuth()
 
   const commentForm = useForm({

@@ -1,7 +1,6 @@
 import db from '@adonisjs/lucid/services/db'
 import { Article } from '../domain/article.js'
 import { ArticleIdentifier } from '../domain/article_identitfier.js'
-import Category from '#models/category'
 import ArticleModel from '#models/article'
 import { DateTime } from 'luxon'
 import ArticleBuilder from '../builder/article_builder.js'
@@ -43,7 +42,7 @@ export default class ArticleRepository {
   }
 
   getBlogs() {
-    return this.getList().whereType([ArticleTypes.BLOG, ArticleTypes.NEWS]).exec()
+    return this.getList().whereType([ArticleTypes.BLOG, ArticleTypes.NEWS])
   }
 
   getLatest(
@@ -59,24 +58,22 @@ export default class ArticleRepository {
     return this.builder()
       .where(column, value)
       .display({ skipPublishCheck: true })
-      .firstOrFail()
       .withComments()
       .firstOrFail()
-      .exec()
   }
 
   async all() {
     const articleRecords = await db
       .from('articles')
-      .join('taxonomies', 'articles.id', 'taxonomies.article_id')
-      .join('categories', 'taxonomies.category_id', 'categories.id')
+      .join('article_taxonomies', 'articles.id', 'article_taxonomies.article_id')
+      .join('taxonomies', 'article_taxonomies.taxonomy_id', 'taxonomies.id')
       .select([
         'articles.id as article_id',
         'articles.title',
         'articles.summary',
         'articles.content',
-        'categories.id as category_id',
-        'categories.name as category_name',
+        'taxonomies.id as taxonomy_id',
+        'taxonomies.name as taxonomy_name',
       ])
       .orderBy('articles.created_at', 'desc')
       .exec()
@@ -85,13 +82,13 @@ export default class ArticleRepository {
         id: ArticleIdentifier.fromString(article.article_id),
         title: article.title,
         summary: article.summary,
-        categoryName: article.category_name,
-        categoryId: article.category_id,
+        taxonomyName: article.taxonomy_name,
+        taxonomyId: article.taxonomy_id,
       })
     })
   }
 
-  async create(payload: StoreArticleDTO, categoryId?: number | string) {
+  async create(payload: StoreArticleDTO, taxonomyId?: number | string) {
     const data = await ArticleModel.create({
       title: payload.title,
       summary: payload.summary,
@@ -99,7 +96,7 @@ export default class ArticleRepository {
       slug: payload.slug,
       stateId: payload.stateId,
     })
-    data.related('categories').attach([categoryId!])
+    data.related('taxonomies').attach([taxonomyId!])
     return
     const trx = await db.transaction()
     try {
@@ -120,7 +117,7 @@ export default class ArticleRepository {
         .table('taxonomies')
         .insert({
           article_id: articleId,
-          category_id: categoryId,
+          taxonomy_id: taxonomyId,
         })
         .exec()
       await trx.commit()
@@ -139,7 +136,7 @@ export default class ArticleRepository {
     // }
   }
 
-  async update(payload: UpdateArticleDTO, categoryId?: number | string) {
+  async update(payload: UpdateArticleDTO, taxonomyId?: number | string) {
     const trx = await db.transaction()
     try {
       const articleId = await trx
@@ -158,7 +155,7 @@ export default class ArticleRepository {
       await trx
         .from('taxonomies')
         .update({
-          category_id: categoryId,
+          taxonomy_id: taxonomyId,
         })
         .where('article_id', '=', payload.id)
         .exec()
@@ -175,19 +172,19 @@ export default class ArticleRepository {
     return db.from('articles').where('id', id).first()
   }
 
-  async withCategory(id: number) {
+  async withTaxonomy(id: number) {
     const [articleRecords] = await db
       .from('articles')
-      .join('taxonomies', 'articles.id', 'taxonomies.article_id')
-      .join('categories', 'taxonomies.category_id', 'categories.id')
+      .join('article_taxonomies', 'articles.id', 'article_taxonomies.article_id')
+      .join('taxonomies', 'article_taxonomies.taxonomy_id', 'taxonomies.id')
       .where('articles.id', id)
       .select(
         'articles.id as article_id',
         'articles.title',
         'articles.summary',
         'articles.content',
-        'categories.id as category_id',
-        'categories.name as category_name'
+        'taxonomies.id as taxonomy_id',
+        'taxonomies.name as taxonomy_name'
       )
       .exec()
 
@@ -196,8 +193,8 @@ export default class ArticleRepository {
       title: articleRecords.title,
       content: articleRecords.content,
       summary: articleRecords.summary,
-      categoryId: articleRecords.category_id,
-      categoryName: articleRecords.category_name,
+      taxonomyId: articleRecords.taxonomy_id,
+      taxonomyName: articleRecords.taxonomy_name,
     })
   }
 }

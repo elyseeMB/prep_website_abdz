@@ -5,8 +5,8 @@ type Items = {
   id: number
   title: string
   summary: string
-  categoryName: string
-  categoryId: number
+  taxonomyName: string
+  taxonomyId: number
 }
 
 function useShowUrl(id: string) {
@@ -22,7 +22,6 @@ export default function List({
   currentUser: PropsCurrentUser
   vm: Props<Items[]>
 }) {
-  // console.log(vm)
   return (
     <div className="md:container md:mx-auto p-8">
       <h1> hello {currentUser.name} </h1>
@@ -43,7 +42,7 @@ export default function List({
                 <p className="mt-1 text-xs/5 text-gray-500">
                   id : <span>{article.id}</span>
                 </p>
-                <Tag>{article.categoryName}</Tag>
+                <Tag>{article.taxonomyName}</Tag>
               </div>
             </li>
           </a>

@@ -10,14 +10,14 @@ type ArticleStatusTextProps = {
 
 export default function Create(props: {
   currentUser: { id: number; name: string }
-  categories: { id: number; name: string }[]
+  taxonomies: { id: number; name: string }[]
 }) {
   const form = useForm({
     title: '',
     summary: '',
     markdown: '',
     slug: '',
-    categoryId: props.categories[0].id,
+    taxonomyId: props.taxonomies[0].id,
     stateId: ArticleStatusText['1'],
   })
 
@@ -61,13 +61,13 @@ export default function Create(props: {
         </FormField>
         <select
           onChange={(ev) => {
-            form.setData('categoryId', parseInt(ev.currentTarget.value, 10))
+            form.setData('taxonomyId', parseInt(ev.currentTarget.value, 10))
           }}
-          name="categoryId"
+          name="taxonomyId"
         >
-          {props.categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
+          {props.taxonomies.map((taxonomy) => (
+            <option key={taxonomy.id} value={taxonomy.id}>
+              {taxonomy.name}
             </option>
           ))}
         </select>

@@ -2,11 +2,8 @@ import { HttpContext } from '@adonisjs/core/http'
 import vine from '@vinejs/vine'
 import ArticleRepository from '../../../articles/respository/article_repository.js'
 import { inject } from '@adonisjs/core'
-import { CategoryRepository } from '../../../taxonomies/categories/repositories/category_repository.js'
-import { AllCategoryViewModel } from '../../../taxonomies/categories/view_models/all_category_view_model.js'
-import db from '@adonisjs/lucid/services/db'
-import Category from '#models/category'
-import Article from '#models/article'
+import { TaxonomyRepository } from '../../../taxonomies/repositories/taxonomy_repository.js'
+import { AllTaxonomyViewModel } from '../../../taxonomies/view_models/all_taxonomy_view_model.js'
 
 @inject()
 export default class StoreArticleController {
@@ -16,26 +13,26 @@ export default class StoreArticleController {
       summary: vine.string().minLength(5).maxLength(255),
       slug: vine.string().minLength(3).maxLength(100).nullable(),
       markdown: vine.string().minLength(3),
-      categoryId: vine.number(),
+      taxonomyId: vine.number(),
       stateId: vine.number(),
     })
   )
 
   constructor(
     private repository: ArticleRepository,
-    private categoryRepository: CategoryRepository
+    private TaxnomyRepository: TaxonomyRepository
   ) {}
 
   async render({ inertia }: HttpContext) {
-    const categories = await this.categoryRepository.all()
+    const taxonomies = await this.TaxnomyRepository.all()
 
     return inertia.render('admin/articles/create', {
-      categories: AllCategoryViewModel.fromDomain(categories).serialize(),
+      taxonomies: AllTaxonomyViewModel.fromDomain(taxonomies).serialize(),
     })
   }
 
   async execute({ request, response }: HttpContext) {
-    const { title, summary, markdown, slug, categoryId, stateId } = await request.validateUsing(
+    const { title, summary, markdown, slug, taxonomyId, stateId } = await request.validateUsing(
       StoreArticleController.validator
     )
 
@@ -47,7 +44,7 @@ export default class StoreArticleController {
         stateId,
         slug,
       },
-      categoryId
+      taxonomyId
     )
 
     return response.redirect().toRoute('admin.articles.index')

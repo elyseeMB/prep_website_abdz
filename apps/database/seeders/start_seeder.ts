@@ -1,12 +1,9 @@
 import SlugService from '#articles/services/slug_service'
 import { UserRole } from '#auth/enums/user_role'
 import { ArticleFactory } from '#database/factories/article_factory'
-import { CategoryFactory } from '#database/factories/category_factory'
-import { CollectionFactory } from '#database/factories/collection_factory'
 import { TaxonomyFactory } from '#database/factories/taxonomy_factory'
+import { CollectionFactory } from '#database/factories/collection_factory'
 import { UserFactory } from '#database/factories/user_factory'
-import Article from '#models/article'
-import Category from '#models/category'
 import Role from '#models/role'
 import User from '#models/user'
 import UtilityService from '#services/utility_service'
@@ -20,32 +17,25 @@ export default class extends BaseSeeder {
     return array[Math.floor(Math.random() * array.length)]
   }
   async run() {
-    // await User.create({
-    //   id: parseInt(randomUUID(), 10),
-    //   fullName: 'johnDoe',
-    //   email: 'johnDoe@gmail.com',
-    //   password: 'je suis le password',
-    //   role: 2,
-    // })
-
+    await User.create({
+      fullName: 'johnDoe',
+      email: 'johnDoe@gmail.com',
+      password: 'je suis le password',
+      roleId: 2,
+    })
     // await Category.createMany([
     //   { id: 1, name: 'Actualité' },
     //   { id: 2, name: 'Societé' },
     // ])
-
     // const slugify = new SlugService<typeof Article>({})
-
     // const a = await slugify.make(Article, 'title', 'je suis le titre 22')
-
     // const article = await Article.create({
     //   id: 1,
     //   title: 'je suis le titre 1',
     //   content: 'je suis le contenu 1',
     //   summary: 'je suis le summary 1',
     // })
-
     // article.related('categories').attach([1, 2])
-
     // const article = await Article.create({
     //   id: 22,
     //   title: 'je suis le titre 22',
@@ -53,10 +43,8 @@ export default class extends BaseSeeder {
     //   summary: 'je suis le summary 2 13',
     //   // slug: a,
     // })
-
     // article.related('categories').attach([2])
-
-    await this.makeFactory()
+    // await this.makeFactory()
   }
 
   async makeFactory() {
@@ -75,7 +63,7 @@ export default class extends BaseSeeder {
   }
 
   async factoryArticle(trx: TransactionClientContract) {
-    const baseArticle = ArticleFactory.client(trx).with('categories')
+    const baseArticle = ArticleFactory.client(trx).with('taxonomies')
     await baseArticle.apply('News').createMany(5)
     await baseArticle.apply('Blog').createMany(5)
     await baseArticle.apply('draft').createMany(5)
@@ -107,7 +95,7 @@ export default class extends BaseSeeder {
   async user(trx: TransactionClientContract) {
     const baseUser = UserFactory.client(trx)
     const admin = await baseUser.apply('admin').create()
-    await this.seedCategories(trx, admin)
+    await this.seedTaxonomies(trx, admin)
 
     const freeUser = await baseUser.apply('User').createMany(10)
     // const userIds = [...freeUser.map((user) => user.id), ...admin.map((userAdmin) => userAdmin.id)]
@@ -132,9 +120,9 @@ export default class extends BaseSeeder {
     )
   }
 
-  async seedCategories(trx: TransactionClientContract, admin: User) {
+  async seedTaxonomies(trx: TransactionClientContract, admin: User) {
     const ownerId = admin.id
-    const rootCategoryNames = ['AdonisJS', 'AWS Amplify', 'Nuxt', 'JavaScript', 'VueJS', 'HTMX']
+    const rootTaxonomyNames = ['AdonisJS', 'AWS Amplify', 'Nuxt', 'JavaScript', 'VueJS', 'HTMX']
     const adonisChildrenNames = [
       'Bouncer',
       'Router',
@@ -146,9 +134,9 @@ export default class extends BaseSeeder {
       'Edge',
       'Authorization',
     ]
-    const catBase = CategoryFactory.client(trx)
+    const catBase = TaxonomyFactory.client(trx)
     const [nameCat, ...other] = await Promise.all(
-      rootCategoryNames.map((name) => catBase.merge({ name }).create())
+      rootTaxonomyNames.map((name) => catBase.merge({ name }).create())
     )
     const adonisChilren = await Promise.all(
       adonisChildrenNames.map((name) => catBase.merge({ name, parentId: nameCat.id }).create())
@@ -163,7 +151,7 @@ export default class extends BaseSeeder {
     const admin = await baseUser.apply('admin').create()
     const OrdinaryUser = await baseUser.apply('User').createMany(10)
     const userIds = [...OrdinaryUser.map((u) => u.id)]
-    const taxonomyIds = await this.seedCategories(trx, admin)
+    const taxonomyIds = await this.seedTaxonomies(trx, admin)
 
     let rootSortOrder = 0
     let moduleSortOrder = 0
@@ -186,7 +174,6 @@ export default class extends BaseSeeder {
               )
               .factory.after('create', async (_, row) => {
                 await row.related('authors').sync([admin.id])
-                await row.related('categories').sync([this.getRandom(taxonomyIds)])
               })
           )
       )

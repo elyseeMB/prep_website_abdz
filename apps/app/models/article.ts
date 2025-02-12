@@ -9,13 +9,13 @@ import {
   scope,
 } from '@adonisjs/lucid/orm'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
-import Category from './category.js'
 import States from '#enums/state'
 import SlugService from '#articles/services/slug_service'
 import Collection from './collection.js'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Comment from './comment.js'
 import User from './user.js'
+import Taxonomy from './taxonomy.js'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -48,12 +48,13 @@ export default class Article extends BaseModel {
   @hasMany(() => Comment)
   declare comments: HasMany<typeof Comment>
 
-  @manyToMany(() => Category, {
-    pivotTable: 'taxonomies',
+  @manyToMany(() => Taxonomy, {
+    pivotTable: 'article_taxonomies',
     pivotForeignKey: 'article_id',
-    pivotRelatedForeignKey: 'category_id',
+    pivotRelatedForeignKey: 'taxonomy_id',
+    pivotColumns: ['sort_order'],
   })
-  declare categories: ManyToMany<typeof Category>
+  declare taxonomies: ManyToMany<typeof Taxonomy>
 
   @manyToMany(() => Collection, {
     pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order'],
@@ -102,6 +103,6 @@ export default class Article extends BaseModel {
     typeof Article,
     (query: ModelQueryBuilderContract<typeof Article>) => void
   >((query) => {
-    query.preload('categories').preload('authors')
+    query.preload('taxonomies').preload('authors')
   })
 }

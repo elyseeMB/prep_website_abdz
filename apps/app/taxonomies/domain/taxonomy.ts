@@ -1,12 +1,12 @@
 import { Entity } from '#core/domain/entity.'
-import type { CategoryIdentifier } from './category_identifier.js'
+import type { TaxonomyIdentifier } from './taxonomy_identifier.js'
 
 interface Properties {
-  id: CategoryIdentifier
+  id: TaxonomyIdentifier
   name: string
 }
 
-export class Category extends Entity<Properties> {
+export class Taxonomy extends Entity<Properties> {
   static create(properties: Properties) {
     return new this(properties)
   }
