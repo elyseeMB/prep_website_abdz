@@ -7,18 +7,11 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name', 50).notNullable().defaultTo('default')
-      table
-        .integer('category_id')
-        .unsigned()
-        .references('id')
-        .inTable('categories')
-        .onDelete('CASCADE')
-      table
-        .integer('article_id')
-        .unsigned()
-        .references('id')
-        .inTable('articles')
-        .onDelete('CASCADE')
+      table.integer('category_id').unsigned().references('id').inTable('categories')
+      // .onDelete('CASCADE')
+      table.integer('article_id').unsigned().references('id').inTable('articles')
+      // .onDelete('CASCADE')
+      table.integer('sort_order').notNullable().defaultTo(0)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

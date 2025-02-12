@@ -1,10 +1,12 @@
 import SlugService from '#articles/services/slug_service'
+import { UserRole } from '#auth/enums/user_role'
 import { ArticleFactory } from '#database/factories/article_factory'
 import { CategoryFactory } from '#database/factories/category_factory'
 import { CollectionFactory } from '#database/factories/collection_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import Article from '#models/article'
 import Category from '#models/category'
+import Role from '#models/role'
 import User from '#models/user'
 import UtilityService from '#services/utility_service'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
@@ -56,6 +58,7 @@ export default class extends BaseSeeder {
   async makeFactory() {
     const trx = await db.transaction()
     try {
+      await this.seedRoles(trx)
       // await this.factoryArticle(trx)
       // await this.collection(trx)
       await this.user(trx)
@@ -102,5 +105,41 @@ export default class extends BaseSeeder {
     const freeUser = await baseUser.apply('User').createMany(10)
     const userIds = [...freeUser.map((user) => user.id), ...admin.map((userAdmin) => userAdmin.id)]
     return userIds
+  }
+
+  seedRoles(trx: TransactionClientContract) {
+    return Role.createMany(
+      [
+        {
+          id: UserRole.User,
+          name: 'User',
+          description: 'Authenticated User',
+        },
+        {
+          id: UserRole.Admin,
+          name: 'Admin',
+          description: 'Super User',
+        },
+      ],
+      { client: trx }
+    )
+  }
+
+  async seedCategories(trx: TransactionClientContract, admin: User) {
+    const ownerId = admin.id
+    const rootCategoryNames = ['AdonisJS', 'AWS Amplify', 'Nuxt', 'JavaScript', 'VueJS', 'HTMX']
+    const adonisChildrenNames = [
+      'Bouncer',
+      'Router',
+      'HttpContext',
+      'Ace CLI',
+      'Validator',
+      'Lucid',
+      'Tips',
+      'Edge',
+      'Authorization',
+    ]
+    const catBase = CategoryFactory.client(trx)
+    const [] = await Promise.all(rootCategoryNames.map((name) => catBase.merge({ name })))
   }
 }
