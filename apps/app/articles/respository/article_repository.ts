@@ -61,6 +61,7 @@ export default class ArticleRepository {
       .display({ skipPublishCheck: true })
       .firstOrFail()
       .withComments()
+      .firstOrFail()
       .exec()
   }
 

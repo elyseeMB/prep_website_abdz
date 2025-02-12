@@ -10,7 +10,7 @@ import UtilityService from '#services/utility_service'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
-import { randomInt, randomUUID } from 'crypto'
+import { randomUUID } from 'crypto'
 
 export default class extends BaseSeeder {
   async run() {
@@ -56,8 +56,8 @@ export default class extends BaseSeeder {
   async makeFactory() {
     const trx = await db.transaction()
     try {
-      await this.factoryArticle(trx)
-      await this.collection(trx)
+      // await this.factoryArticle(trx)
+      // await this.collection(trx)
       await this.user(trx)
       await trx.commit()
     } catch (error) {
@@ -89,10 +89,8 @@ export default class extends BaseSeeder {
                   root_sort_order: rootSortOrder++,
                 }))
               )
-              .with('comments', 5, (comment) => comment.tap((row) => (row.userId = randomInt(10))))
-              .factory.after('create', async (_, row) => {
-                await row.related('authors').sync([1])
-              })
+              .with('comments', 10, (comment) => comment.tap((row) => (row.articleId = 10)))
+              .factory.after('create', (_, row) => row.related('authors').sync([55479]))
           )
       )
       .create()
@@ -100,7 +98,9 @@ export default class extends BaseSeeder {
 
   async user(trx: TransactionClientContract) {
     const baseUser = UserFactory.client(trx)
-    await baseUser.apply('admin').createMany(2)
-    await baseUser.createMany(4)
+    const admin = await baseUser.apply('admin').createMany(2)
+    const freeUser = await baseUser.apply('User').createMany(10)
+    const userIds = [...freeUser.map((user) => user.id), ...admin.map((userAdmin) => userAdmin.id)]
+    return userIds
   }
 }
