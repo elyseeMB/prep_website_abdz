@@ -18,6 +18,7 @@
     "#auth/*": "./app/auth/*.js",
     "#enums/*": "./app/articles/enums/*.js",
     "#articles/services/*": "./app/articles/services/*.js",
+    "#assets/enums/*": "./app/assets/enums/*.js",
     "#collections/enums/*": "./app/collections/enums/*.js",
     "#controllers/*": "./app/controllers/*.js",
     "#exceptions/*": "./app/exceptions/*.js",

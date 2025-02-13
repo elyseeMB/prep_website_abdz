@@ -16,6 +16,8 @@ import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Comment from './comment.js'
 import User from './user.js'
 import Taxonomy from './taxonomy.js'
+import Asset from './asset.js'
+import AssetTypes from '#assets/enums/asset_types'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -47,6 +49,27 @@ export default class Article extends BaseModel {
 
   @hasMany(() => Comment)
   declare comments: HasMany<typeof Comment>
+
+  @manyToMany(() => Asset, {
+    pivotTable: 'asset_articles',
+    pivotColumns: ['sort_order'],
+    onQuery: (q) => q.where('assetTypeId', AssetTypes.THUMBNAIL),
+  })
+  declare assets: ManyToMany<typeof Asset>
+
+  @manyToMany(() => Asset, {
+    pivotTable: 'asset_articles',
+    pivotColumns: ['sort_order'],
+    onQuery: (q) => q.where('assetTypeId', AssetTypes.THUMBNAIL),
+  })
+  declare thumbnails: ManyToMany<typeof Asset>
+
+  @manyToMany(() => Asset, {
+    pivotTable: 'asset_articles',
+    pivotColumns: ['sort_order'],
+    onQuery: (q) => q.where('assetTypeId', AssetTypes.COVER),
+  })
+  declare covers: ManyToMany<typeof Asset>
 
   @manyToMany(() => Taxonomy, {
     pivotTable: 'article_taxonomies',

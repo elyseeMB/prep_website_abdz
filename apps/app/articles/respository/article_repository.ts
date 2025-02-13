@@ -153,7 +153,7 @@ export default class ArticleRepository {
         .exec()
 
       await trx
-        .from('taxonomies')
+        .from('article_taxonomies')
         .update({
           taxonomy_id: taxonomyId,
         })

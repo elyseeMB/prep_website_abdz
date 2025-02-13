@@ -5,6 +5,7 @@ import "virtual:uno.css";
 
 const preview: Preview = {
   parameters: {
+    layout: "centered",
     controls: {
       matchers: {
         color: /(background|color)$/i,

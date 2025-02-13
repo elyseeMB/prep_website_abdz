@@ -25,7 +25,6 @@ export const Base: Story = {
       FormField({ name: "usename", type: "textarea" }),
       FormPrimaryButton({ children: "je suis le button" }),
       FormSecondaryButton({
-        className: "text-orange",
         children: "je suis le button secondaire",
       }),
     ],

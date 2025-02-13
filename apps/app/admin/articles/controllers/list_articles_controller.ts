@@ -13,7 +13,7 @@ export default class ListArticleController {
     const articles = await this.repository.all()
 
     const [test] = await this.repository
-      .findBy('slug', 'nostrum-derideo-barba-desino-solio-amo-deprimo-cohibeo')
+      .findBy('slug', 'benigne-cupio-absque-numquam-animi-agnitio-placeat')
       .query.exec()
 
     console.log(test)

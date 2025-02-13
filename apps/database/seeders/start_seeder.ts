@@ -17,12 +17,12 @@ export default class extends BaseSeeder {
     return array[Math.floor(Math.random() * array.length)]
   }
   async run() {
-    await User.create({
-      fullName: 'johnDoe',
-      email: 'johnDoe@gmail.com',
-      password: 'je suis le password',
-      roleId: 2,
-    })
+    // await User.create({
+    //   fullName: 'johnDoe',
+    //   email: 'johnDoe@gmail.com',
+    //   password: 'je suis le password',
+    //   roleId: 2,
+    // })
     // await Category.createMany([
     //   { id: 1, name: 'Actualité' },
     //   { id: 2, name: 'Societé' },
@@ -44,7 +44,7 @@ export default class extends BaseSeeder {
     //   // slug: a,
     // })
     // article.related('categories').attach([2])
-    // await this.makeFactory()
+    await this.makeFactory()
   }
 
   async makeFactory() {
@@ -62,12 +62,12 @@ export default class extends BaseSeeder {
     }
   }
 
-  async factoryArticle(trx: TransactionClientContract) {
-    const baseArticle = ArticleFactory.client(trx).with('taxonomies')
-    await baseArticle.apply('News').createMany(5)
-    await baseArticle.apply('Blog').createMany(5)
-    await baseArticle.apply('draft').createMany(5)
-  }
+  // async factoryArticle(trx: TransactionClientContract) {
+  //   const baseArticle = ArticleFactory.client(trx).with('taxonomies')
+  //   await baseArticle.apply('News').createMany(5)
+  //   await baseArticle.apply('Blog').createMany(5)
+  //   await baseArticle.apply('draft').createMany(5)
+  // }
 
   async collection(trx: TransactionClientContract) {
     let rootSortOrder = 0
@@ -134,19 +134,20 @@ export default class extends BaseSeeder {
       'Edge',
       'Authorization',
     ]
-    const catBase = TaxonomyFactory.client(trx)
-    const [nameCat, ...other] = await Promise.all(
-      rootTaxonomyNames.map((name) => catBase.merge({ name }).create())
+    const taxBase = TaxonomyFactory.client(trx)
+    const [adonis, ...other] = await Promise.all(
+      rootTaxonomyNames.map((name) => taxBase.merge({ name, ownerId }).create())
     )
     const adonisChilren = await Promise.all(
-      adonisChildrenNames.map((name) => catBase.merge({ name, parentId: nameCat.id }).create())
+      adonisChildrenNames.map((name) =>
+        taxBase.merge({ name, parentId: adonis.id, rootParentId: adonis.id, ownerId }).create()
+      )
     )
-    return [nameCat.id, ...other.map((t) => t.id), ...adonisChilren.map((t) => t.id)]
+    return [adonis.id, ...other.map((t) => t.id), ...adonisChilren.map((t) => t.id)]
   }
 
   async seedUserAndContent(trx: TransactionClientContract) {
     const password = 'password'
-
     const baseUser = UserFactory.client(trx).with('profile').merge({ password })
     const admin = await baseUser.apply('admin').create()
     const OrdinaryUser = await baseUser.apply('User').createMany(10)
@@ -169,11 +170,15 @@ export default class extends BaseSeeder {
                   root_sort_order: rootSortOrder++,
                 }))
               )
+              .with('assets', 1, (asset) =>
+                asset.apply('thumbnail').pivotAttributes({ sort_order: 0 })
+              )
               .with('comments', 6, (comments) =>
                 comments.tap((row) => (row.userId = this.getRandom(userIds)))
               )
               .factory.after('create', async (_, row) => {
                 await row.related('authors').sync([admin.id])
+                await row.related('taxonomies').sync([this.getRandom(taxonomyIds)])
               })
           )
       )

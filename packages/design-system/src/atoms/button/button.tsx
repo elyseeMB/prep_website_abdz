@@ -26,7 +26,7 @@ export function Button({
     <button
       type={type}
       style={style}
-      className={["btn text-orange", mode, className].join(" ")}
+      className={["btn", mode, className].join(" ")}
     >
       {children}
     </button>
