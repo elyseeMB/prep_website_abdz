@@ -1,10 +1,10 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { ArticleCard } from "./articleCard.tsx";
+import { Card } from "./articleCard.tsx";
 
 const meta = {
-  component: ArticleCard,
+  component: Card,
   title: "Molecules/article Card",
-} satisfies Meta<typeof ArticleCard>;
+} satisfies Meta<typeof Card>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -1,0 +1,9 @@
+@unocss;
+
+.table-padding th,
+td {
+  @apply first:pl-24px;
+  @apply p-[10px_24px_10px_0];
+  @apply relative
+  /* Utilise la directive @apply pour UnoCSS */;
+}

@@ -117,6 +117,24 @@ export default class Article extends BaseModel {
     return isDeclare
   }
 
+  static forCollectionDisplay = scope<
+    typeof Article,
+    (query: ModelQueryBuilderContract<typeof Article>) => void
+  >(
+    (
+      query,
+      {
+        orderBy,
+        direction,
+      }: { orderBy: 'sort_order' | 'root_sort_order'; direction: 'asc' | 'desc' } = {
+        orderBy: 'sort_order',
+        direction: 'asc',
+      }
+    ) => {
+      query.apply((scope) => scope.forDisplay()).orderBy(orderBy, direction)
+    }
+  )
+
   static published = scope<
     typeof Article,
     (query: ModelQueryBuilderContract<typeof Article>) => void

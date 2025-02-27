@@ -8,6 +8,7 @@ type Properties = {
   content?: string
   taxonomyId?: number
   taxonomyName?: string
+  stateId?: number
 }
 
 export class Article extends Entity<Properties> {

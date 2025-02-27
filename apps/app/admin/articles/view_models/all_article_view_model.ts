@@ -16,6 +16,7 @@ export class AllArticleViewModel {
       summary: article.props.summary,
       taxonomyName: article.props.taxonomyName,
       taxonomyId: article.props.taxonomyId,
+      stateId: article.props.stateId,
     }))
   }
 }

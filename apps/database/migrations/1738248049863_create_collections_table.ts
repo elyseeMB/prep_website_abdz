@@ -9,7 +9,9 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.integer('owner_id').unsigned().references('id').inTable('users')
       table.integer('parent_id').unsigned().references('id').inTable(this.tableName)
+      table.integer('asset_id').unsigned().references('id').inTable('assets').nullable()
       table.integer('collection_type_id').unsigned().notNullable().defaultTo(CollectionTypes.COURSE)
       table.integer('status_id').unsigned().notNullable().defaultTo(Status.IN_PROGRESS)
       table.integer('state_id').unsigned().notNullable().defaultTo(States.PUBLIC)

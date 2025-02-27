@@ -18,4 +18,7 @@ export const AssetFactory = factory
     row.assetTypeId = AssetTypes.COVER
     row.filename = faker.image.url({ width: 1280, height: 720 })
   })
+  .state('icon', (row, { faker }) => {
+    row.filename = faker.image.url({ width: 300, height: 300 })
+  })
   .build()

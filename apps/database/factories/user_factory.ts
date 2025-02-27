@@ -4,6 +4,7 @@ import { UserRole } from '#auth/enums/user_role'
 import { CommentFactory } from './comment_factory.js'
 import { ArticleFactory } from './article_factory.js'
 import { ProfileFactory } from './profile_factory.js'
+import { CollectionFactory } from './collection_factory.js'
 
 export const UserFactory = factory
   .define(User, async ({ faker }) => {
@@ -19,4 +20,5 @@ export const UserFactory = factory
   .relation('comments', () => CommentFactory)
   .relation('articles', () => ArticleFactory)
   .relation('profile', () => ProfileFactory)
+  .relation('collections', () => CollectionFactory)
   .build()

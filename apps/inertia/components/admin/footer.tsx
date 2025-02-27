@@ -1,9 +1,5 @@
-import { FooterSection } from '@website/design-system/src/organisms/footer/footer_section'
+import { Footer as FooterSection } from '@website/design-system'
 
 export function Footer() {
-  return (
-    <footer>
-      <FooterSection>hello world !</FooterSection>
-    </footer>
-  )
+  return <FooterSection />
 }

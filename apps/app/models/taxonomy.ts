@@ -1,9 +1,20 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasMany, manyToMany, scope } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeSave,
+  belongsTo,
+  column,
+  hasMany,
+  manyToMany,
+  scope,
+} from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Article from './article.js'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import User from './user.js'
+import Asset from './asset.js'
+import Collection from './collection.js'
+import SlugService from '#articles/services/slug_service'
 
 export default class Taxonomy extends BaseModel {
   @column({ isPrimary: true })
@@ -22,7 +33,13 @@ export default class Taxonomy extends BaseModel {
   declare level_index: number
 
   @column()
+  declare assetId: number | null
+
+  @column()
   declare name: string
+
+  @column()
+  declare slug: string
 
   @column()
   declare description: string
@@ -37,6 +54,9 @@ export default class Taxonomy extends BaseModel {
     foreignKey: 'ownerId',
   })
   declare owner: BelongsTo<typeof User>
+
+  @belongsTo(() => Asset)
+  declare asset: BelongsTo<typeof Asset>
 
   @belongsTo(() => Taxonomy, {
     foreignKey: 'parentId',
@@ -56,10 +76,27 @@ export default class Taxonomy extends BaseModel {
   })
   declare articles: ManyToMany<typeof Article>
 
+  @manyToMany(() => Collection, {
+    pivotTable: 'collection_taxonomies',
+    pivotColumns: ['sort_order'],
+  })
+  declare Collections: ManyToMany<typeof Collection>
+
   static hasContent = scope<
     typeof Taxonomy,
     (query: ModelQueryBuilderContract<typeof Taxonomy>) => void
   >((query) =>
     query.where((q) => q.whereHas('articles', (articles) => articles.apply((s) => s.published())))
   )
+
+  @beforeSave()
+  static async slugifyName(taxonomy: Taxonomy) {
+    if (taxonomy.$dirty.name && !taxonomy.$dirty.slug) {
+      const slugify = new SlugService<typeof Taxonomy>({
+        startegy: 'dbIncrement',
+        fields: ['name'],
+      })
+      taxonomy.slug = await slugify.make(Taxonomy, 'name', taxonomy.name)
+    }
+  }
 }

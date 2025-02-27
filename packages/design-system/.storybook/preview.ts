@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react";
 import "../src/css/index.css";
-// import "@unocss/reset/tailwind.css";
+import "@unocss/reset/tailwind.css";
 import "virtual:uno.css";
 
 const preview: Preview = {

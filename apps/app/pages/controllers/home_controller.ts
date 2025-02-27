@@ -1,20 +1,23 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { TaxonomyRepository } from '../../taxonomies/repositories/taxonomy_repository.js'
 import { inject } from '@adonisjs/core'
+import CollectionRepository from '../../collections/repository/collection_repository.js'
 
 @inject()
 export default class HomeController {
-  constructor(private taxonomyRepository: TaxonomyRepository) {}
+  constructor(
+    protected taxonomyRepository: TaxonomyRepository,
+    protected collectionRepository: CollectionRepository
+  ) {}
 
-  async render({ inertia }: HttpContext) {
-    const doc = await this.taxonomyRepository.getList().query.exec()
-    console.log(doc)
+  async render({ inertia, view }: HttpContext) {
+    const [series] = await this.collectionRepository.getLastUpdated(1, true)
 
     // const categories = doc.reduce((acc, value) => {
     //   acc[value.$attributes.name] = { article: value.articles, count: value.$extras }
     //   return acc
     // }, {})
 
-    return inertia.render('home')
+    return inertia.render('home', { series })
   }
 }

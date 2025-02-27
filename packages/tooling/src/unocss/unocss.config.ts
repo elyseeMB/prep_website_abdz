@@ -33,5 +33,9 @@ export default (config: UserConfig) =>
             0 1.5px 2px 0 rgba(0 0 0 / 0.24);`,
         },
       },
+      rules: [
+        ["bg-taxonomy", { "background-color": "#a1f3ff" }],
+        ["bg-state", { "background-color": "#ffff9cd1" }],
+      ],
     },
   ]);

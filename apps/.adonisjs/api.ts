@@ -61,6 +61,13 @@ const routes = [
   },
   {
     params: [],
+    name: 'admin.pages.users',
+    path: '/admin/users',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
     name: 'home',
     path: '/',
     method: ["GET","HEAD"],

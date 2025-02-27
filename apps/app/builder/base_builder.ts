@@ -42,7 +42,6 @@ export class BaseBuilder<Model extends LucidModel, Record extends LucidRow> {
 
   limit(limit: number) {
     this.query.limit(limit)
-
     return this
   }
 }

@@ -89,6 +89,7 @@ export default class extends BaseSeeder {
               .factory.after('create', (_, row) => row.related('authors').sync([55479]))
           )
       )
+
       .create()
   }
 
@@ -157,9 +158,11 @@ export default class extends BaseSeeder {
     let rootSortOrder = 0
     let moduleSortOrder = 0
     await CollectionFactory.client(trx)
-      .merge({ name: "Let's Learn Adonisjs" })
+      .merge({ ownerId: admin.id, name: "Let's Learn Adonisjs" })
+      .with('asset', 1, (f) => f.apply('icon'))
       .with('children', 5, (f) =>
         f
+          .merge({ ownerId: admin.id })
           .tap((row) => (row.sortOrder = moduleSortOrder++))
           .with('articles', 5, (articles) =>
             articles
@@ -182,6 +185,32 @@ export default class extends BaseSeeder {
               })
           )
       )
+
       .create()
+
+    rootSortOrder = 0
+    moduleSortOrder = 0
+    await CollectionFactory.client(trx)
+      .merge({ ownerId: admin.id })
+      .with('asset', 1, (f) => f.apply('icon'))
+      .with('articles', 10, (f) =>
+        f
+          .pivotAttributes(
+            [...new Array(10)].map((_, i) => ({
+              root_collection_id: f.parent.id,
+              sort_order: i,
+              root_sort_order: rootSortOrder++,
+            }))
+          )
+          .with('assets', 1, (asset) => asset.apply('thumbnail').pivotAttributes({ sort_order: 0 }))
+          .with('comments', 6, (comments) =>
+            comments.tap((row) => (row.userId = this.getRandom(userIds)))
+          )
+          .factory.after('create', async (_, row) => {
+            await row.related('authors').sync([admin.id])
+            await row.related('taxonomies').sync([this.getRandom(taxonomyIds)])
+          })
+      )
+      .createMany(3)
   }
 }

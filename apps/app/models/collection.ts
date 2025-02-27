@@ -1,15 +1,31 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeSave,
+  belongsTo,
+  column,
+  hasMany,
+  manyToMany,
+  scope,
+} from '@adonisjs/lucid/orm'
 import SlugService from '#articles/services/slug_service'
 import CollectionTypes from '#collections/enums/collection_types'
 import Status from '#collections/enums/status'
 import States from '#enums/state'
 import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Article from './article.js'
+import User from './user.js'
+import Asset from './asset.js'
+import Taxonomy from './taxonomy.js'
+import Database from '@adonisjs/lucid/services/db'
+import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 
 export default class Collection extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
+
+  @column()
+  declare ownerId: number
 
   @column()
   declare parentId: number | null
@@ -30,13 +46,27 @@ export default class Collection extends BaseModel {
   declare slug: string
 
   @column()
+  declare description: string
+
+  @column()
   declare sortOrder: number
+
+  @column()
+  declare assetId: number | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @belongsTo(() => User, {
+    foreignKey: 'ownerId',
+  })
+  declare owner: BelongsTo<typeof User>
+
+  @belongsTo(() => Asset)
+  declare asset: BelongsTo<typeof Asset>
 
   @belongsTo(() => Collection)
   declare parent: BelongsTo<typeof Collection>
@@ -46,6 +76,19 @@ export default class Collection extends BaseModel {
     pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order'],
   })
   declare articles: ManyToMany<typeof Article>
+
+  @manyToMany(() => Article, {
+    pivotForeignKey: 'root_collection_id',
+    pivotTable: 'collection_articles',
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order'],
+  })
+  declare articlesFlatttened: ManyToMany<typeof Article>
+
+  @manyToMany(() => Taxonomy, {
+    pivotTable: 'collection_taxonomies',
+    pivotColumns: ['sort_order'],
+  })
+  declare taxonomies: ManyToMany<typeof Taxonomy>
 
   @hasMany(() => Collection, {
     foreignKey: 'parentId',
@@ -62,4 +105,9 @@ export default class Collection extends BaseModel {
       collection.slug = await slugify.make(Collection, 'name', collection.name)
     }
   }
+
+  static withPostLatestPublished = scope<
+    typeof Collection,
+    (query: ModelQueryBuilderContract<typeof Collection>) => void
+  >((query) => query.where('state_id', States.PUBLIC))
 }

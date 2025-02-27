@@ -8,6 +8,7 @@ import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/typ
 import Article from './article.js'
 import Role from './role.js'
 import Profile from './profile.js'
+import Collection from './collection.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -47,6 +48,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @belongsTo(() => Role)
   declare role: BelongsTo<typeof Role>
+
+  @hasMany(() => Collection, {
+    foreignKey: 'ownerId',
+  })
+  declare collections: HasMany<typeof Collection>
 
   @hasOne(() => Profile)
   declare profile: HasOne<typeof Profile>

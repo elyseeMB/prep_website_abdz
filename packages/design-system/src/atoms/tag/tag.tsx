@@ -1,19 +1,28 @@
 import { PropsWithChildren } from "react";
 
+type TagType = "taxonomy" | "state" | "collections";
+
 export function Tag({
+  type = "taxonomy",
   className,
   children = "tag",
 }: PropsWithChildren<{
   className?: string;
+  type?: TagType;
 }>) {
   return (
-    <div
+    <span
       className={[
+        "inline-flex gap-1 items-center lowercase rounded-full text-3 px-3 py-1 font-medium ring-1 ring-inset before:content-empty before:block before:w-6px before:h-6px before:rounded-full hover:bg-gray-1 transition-200",
+        type === "state" &&
+          "before:hidden bg-gradient-to-b from-[#f0fdf4] to-transparent text-green-700 ring-green-600/20 before:bg-green-700",
+        type === "taxonomy" &&
+          "bg-blue-50 text-blue-700 ring-blue-700/10 before:bg-blue-700",
         className,
-        "relative flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_0_1px_rgba(124,124,124,0.17),_0_1.5px_2px_0_rgba(0,0,0,0.02)] rounded-full line-height-1 py-2px px-4 text-sm line-height-normal bg-none before:content-empty before:block before:w-8px before:h-8px before:rounded-full before:bg-green-5 hover:bg-gray-1 transition-200",
       ].join(" ")}
     >
+      <div className="i-ri-checkbox-circle-fill"></div>
       {children}
-    </div>
+    </span>
   );
 }

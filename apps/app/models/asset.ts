@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import Article from './article.js'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import Collection from './collection.js'
 
 export default class Asset extends BaseModel {
   @column({ isPrimary: true })
@@ -27,4 +28,10 @@ export default class Asset extends BaseModel {
     pivotColumns: ['sort_order'],
   })
   declare articles: ManyToMany<typeof Article>
+
+  @hasMany(() => Collection)
+  declare collections: HasMany<typeof Collection>
+
+  @hasMany(() => Asset)
+  declare taxonomies: HasMany<typeof Asset>
 }

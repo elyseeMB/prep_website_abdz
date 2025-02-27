@@ -20,4 +20,10 @@ export default class PagesController {
     }
     return inertia.render('admin/articles/blogs')
   }
+
+  usersList({ inertia, response }: HttpContext) {
+    if (!this.user.isAdmin) {
+      return response.redirect().back()
+    }
+  }
 }

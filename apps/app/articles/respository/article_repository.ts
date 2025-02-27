@@ -72,6 +72,7 @@ export default class ArticleRepository {
         'articles.title',
         'articles.summary',
         'articles.content',
+        'articles.state_id',
         'taxonomies.id as taxonomy_id',
         'taxonomies.name as taxonomy_name',
       ])
@@ -84,6 +85,7 @@ export default class ArticleRepository {
         summary: article.summary,
         taxonomyName: article.taxonomy_name,
         taxonomyId: article.taxonomy_id,
+        stateId: article.state_id,
       })
     })
   }

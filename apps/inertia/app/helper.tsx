@@ -3,7 +3,7 @@ import { LayoutAdmin } from '~/components/layouts/admin.js'
 export function setLayout(name: string, page: { layout?: any }) {
   if (name.includes('admin')) {
     page.layout = (page) => {
-      return <LayoutAdmin children={page} title="fdsfd" />
+      return <LayoutAdmin children={page} title="home" />
     }
   } else if (name.includes('pastes')) {
   } else {
