@@ -14,7 +14,6 @@ export default class customersRepository {
 
   getList() {
     const users = User.query().select('*').preload('articles').preload('profile').preload('role')
-
     return users
   }
 }

@@ -1,6 +1,8 @@
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import CollectionBuilder from '../builder/collection_builder.js'
+import { Collection } from '#collections/domain/collection'
+import { CollectionIdentifier } from '#collections/domain/collection_identifier'
 
 @inject()
 export default class CollectionRepository {
@@ -22,15 +24,25 @@ export default class CollectionRepository {
       .display()
   }
 
-  getLastUpdated(
+  async getLastUpdated(
     limit: number | undefined = undefined,
     withArticles: boolean = true,
     excludeIds: number[] = [],
     postLimit: number = 8
   ) {
-    return this.queryGetLastUpdated(withArticles, excludeIds, postLimit)
+    const collections = await this.queryGetLastUpdated(withArticles, excludeIds, postLimit)
       .if(limit, (builder) => builder.limit(limit!))
       .query.exec()
+
+    return collections.map((collection) => {
+      return Collection.create({
+        id: CollectionIdentifier.fromString(collection.id.toString()),
+        name: collection.name,
+        slug: collection.slug,
+        articles: collection.articles,
+        asset: collection.asset,
+      })
+    })
   }
 
   private queryGetLastUpdated(

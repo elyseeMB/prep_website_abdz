@@ -1,13 +1,13 @@
 import { Footer, Card } from '@website/design-system'
 
 export default function Home({ currentUser, series }: any) {
-  console.log(series)
+  console.log(series.collections)
   return (
     <>
-      <h1 className="text-orange"> {series.name}</h1>
+      <h1 className="text-orange"> {series.collections[0].props.name}</h1>
 
       <section className="w-full">
-        {series.articles.map((article: any, index) => (
+        {series.collections[0].props.articles.map((article: any, index) => (
           <Card
             index={index}
             title={article.title}
