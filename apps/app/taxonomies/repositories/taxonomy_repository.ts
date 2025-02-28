@@ -2,6 +2,7 @@ import db from '@adonisjs/lucid/services/db'
 import { Taxonomy } from '../domain/taxonomy.js'
 import { TaxonomyIdentifier } from '../domain/taxonomy_identifier.js'
 import TaxonomyBuilder from '../builder/taxonomy_builder.js'
+import TaxonomyModel from '#models/taxonomy'
 
 export class TaxonomyRepository {
   builder() {
@@ -23,7 +24,15 @@ export class TaxonomyRepository {
     })
   }
 
+  getBySlug(slug: string) {
+    return this.builder().display().where('slug', slug).firstOrFail()
+  }
+
+  getChildren(taxonomy: TaxonomyModel) {
+    return this.builder().where('parent_id', taxonomy.id).display().order()
+  }
+
   getList() {
-    return this.builder().display()
+    return this.builder().display().order()
   }
 }

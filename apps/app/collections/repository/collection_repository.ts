@@ -24,25 +24,15 @@ export default class CollectionRepository {
       .display()
   }
 
-  async getLastUpdated(
+  getLastUpdated(
     limit: number | undefined = undefined,
     withArticles: boolean = true,
     excludeIds: number[] = [],
     postLimit: number = 8
   ) {
-    const collections = await this.queryGetLastUpdated(withArticles, excludeIds, postLimit)
-      .if(limit, (builder) => builder.limit(limit!))
-      .query.exec()
-
-    return collections.map((collection) => {
-      return Collection.create({
-        id: CollectionIdentifier.fromString(collection.id.toString()),
-        name: collection.name,
-        slug: collection.slug,
-        articles: collection.articles,
-        asset: collection.asset,
-      })
-    })
+    return this.queryGetLastUpdated(withArticles, excludeIds, postLimit).if(limit, (builder) =>
+      builder.limit(limit!)
+    )
   }
 
   private queryGetLastUpdated(

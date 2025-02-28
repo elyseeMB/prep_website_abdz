@@ -1,4 +1,3 @@
-import Category from '#models/category'
 import Taxonomy from '#models/taxonomy'
 import { BaseBuilder } from '../../builder/base_builder.js'
 
@@ -33,5 +32,9 @@ export default class TaxonomyBuilder extends BaseBuilder<typeof Taxonomy, Taxono
       query.apply((s) => s.forDisplay()).apply((s) => s.published())
     )
     return this
+  }
+
+  order(column: keyof Taxonomy = 'name', direction: 'asc' | 'desc' | undefined = 'asc') {
+    return this.query.orderBy(column, direction)
   }
 }

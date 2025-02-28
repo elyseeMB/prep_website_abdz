@@ -2,6 +2,7 @@ import { User } from '#auth/domain/user'
 import CollectionTypes from '#collections/enums/collection_types'
 import States from '#enums/state'
 import Collection from '#models/collection'
+import Taxonomy from '#models/taxonomy'
 import { BaseBuilder } from '../../builder/base_builder.js'
 
 type IUser = User | undefined
@@ -78,6 +79,11 @@ export default class CollectionBuilder extends BaseBuilder<typeof Collection, Co
 
   orderLastUpdated() {
     this.query.apply((scope) => scope.withPostLatestPublished()).select(['collections.*'])
+    return this
+  }
+
+  whereHasTaxonomy(taxonomy: Taxonomy) {
+    this.query.whereHas('taxonomies', (query) => query.where('taxonomies.id', taxonomy.id))
     return this
   }
 }

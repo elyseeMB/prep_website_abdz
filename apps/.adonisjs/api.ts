@@ -7,7 +7,32 @@
 import type { MakeTuyauRequest, MakeTuyauResponse } from '@tuyau/utils/types'
 import type { InferInput } from '@vinejs/vine/types'
 
+type LoginGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/auth/controllers/login_controller.ts').default['show'], false>
+}
+type LoginPost = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/auth/controllers/login_controller.ts').default['execute'], false>
+}
+type SeriesGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/pages/series/controller/series_controller.ts').default['render'], false>
+}
 export interface ApiDefinition {
+  'login': {
+    '$url': {
+    };
+    '$get': LoginGetHead;
+    '$head': LoginGetHead;
+    '$post': LoginPost;
+  };
+  'series': {
+    '$url': {
+    };
+    '$get': SeriesGetHead;
+    '$head': SeriesGetHead;
+  };
 }
 const routes = [
   {
@@ -54,15 +79,15 @@ const routes = [
   },
   {
     params: [],
-    name: 'admin.pages.blogs',
-    path: '/admin/views',
+    name: 'admin.pages.users',
+    path: '/admin/users',
     method: ["GET","HEAD"],
     types: {} as unknown,
   },
   {
     params: [],
-    name: 'admin.pages.users',
-    path: '/admin/users',
+    name: 'admin.pages.blogs',
+    path: '/admin/views',
     method: ["GET","HEAD"],
     types: {} as unknown,
   },
@@ -78,14 +103,35 @@ const routes = [
     name: 'login_route_show',
     path: '/login',
     method: ["GET","HEAD"],
-    types: {} as unknown,
+    types: {} as LoginGetHead,
   },
   {
     params: [],
     name: 'login_route',
     path: '/login',
     method: ["POST"],
+    types: {} as LoginPost,
+  },
+  {
+    params: [],
+    name: 'topics.index',
+    path: '/topics',
+    method: ["GET","HEAD"],
     types: {} as unknown,
+  },
+  {
+    params: ["slug"],
+    name: 'topics.show',
+    path: '/topics/:slug',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'series.index',
+    path: '/series',
+    method: ["GET","HEAD"],
+    types: {} as SeriesGetHead,
   },
   {
     params: [],

@@ -5,30 +5,30 @@ import { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Article from '#models/article'
 import Asset from '#models/asset'
 
-// interface Asset {
-//   id: number
-//   assetTypeId: number
-//   filename: string
-//   byteSize: number
-//   createdAt: string
-//   updatedAt: string
-// }
+export interface AssetProperties {
+  id: number
+  assetTypeId: number
+  filename: string
+  byteSize: number
+  createdAt: string
+  updatedAt: string
+}
 
-// interface Article {
-//   id: number
-//   articleTypeId: number
-//   title: string
-//   slug: string
-//   summary: string
-//   content: string
-//   isPublished: boolean
-//   publishAt: string | null
-//   viewCount: number
-//   stateId: number
-//   assets: Asset[]
-//   createdAt: DateTime
-//   updatedAt: DateTime
-// }
+export interface ArticleProperties {
+  id: number
+  articleTypeId: number
+  title: string
+  slug: string
+  summary: string
+  content: string
+  isPublished: boolean
+  publishAt: string | null
+  viewCount: number
+  stateId: number
+  assets: Asset[]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
 
 interface Properties {
   id: CollectionIdentifier
