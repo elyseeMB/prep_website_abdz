@@ -4,6 +4,7 @@ import type { TaxonomyIdentifier } from './taxonomy_identifier.js'
 interface Properties {
   id: TaxonomyIdentifier
   name: string
+  slug: string
 }
 
 export class Taxonomy extends Entity<Properties> {

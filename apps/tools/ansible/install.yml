@@ -1,0 +1,23 @@
+---
+- name: Installation du serveurs
+  hosts: local
+  become: yes
+  vars:
+    ssh_passphrase: git
+    nvm_version: 'v0.40.1'
+    node_version: '22'
+    nvm_dir: '{{ ansible_env.HOME }}/.nvm'
+
+  # pre_tasks:
+  #   - name: 'APT | Update & Upgrade'
+  #     become: yes
+  #     apt:
+  #       upgrade: dist
+  #       update_cache: yes
+
+  tasks:
+
+  roles:
+    # - { role: tools, tags: tools }
+    # - { role: node, tags: node }
+    - { role: app, tags: app }

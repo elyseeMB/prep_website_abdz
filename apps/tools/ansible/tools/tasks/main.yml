@@ -1,0 +1,10 @@
+---
+- name: Installation de Tools
+  apt:
+    name:
+      - git
+      - vim
+      - redis
+      - gnupg
+      - curl
+    state: latest

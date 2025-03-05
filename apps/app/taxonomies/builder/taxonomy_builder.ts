@@ -35,6 +35,7 @@ export default class TaxonomyBuilder extends BaseBuilder<typeof Taxonomy, Taxono
   }
 
   order(column: keyof Taxonomy = 'name', direction: 'asc' | 'desc' | undefined = 'asc') {
-    return this.query.orderBy(column, direction)
+    this.query.orderBy(column, direction)
+    return this
   }
 }

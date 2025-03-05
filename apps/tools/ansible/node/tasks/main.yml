@@ -1,0 +1,6 @@
+---
+# main.yml
+- name: Install Node.js and pnpm
+  block:
+    - name: Include node tasks
+      include_tasks: node.yml

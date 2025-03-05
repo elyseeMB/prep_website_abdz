@@ -1,0 +1,31 @@
+---
+- name: Vérifier si NVM est déjà installé
+  become: yes
+  stat:
+    path: '{{ nvm_dir }}/nvm.sh'
+  register: nvm_installed
+
+- name: Installer NVM
+  shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh | bash
+  args:
+    creates: '{{ nvm_dir }}/nvm.sh'
+  when: not nvm_installed.stat.exists
+
+- name: Installer Node.js v22 via NVM
+  shell: |
+    source {{ nvm_dir }}/nvm.sh
+    nvm install {{ node_version }}
+  args:
+    executable: /bin/bash
+  register: node_install
+  changed_when: "'is already installed.' not in node_install.stdout"
+
+- name: Activer pnpm via corepack
+  shell: |
+    source {{ nvm_dir }}/nvm.sh
+    corepack enable pnpm
+  args:
+    executable: /bin/bash
+  register: pnpm_enable
+  changed_when: pnpm_enable.rc == 0

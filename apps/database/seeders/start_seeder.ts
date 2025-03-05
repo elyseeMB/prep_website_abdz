@@ -52,7 +52,6 @@ export default class extends BaseSeeder {
     try {
       await this.seedRoles(trx)
       await this.seedUsersAndContent(trx)
-
       // return
       // await this.seedRoles(trx)
       // await this.seedUserAndContent(trx)
@@ -411,6 +410,38 @@ export default class extends BaseSeeder {
       .with('asset', 1, (f) => f.apply('icon'))
       .with('articles', 10, (f) =>
         f
+          .pivotAttributes(
+            [...new Array(10)].map((_, i) => ({
+              root_collection_id: f.parent.id,
+              sort_order: i,
+              root_sort_order: rootSortOrder++,
+            }))
+          )
+          .with('assets', 1, (assets) =>
+            assets.apply('thumbnail').pivotAttributes({ sort_order: 0 })
+          )
+          .with('comments', 6, (comments) =>
+            comments.tap((row) => (row.userId = UtilityService.getRandom(userIds)))
+          )
+          .factory.after('create', async (_, row) => {
+            await row.related('authors').sync([contributorLvl1.id])
+            await row.related('taxonomies').sync([UtilityService.getRandom(taxonomyIds)])
+          })
+      )
+      .createMany(3)
+
+    // creates the following
+    //    3 mock series tied to admin (contributorLvl1 doesn't have access to create collections/taxonomies)
+    //    containing 10 lessons each, authored by contributorLvl2
+    //    which are tied to random taxonomies
+    //    each lesson also gets 6 comments from random users
+    rootSortOrder = 0
+    await CollectionFactory.client(trx)
+      .merge({ ownerId: admin.id })
+      .with('asset', 1, (f) => f.apply('icon'))
+      .with('articles', 10, (f) =>
+        f
+          .apply('Blog')
           .pivotAttributes(
             [...new Array(10)].map((_, i) => ({
               root_collection_id: f.parent.id,

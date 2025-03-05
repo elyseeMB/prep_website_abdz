@@ -25,7 +25,7 @@ export interface ArticleProperties {
   publishAt: string | null
   viewCount: number
   stateId: number
-  assets: Asset[]
+  assets: Partial<BelongsTo<typeof Asset>>
   createdAt: DateTime
   updatedAt: DateTime
 }

@@ -42,7 +42,7 @@ export default class ArticleRepository {
   }
 
   getBlogs() {
-    return this.getList().whereType([ArticleTypes.BLOG, ArticleTypes.NEWS])
+    return this.getList([ArticleTypes.BLOG, ArticleTypes.NEWS])
   }
 
   getLatest(

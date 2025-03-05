@@ -11,6 +11,7 @@ export class AllTaxonomyViewModel {
     return this.taxonomies.map((taxonomy) => ({
       id: taxonomy.getIdentifier().toString(),
       name: taxonomy.props.name,
+      slug: taxonomy.props.slug,
     }))
   }
 }

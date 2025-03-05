@@ -144,6 +144,9 @@ export default class Article extends BaseModel {
     typeof Article,
     (query: ModelQueryBuilderContract<typeof Article>) => void
   >((query) => {
-    query.preload('taxonomies').preload('authors')
+    query
+      .preload('thumbnails')
+      .preload('taxonomies')
+      .preload('authors', (authors) => authors.preload('profile'))
   })
 }
