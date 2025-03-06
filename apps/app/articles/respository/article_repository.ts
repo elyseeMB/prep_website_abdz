@@ -82,9 +82,10 @@ export default class ArticleRepository {
       return Article.create({
         id: ArticleIdentifier.fromString(article.article_id),
         title: article.title,
+        slug: article.slug,
+        content: article.content,
         summary: article.summary,
-        taxonomyName: article.taxonomy_name,
-        taxonomyId: article.taxonomy_id,
+        taxonomies: article.taxonomy_name,
         stateId: article.state_id,
       })
     })

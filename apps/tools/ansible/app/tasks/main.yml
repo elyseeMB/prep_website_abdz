@@ -3,5 +3,3 @@
   git:
     repo: 'https://github.com/elyseeMB/prep_website_abdz.git'
     dest: '{{root_path}}'
-    sparse_checkout:
-      - build/

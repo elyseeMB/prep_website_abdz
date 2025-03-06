@@ -17,14 +17,11 @@ export default class ListArticleController {
     const articles = await this.repository.all()
 
     const [test] = await this.repository
-      .findBy('slug', 'tondeo-temeritas-nihil-patria-neque-spes-tergiversatio')
+      .findBy('slug', 'facilis-quas-curtus-conqueror-sponte-adsuesco-totam-impedit')
       .query.exec()
 
     // console.log(test)
     const [collection] = await this.collection.getList().query.exec()
-
-    console.log(collection)
-    // await emitter.emit('article:sync', { article: test, views: 2 })
 
     return inertia.render('admin/articles/list', {
       vm: AllArticleViewModel.fromDomain(articles).serialize(),

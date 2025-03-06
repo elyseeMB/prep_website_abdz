@@ -15,8 +15,8 @@ export default function viewCustomers({
   currentUser: PropsCurrentUser
   customers: any
 }) {
-  const formatDate = new Intl.DateTimeFormat()
-  console.log(customers.filter((c) => c.articles))
+  // const formatDate = new Intl.DateTimeFormat()
+  // console.log(customers.filter((c) => c.articles))
 
   return (
     <div className="relative w-full">

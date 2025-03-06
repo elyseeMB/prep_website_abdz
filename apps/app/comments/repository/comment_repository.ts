@@ -16,7 +16,6 @@ export default class CommentRepository {
   }
 
   async store(data: Infer<typeof commentValidator>) {
-    console.log(data)
     if (!this.user) {
       throw new UnauthorizedException('you must be signed in to create comment')
     }

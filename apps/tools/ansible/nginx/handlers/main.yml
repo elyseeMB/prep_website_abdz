@@ -1,0 +1,16 @@
+---
+- name: nginx reload
+  service:
+    name: nginx
+    state: reloaded
+
+- name: nginx restart
+  service:
+    name: nginx
+    state: restarted
+
+- name: nginx started
+  service:
+    name: nginx
+    state: started
+    enabled: true
