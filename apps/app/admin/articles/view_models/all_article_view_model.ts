@@ -15,7 +15,7 @@ export class AllArticleViewModel {
       title: article.props.title,
       stateId: article.props.stateId,
       summary: article.props.summary,
-      taxonomyId: article.props.taxonomies,
+      taxonomyName: article.props.taxonomies,
     }))
   }
 }

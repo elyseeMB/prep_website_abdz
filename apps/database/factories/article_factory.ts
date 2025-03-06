@@ -16,12 +16,7 @@ export const ArticleFactory = factory
           max: 9,
         })
       ),
-      summary: stringHelpers.titleCase(
-        faker.lorem.words({
-          min: 3,
-          max: 9,
-        })
-      ),
+      summary: stringHelpers.titleCase(faker.lorem.sentences(2)),
       content: faker.lorem.paragraph(5),
       stateId: States.PUBLIC,
     }

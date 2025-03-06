@@ -1,6 +1,7 @@
 import Article from '#models/article'
 import { Exception } from '@adonisjs/core/exceptions'
 import string from '@adonisjs/core/helpers/string'
+import db from '@adonisjs/lucid/services/db'
 import { LucidModel } from '@adonisjs/lucid/types/model'
 
 export type SlugifyConfig = {
@@ -56,6 +57,7 @@ class SimpleStrategy {
 }
 
 export default class SlugService<Model extends LucidModel> extends SimpleStrategy {
+  private counterName: string = 'lucid_slugify_counter'
   constructor(config: SlugifyConfig) {
     super(config)
   }
@@ -89,6 +91,36 @@ export default class SlugService<Model extends LucidModel> extends SimpleStrateg
     return `${slug}${this.separator}${Math.max(...slugs) + 1}`
   }
 
+  /**
+   * Makes the slug unique by using the runtime slug counter field
+   */
+  private makeSlugFromCounter(slug: string, rows: InstanceType<Model>[]) {
+    /**
+     * No matching rows found. Consider the slug as it is
+     */
+    if (!rows.length) {
+      return slug
+    }
+
+    /**
+     * First row has the counter and hence consider it
+     */
+    let counter = rows[0].$extras[this.counterName]
+    if (counter) {
+      return `${slug}${this.separator}${counter + 1}`
+    }
+
+    /**
+     * Second row has the counter and hence consider it
+     */
+    if (rows[1]) {
+      counter = rows[1].$extras[this.counterName]
+      return `${slug}${this.separator}${counter + 1}`
+    }
+
+    return `${slug}${this.separator}1`
+  }
+
   private async getSlugForSqlite(
     model: Model,
     field: Extract<keyof InstanceType<Model>, string>,
@@ -104,6 +136,21 @@ export default class SlugService<Model extends LucidModel> extends SimpleStrateg
     return this.makeSlugFromMultipleRows(slug, field, rows)
   }
 
+  private async getSlugForPg(
+    model: Model,
+    _: Extract<keyof InstanceType<Model>, string>,
+    columnName: string,
+    slug: string
+  ) {
+    const rows = await model
+      .query()
+      .select(db.raw(`SUBSTRING(${columnName} from '[0-9]+$')::INTEGER as ${this.counterName}`))
+      .whereRaw(`?? ~* ?`, [columnName, `^${slug}(${this.separator}[0-9]*)?$`])
+      .orderBy(this.counterName, 'desc')
+
+    return this.makeSlugFromCounter(slug, rows)
+  }
+
   make(model: Model, field: Extract<keyof InstanceType<Model>, string>, slug: string) {
     model.boot()
 
@@ -115,6 +162,10 @@ export default class SlugService<Model extends LucidModel> extends SimpleStrateg
     slug = this.makeSlug(model, field, slug)
 
     switch (dialectName) {
+      case 'postgres':
+      case 'redshift':
+        return this.getSlugForPg(model, field, columnName, slug)
+      case 'better-sqlite3':
       case 'better-sqlite3':
         return this.getSlugForSqlite(model, field, columnName, slug)
       default:
