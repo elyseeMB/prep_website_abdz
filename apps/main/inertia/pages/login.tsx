@@ -1,11 +1,6 @@
-import { createTuyau } from '@tuyau/client'
-import { api } from '../../.adonisjs/api.js'
 import { Head, useForm } from '@inertiajs/react'
 import { FormEvent } from 'react'
-export const client = createTuyau({
-  api,
-  baseUrl: 'http://localhost:3333',
-})
+import { client } from '@website/rpc/client'
 
 const loginUrl = client.$url('login_route')
 

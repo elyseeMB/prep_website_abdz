@@ -1,4 +1,4 @@
-import { client } from '~/pages/login.js'
+import { client } from '@website/rpc/client'
 import { Button, Tag, FormField } from '@website/design-system'
 import States from '#enums/state'
 

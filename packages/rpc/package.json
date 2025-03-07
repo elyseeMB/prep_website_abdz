@@ -1,0 +1,15 @@
+{
+  "name": "@website/rpc",
+  "private": "true",
+  "type": "module",
+  "exports": {
+    "./client": "./src/client.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@website/prep_website_abdz": "workspace:*",
+    "@tuyau/client": "^0.2.3"
+  }
+}

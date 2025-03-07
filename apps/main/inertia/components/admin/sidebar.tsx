@@ -1,4 +1,4 @@
-import { client } from '~/pages/login.js'
+import { client } from '@website/rpc/client'
 
 export function Sidebar() {
   const articleIndexUrl = client.$url('admin.articles.index')

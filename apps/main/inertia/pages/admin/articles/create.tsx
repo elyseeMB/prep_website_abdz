@@ -1,7 +1,7 @@
 import { ArticleStatusText } from '#enums/state'
 import { useForm } from '@inertiajs/react'
 import { FormEvent } from 'react'
-import { client } from '~/pages/login.js'
+import { client } from '@website/rpc/client'
 import { Form, FormField, FormPrimaryButton } from '@website/design-system/src/molecules/form/form'
 
 type ArticleStatusTextProps = {

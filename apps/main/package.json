@@ -1,9 +1,13 @@
 {
-  "name": "prep_website_abdz",
+  "name": "@website/prep_website_abdz",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
+  "exports": {
+    "./api": "./.adonisjs/index.ts"
+  },
+  "types": "./adonisrc.ts",
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",
@@ -77,11 +81,12 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^4.0.0",
     "@inertiajs/react": "^2.0.1",
+    "@website/rpc": "workspace:*",
+    "@website/design-system": "workspace:*",
     "@packages/tooling": "workspace:*",
     "@tuyau/client": "^0.2.3",
     "@tuyau/core": "^0.3.0",
     "@vinejs/vine": "^3.0.0",
-    "@website/design-system": "workspace:*",
     "better-sqlite3": "^11.8.0",
     "edge.js": "^6.2.0",
     "luxon": "^3.5.0",
