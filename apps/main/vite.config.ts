@@ -12,8 +12,10 @@ export default defineConfig({
     allowedHosts: ['d501-2c0f-ef58-1656-3b00-e98c-eb73-f15c-c8db.ngrok-free.app', 'localhost'],
   },
   plugins: [
-    inertia({ ssr: { enabled: true, entrypoint: 'inertia/app/ssr.tsx' } }),
-    adonisjs({ entrypoints: ['inertia/app/app.tsx'], reload: ['resources/views/**/*.edge'] }),
+    adonisjs({
+      entrypoints: ['ressources/css/app.cs', 'resources/js/app.jsx'],
+      reload: ['resources/views/**/*.edge'],
+    }),
     react(),
     UnoCss(),
   ],

@@ -6,5 +6,4 @@
 		"types": ["hot-hook/import-meta"],
     "outDir": "./build"
   },
-  "exclude": ["./inertia/**/*", "node_modules", "build"]
 }

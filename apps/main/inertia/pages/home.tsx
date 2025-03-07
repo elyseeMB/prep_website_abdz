@@ -1,4 +1,4 @@
-import { Footer, Card } from '@website/design-system'
+import { Footer } from '@website/design-system'
 
 export default function Home({ currentUser, series }: any) {
   // console.log(series.collections)

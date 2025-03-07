@@ -11,7 +11,7 @@ export default class HomeController {
     protected collectionRepository: CollectionRepository
   ) {}
 
-  async render({ inertia, view }: HttpContext) {
-    return inertia.render('home')
+  async render({ view }: HttpContext) {
+    return view.render('pages/home')
   }
 }
