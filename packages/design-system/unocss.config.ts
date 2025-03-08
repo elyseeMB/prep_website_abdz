@@ -1,19 +1,11 @@
 import defineConfig from "@packages/tooling/unocss";
 
 export default defineConfig({
-  theme: {
-    colors: {
-      bg_primary: `linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.16) 100%
-      ),
-      #7e5aff;`,
-      color_secondary: `rgb(74 80 92)`,
-    },
-    boxShadow: {
-      small: `0 0 0 1px rgba(126 90 255 / 1),
-        0 1.5px 2px 0 rgba(0 0 0 / 0.24);`,
-    },
+  content: {
+    filesystem: ["node_modules/@website/design-system/**/*.tsx"],
+  },
+  shortcuts: {
+    btn_sidebar:
+      "px-2 py-1 hover:bg-#d6d6d65e font-500 transition-2 text-sm rounded-lg opacity-50 hover:opacity-100",
   },
 });

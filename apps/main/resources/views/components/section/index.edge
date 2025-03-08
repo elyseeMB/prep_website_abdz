@@ -1,0 +1,7 @@
+@let(classNames = utils.classes('container', $props.class))
+@let(attrs = $props.except(['class']) || {})
+
+
+<section {{ html.attrs({...attrs, class:classNames }) }}>
+    {{{ await $slots.main() }}}
+</section>

@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { ValueObject } from './value_object.ts'
+import { ValueObject } from './value_object.js'
 
 export class Identifier<T extends string> extends ValueObject<{ value: string }> {
   // @ts-expect-error - This is a hack to make the type work

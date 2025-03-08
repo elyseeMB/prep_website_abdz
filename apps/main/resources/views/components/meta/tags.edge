@@ -1,0 +1,12 @@
+@let(seriesTitle = title)
+
+<title> {{seriesTitle}} </title>
+<meta name="description" content="{{desc}}" />
+
+
+{{-- Robots --}}
+@if (index)
+  <meta  name="robots" content="index, follow" />
+@elseif (index === false)
+  <meta  name="robots" content="noindex, nofollow" />
+@endif

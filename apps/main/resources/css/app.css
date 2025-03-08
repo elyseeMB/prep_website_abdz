@@ -1,3 +1,16 @@
+@import './tools/layout.css';
+@unocss;
+
+:root {
+  --theme: #cfcfcf;
+}
+.contrast {
+  @apply: bg-contrast p1 rounded;
+}
 .text-green {
-  color: red;
+  @apply: text-2xl text-emerald mb-50;
+}
+
+.page {
+  @apply bg-[#cfcfcf]/30;
 }

@@ -13,7 +13,7 @@ export default defineConfig({
   },
   plugins: [
     adonisjs({
-      entrypoints: ['ressources/css/app.cs', 'resources/js/app.jsx'],
+      entrypoints: ['resources/css/app.css', 'resources/js/app.jsx'],
       reload: ['resources/views/**/*.edge'],
     }),
     react(),
