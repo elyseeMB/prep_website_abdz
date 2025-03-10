@@ -13,9 +13,10 @@ export class AllArticleViewModel {
     return this.articles.map((article) => ({
       id: article.getIdentifier().toString(),
       title: article.props.title,
-      stateId: article.props.stateId,
       summary: article.props.summary,
-      taxonomyName: article.props.taxonomies,
+      authors: article.props.authors,
+      taxonomies: article.props.taxonomies,
+      thumbnails: article.props.thumbnails,
     }))
   }
 }

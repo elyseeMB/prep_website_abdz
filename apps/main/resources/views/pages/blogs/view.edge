@@ -1,0 +1,19 @@
+@layout({
+title: 'Blogs & News',
+meta: {
+index: true
+}
+})
+
+
+@section()
+<div class='bg-red'>je suis le blog
+    @each((item, index) in vm)
+    @!articles.item({index: index, title: item.title, content: item.summary, asset:item.thumbnails[0].filename})
+    @end
+</div>
+@end
+
+
+
+@end

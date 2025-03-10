@@ -7,10 +7,12 @@ import { ArticleTransformer } from '../../../articles/domain/article_transfomer.
 @inject()
 export default class BlogController {
   constructor(protected articleRepository: ArticleRepository) {}
-  async render({ inertia }: HttpContext) {
+  async render({ view }: HttpContext) {
     const items = this.articleRepository.getBlogs()
     const articles = await ArticleTransformer.fromDomain(items).serialize()
 
-    return inertia.render('blog/view', { vm: AllArticleViewModel.fromDomain(articles).serialize() })
+    return view.render('pages/blogs/view', {
+      vm: AllArticleViewModel.fromDomain(articles).serialize(),
+    })
   }
 }

@@ -1,0 +1,24 @@
+<article class="article-item" {{$props.toAttrs()}}>
+    <span>
+        <h2 class="article__index">
+
+            {{padStartToSTring(index)}}
+        </h2>
+        <h2 class="article__title">
+            <a href="{{route('home')}}">{{title}}</a>
+        </h2>
+        <h3 class="hidden"></h3>
+        <h3 class="hidden"></h3>
+        <h3 class="hidden"></h3>
+        <div class="col-start-9 col-span-3 aspect-1">
+            <a href="{{route('home')}}">
+                <img class="w-100% h-100% object-cover" src={{asset}} alt="" />
+            </a>
+        </div>
+        <div class="article__body">
+            <p>
+                {{content}}
+            </p>
+        </div>
+    </span>
+</article>

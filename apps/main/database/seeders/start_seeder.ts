@@ -10,7 +10,6 @@ import UtilityService from '#services/utility_service'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
-import { randomUUID } from 'crypto'
 
 export default class extends BaseSeeder {
   getRandom<T>(array: T[]) {

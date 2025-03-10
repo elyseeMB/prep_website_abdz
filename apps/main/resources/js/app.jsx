@@ -3,6 +3,7 @@ import '@website/design-system/src/css/index.css'
 import 'virtual:uno.css'
 import { createRoot } from 'react-dom/client'
 import { Footer } from '@website/design-system'
+import './elements/index.js'
 
 class FooterCustomElement extends HTMLElement {
   connectedCallback() {

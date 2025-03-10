@@ -20,15 +20,15 @@ export default defineConfig({
     UnoCss(),
   ],
 
-  /**
-   * Define aliases for importing modules from
-   * your frontend code
-   */
-  resolve: {
-    alias: {
-      '~/': `${getDirname(import.meta.url)}/inertia/`,
-    },
-  },
+  // /**
+  //  * Define aliases for importing modules from
+  //  * your frontend code
+  //  */
+  // resolve: {
+  //   alias: {
+  //     '~/': `${getDirname(import.meta.url)}/inertia/`,
+  //   },
+  // },
 })
 
 /**

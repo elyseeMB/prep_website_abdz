@@ -1,8 +1,39 @@
 @import './tools/layout.css';
+@import './tools/typography.css';
+
+/*  Modules */
+@import './modules/article.css';
+
 @unocss;
 
 :root {
   --theme: #cfcfcf;
+  --h1: 56px;
+  --h2: 44px;
+  --h3: 32px;
+  --h4: 28px;
+  --h5: 24px;
+  --body: 16px;
+  --body2: 14px;
+  --label: 12px;
+  --label2: 10px;
+  --display1-line-height: 92px;
+  --display2-line-height: 84px;
+  --display3-line-height: 72px;
+  --h1-line-height: 64px;
+  --h2-line-height: 52px;
+  --h3-line-height: 44px;
+  --h4-line-height: 40px;
+  --h5-line-height: 32px;
+  --body-line-height: 22px;
+  --body2-line-height: 20px;
+  --label-line-height: 18px;
+  --label2-line-height: 15px;
+  --basic-spacing: 24px;
+  --line-height: 1.5em;
+  --grid-template: repeat(16, 1fr);
+  --grid-template-taxonomy: repeat(9, 1fr);
+  --grid-gap: 24px;
 }
 .contrast {
   @apply: bg-contrast p1 rounded;

@@ -10,3 +10,7 @@ globalThis.Eembouz = {
 
 // EDGE template
 edge.global('utils', UtilityService)
+edge.global('toJSON', (data: Record<string, any>) => JSON.stringify(data))
+edge.global('padStartToSTring', (index: string) =>
+  index?.toString().padStart(2, '0').padStart(3, '.')
+)

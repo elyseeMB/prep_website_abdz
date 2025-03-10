@@ -3,6 +3,7 @@ import {
   mergeConfigs,
   // presetIcons,
   presetUno,
+  presetWebFonts,
   transformerDirectives,
 } from "unocss";
 import { themeColors } from "./tokens.js";
@@ -13,6 +14,14 @@ export default (config: UserConfig) =>
     {
       presets: [
         presetUno(),
+        presetWebFonts({
+          provider: "none",
+          fonts: {
+            sans: "Geist",
+            mono: "sans-serif",
+          },
+        }),
+
         // presetIcons({
         //   warn: true,
         //   cdn: "https://esm.sh/",

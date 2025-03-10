@@ -5,7 +5,10 @@
   "type": "module",
   "license": "UNLICENSED",
   "exports": {
-    "./api": "./.adonisjs/index.ts"
+    "./api": "./.adonisjs/index.ts",
+    "./entity": "./app/core/domain/entity.ts",
+    "./identifier": "./app/core/domain/identifier.ts",
+    "./value_object": "./app/core/domain/value_object.ts"
   },
   "types": "./adonisrc.ts",
   "scripts": {
