@@ -18,6 +18,7 @@ import Taxonomy from './taxonomy.js'
 import Asset from './asset.js'
 import AssetTypes from '#enums/asset_types'
 import SlugService from '#services/slug_service'
+import ArticleTypes from '#enums/article_types'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -42,10 +43,10 @@ export default class Article extends BaseModel {
   declare viewCount: number
 
   @column()
-  declare publishAt: DateTime | null
+  declare articleTypeId: ArticleTypes
 
   @column()
-  declare articleTypeId: number
+  declare publishAt: DateTime | null
 
   @hasMany(() => Comment)
   declare comments: HasMany<typeof Comment>

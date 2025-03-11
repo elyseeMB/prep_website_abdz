@@ -16,5 +16,6 @@ router.group(() => {
   router.get('/', [DashboardController]).as('dashboard')
   router.get('/articles', [ArticlesController, 'index']).as('articles.index')
   router.get('/articles/create', [ArticlesController, 'create']).as('articles.create')
+  router.post('/articles', [ArticlesController, 'store']).as('articles.store')
   router.get('/collections', [CollectionController, 'index']).as('collections.index')
 })

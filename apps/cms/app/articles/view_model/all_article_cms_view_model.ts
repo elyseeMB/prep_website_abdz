@@ -5,7 +5,7 @@ import {
   ModelObject,
   ModelPaginatorContract,
 } from '@adonisjs/lucid/types/model'
-import ArticleCms from '../dtos/article/article.js'
+import ArticleCms from '../../dto/article/article.js'
 import { SimplePaginatorContract } from '@adonisjs/lucid/types/querybuilder'
 
 type Pagination = {

@@ -33,6 +33,13 @@ const routes = [
   },
   {
     params: [],
+    name: 'articles.store',
+    path: '/articles',
+    method: ["POST"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
     name: 'collections.index',
     path: '/collections',
     method: ["GET","HEAD"],
