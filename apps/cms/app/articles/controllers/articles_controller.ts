@@ -14,7 +14,6 @@ export default class ArticlesController {
   async index({ request, inertia }: HttpContext) {
     const data = await request.validateUsing(articleIndexValidator)
     const paginator = await GetPaginatedArticles.handle(data)
-
     return inertia.render('articles/index', {
       articles: AllArticleCmsViewModel.fromPaginator(paginator, {
         start: paginator.firstPage,
@@ -33,7 +32,11 @@ export default class ArticlesController {
   async store({ request, response }: HttpContext) {
     const data = request.all()
 
+    response.json(data)
+
+    return
     const doc = await StoreArticle.handle(data)
+
     return response.json(doc)
   }
 }

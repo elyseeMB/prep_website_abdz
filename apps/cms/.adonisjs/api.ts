@@ -11,6 +11,27 @@ export interface ApiDefinition {
 }
 const routes = [
   {
+    params: ["*"],
+    name: 'drive.fs.serve',
+    path: '/uploads/*',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: ["*"],
+    name: 'assets.show',
+    path: '/assets/*',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: ["typeId"],
+    name: 'assets.store',
+    path: '/assets/:typeId?',
+    method: ["POST"],
+    types: {} as unknown,
+  },
+  {
     params: [],
     name: 'dashboard',
     path: '/',

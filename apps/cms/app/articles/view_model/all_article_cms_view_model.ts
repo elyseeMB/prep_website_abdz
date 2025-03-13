@@ -49,6 +49,7 @@ export class AllArticleCmsViewModel {
       summary: doc.summary,
       authors: doc.authors,
       taxonomies: doc.taxonomies,
+      thumbails: doc.thumbnails,
     }))
   }
 }

@@ -20,8 +20,6 @@ export default class SyncTaxonomies {
       }),
       {}
     )
-    console.log(taxonomies)
-
     switch (true) {
       case resource instanceof Article:
         await resource.related('taxonomies').sync(taxonomies)

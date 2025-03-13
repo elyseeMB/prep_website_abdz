@@ -8,6 +8,7 @@ export default class GetPaginatedArticles {
   static async handle({ page = 1, perPage = 100 }: Params = {} as Params) {
     return await Article.query()
       .preload('authors')
+      .preload('thumbnails')
       .preload('taxonomies')
       .orderBy('createdAt', 'desc')
       .paginate(page, perPage)

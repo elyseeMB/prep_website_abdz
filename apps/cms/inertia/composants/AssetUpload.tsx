@@ -1,57 +1,72 @@
-import { ChangeEvent } from 'react'
+import AssetTypes from '#enums/asset_types'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
+import { FilePondFile, FilePondInitialFile } from 'filepond'
+import { registerPlugin, FilePond } from 'react-filepond'
+import 'filepond/dist/filepond.min.css'
+
+import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
+
+interface Asset {
+  id: number
+  assetTypeId: AssetTypes
+  filename: string
+  byteSize: number
+}
 type Props = {
-  name: string
+  name?: string
   label?: string
-  assets?: any[]
+  assets?: Asset[]
   value?: string
   onChange?: (e: ChangeEvent) => void
 }
 
 export function AssetUpload({ value, onChange, name, label, assets }: Props) {
+  const [files, setFiles] = useState<FilePondInitialFile[]>([])
+  const pondRef = useRef<FilePond>(null)
+
+  const handleInit = () => {
+    const file = pondRef.current?.getFiles()[0]
+    console.log(file?.source)
+  }
+
+  // useEffect(() => {
+  //   if (pondRef.current) {
+  //     pondRef.current.addEventListener('FilePond:removefile', (e) => {
+  //       console.log(e)
+  //     })
+  //   }
+
+  //   return () => {
+  //     if (pondRef.current) {
+  //       pondRef.current = null
+  //     }
+  //   }
+  // }, [])
   return (
     <div className="col-span-full">
       <label htmlFor="cover-photo" className="block text-sm/6 font-medium text-gray-900">
         {label}
       </label>
-      <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-        {assets ? (
-          assets.map((asset) => <img src={asset.filename} alt="" />)
-        ) : (
-          <div className="text-center">
-            <svg
-              className="mx-auto size-12 text-gray-300"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-              data-slot="icon"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            <div className="mt-4 flex text-sm/6 text-gray-600">
-              <label
-                htmlFor="file-upload"
-                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500"
-              >
-                <span>Upload a file</span>
-                <input
-                  onChange={onChange}
-                  value={value}
-                  id="file-upload"
-                  name={name}
-                  type="file"
-                  className="sr-only"
-                />
-              </label>
-              <p className="pl-1">or drag and drop</p>
-            </div>
-            <p className="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-          </div>
-        )}
+      <div className="mt-2 w-48 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+        <FilePond
+          ref={pondRef}
+          files={files}
+          // onupdatefiles={(filesItems) =>
+          //   setFiles({ files: filesItems.map((fileItem) => fileItem.file) })
+          // }
+          allowMultiple={true}
+          allowImagePreview={true}
+          server="./"
+          accepted-file-types="image/jpeg, image/png"
+          name={name}
+          onprocessfiles={handleInit}
+          labelIdle="Drag & Drop"
+        />
       </div>
     </div>
   )

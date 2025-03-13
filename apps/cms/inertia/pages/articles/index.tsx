@@ -19,6 +19,7 @@ const data = [
 ]
 
 export default function Index(props) {
+  console.log(props)
   return (
     <div className="w-50px flex flex-col gap-2">
       {Array.from({ length: 10 }, (_, k) => (

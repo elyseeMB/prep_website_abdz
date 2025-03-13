@@ -15,7 +15,8 @@ export default class StoreArticle {
       const article = await Article.create(store, {
         client: trx,
       })
-      SyncTaxonomies.handle({ resource: article, ids: taxonomyIds })
+      await SyncTaxonomies.handle({ resource: article, ids: taxonomyIds })
+
       return article
     })
   }

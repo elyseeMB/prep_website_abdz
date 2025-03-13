@@ -1,4 +1,5 @@
 import ArticleTypes from '#enums/article_types'
+import AssetTypes from '#enums/asset_types'
 import States, { ArticleStatusText } from '#enums/state'
 import { useForm } from '@inertiajs/react'
 import { FormField, FormPrimaryButton } from '@website/design-system'
@@ -7,8 +8,9 @@ import {
   FieldInput,
   FieldTextarea,
 } from '@website/design-system/src/molecules/field/field.js'
-import { ChangeEvent, FormEvent } from 'react'
+import React, { ChangeEvent, FormEvent, useCallback, useEffect, useRef } from 'react'
 import { AssetUpload } from '~/composants/AssetUpload.js'
+import { InputTags, SelectTags } from '~/composants/TaxonomyTags.js'
 import { FieldElement } from '~/composants/ui/form/field.js'
 import { Textarea } from '~/composants/ui/form/textarea.js'
 import { tuyau } from '~/lib/tuyau.js'
@@ -32,7 +34,7 @@ type articlesProps = {
   assets: any
   thumbnails: any
   covers: any
-  taxonomies: any
+  taxonomies: any[]
   collections: any
   authors: any
   createdAt: any
@@ -57,24 +59,71 @@ export default function Form(props: Props) {
     assets: props.articles?.assets ?? '',
     thumbnails: props.articles?.thumbnails ?? '',
     covers: props.articles?.covers ?? '',
-    taxonomies: props.articles?.taxonomies ?? '',
+    taxonomyIds: props.articles?.taxonomies ?? '',
     collections: props.articles?.collections ?? '',
     authors: props.articles?.authors ?? '',
     createdAt: props.articles?.createdAt ?? '',
     updatedAt: props.articles?.updatedAt ?? '',
   })
 
-  const handleSumbit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    for (const [key, value] of formData) {
-      form.setData(key as any, value)
-    }
+  const formThumbnails = useForm({
+    thumbnails: props.articles?.thumbnails ?? '',
+  })
 
-    form.post(tuyau.$url('articles.store'), {
-      forceFormData: true,
-    })
+  const formDataRef = useRef(form.data)
+
+  useEffect(() => {
+    formDataRef.current = form.data
+  }, [form.data])
+
+  const cleanedFormData = (f: FormData) => {
+    const cleaned = new FormData()
+    for (const [key, value] of f) {
+      if (value && value.toString().trim() !== '') {
+        cleaned.append(key, value)
+      }
+    }
+    return cleaned
   }
+
+  const handleSumbit = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      const formData = new FormData(e.currentTarget)
+      const cleaned = cleanedFormData(formData)
+
+      for (const [key, value] of cleaned) {
+        form.setData(key as any, value)
+      }
+
+      form.post(tuyau.$url('articles.store'), {
+        forceFormData: true,
+      })
+    },
+    [form]
+  )
+
+  const handleChange = useCallback(
+    (key: keyof (typeof form)['data']) => (e?: ChangeEvent) => {
+      if (e instanceof Array) {
+        form.setData(key, e)
+      } else {
+        e?.preventDefault()
+        const input = e?.currentTarget as HTMLInputElement
+        form.setData(key, input.type === 'file' ? input.files![0] : input.value)
+      }
+    },
+    [form.data]
+  )
+
+  const handleUploadFile = () => {
+    const url = tuyau.$url('assets.store', {
+      params: [AssetTypes.THUMBNAIL],
+    })
+    formThumbnails.post(url)
+  }
+
+  console.log(formThumbnails.data)
 
   return (
     <div className="flex gap-4">
@@ -84,7 +133,7 @@ export default function Form(props: Props) {
             <h2 className="text-base/7 font-semibold text-gray-900">Create your article</h2>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <FieldElement name="title" label="Title" />
+              <FieldElement onChange={handleChange('title')} name="title" label="Title" />
               <FieldElement name="slug" label="Slug" />
               <FieldElement name="summary" label="Summary" />
             </div>
@@ -102,19 +151,24 @@ export default function Form(props: Props) {
 
                 <div className="flex gap-5 items-center justify-between">
                   <div className="mt-2 grid grid-cols-1">
-                    <select
+                    {/* <select
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                       onChange={(ev) => {
                         form.setData('taxonomies', parseInt(ev.currentTarget.value, 10))
                       }}
                       name="taxonomyIds"
                     >
-                      {props.taxonomies.map((taxonomy) => (
-                        <option key={taxonomy.id} value={taxonomy.id}>
+                      {props.taxonomies.map((taxonomy, index) => (
+                        <option key={index} value={taxonomy.id}>
                           {taxonomy.name}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
+                    <SelectTags
+                      name="taxonomyIds"
+                      onChange={(e) => form.setData('taxonomyIds', e)}
+                      items={props.taxonomies}
+                    />
                     <svg
                       className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
                       viewBox="0 0 16 16"
@@ -137,8 +191,8 @@ export default function Form(props: Props) {
                       onChange={(ev) => form.setData('stateId', ev.currentTarget.value)}
                       name="stateId"
                     >
-                      {Object.keys(ArticleStatusText).map((state) => (
-                        <option key={state} value={state}>
+                      {Object.keys(ArticleStatusText).map((state, index) => (
+                        <option key={index} value={state}>
                           {ArticleStatusText[state]}
                         </option>
                       ))}
@@ -164,8 +218,8 @@ export default function Form(props: Props) {
                       defaultValue={ArticleTypes['BLOG']}
                       name="articleTypeId"
                     >
-                      {Object.keys(ArticleTypes).map((type) => (
-                        <option key={type} value={type}>
+                      {Object.keys(ArticleTypes).map((type, index) => (
+                        <option key={index} value={type}>
                           {ArticleTypes[type]}
                         </option>
                       ))}
@@ -203,7 +257,19 @@ export default function Form(props: Props) {
         </div>
       </form>
 
-      <AssetUpload name="thumbnails" label="Upload Thumbnails" />
+      <input
+        onChange={(ev) => formThumbnails.setData('thumbnails', ev.currentTarget.files![0])}
+        type="file"
+        name="thumbnails"
+        id=""
+      />
+      <button onClick={handleUploadFile}>Upload</button>
+
+      {/* <AssetUpload
+        value={form.data.thumbnails}
+        onChange={handleChange('thumbnails')}
+        name="thumbnails"
+      /> */}
     </div>
   )
 }
