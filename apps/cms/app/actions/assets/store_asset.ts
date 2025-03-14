@@ -6,7 +6,6 @@ import { Exception } from '@adonisjs/core/exceptions'
 import { cuid } from '@adonisjs/core/helpers'
 import { HttpContext } from '@adonisjs/core/http'
 import { randomUUID } from 'crypto'
-import { unlink } from 'fs/promises'
 
 interface AssetTypeDetails {
   id: AssetTypes
@@ -24,6 +23,8 @@ export default class StoreAsset {
   async handle() {
     this.type = this.#getTypeDetails(this.clx.params.typeId)
     this.file = this.#validate()
+
+    console.log(this.file)
 
     if (!this.file) {
       throw new Exception(`${this.type.fieldName} is missing from the request`, {
@@ -52,7 +53,7 @@ export default class StoreAsset {
   async #moveToDisk() {
     const uid = randomUUID()
     const filename = `${uid}/${cuid()}.${this.file!.extname}`
-    await this.file!.move(filename)
+    await this.file!.moveToDisk(filename)
     return filename
   }
 

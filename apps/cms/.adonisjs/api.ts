@@ -25,6 +25,13 @@ const routes = [
     types: {} as unknown,
   },
   {
+    params: ["id"],
+    name: 'assets.destroy',
+    path: '/assets/:id',
+    method: ["DELETE"],
+    types: {} as unknown,
+  },
+  {
     params: ["typeId"],
     name: 'assets.store',
     path: '/assets/:typeId?',

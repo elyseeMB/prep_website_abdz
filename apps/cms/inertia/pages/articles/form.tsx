@@ -9,10 +9,10 @@ import {
   FieldTextarea,
 } from '@website/design-system/src/molecules/field/field.js'
 import React, { ChangeEvent, FormEvent, useCallback, useEffect, useRef } from 'react'
-import { AssetUpload } from '~/composants/AssetUpload.js'
-import { InputTags, SelectTags } from '~/composants/TaxonomyTags.js'
-import { FieldElement } from '~/composants/ui/form/field.js'
-import { Textarea } from '~/composants/ui/form/textarea.js'
+import { AssetUpload } from '~/components/AssetUpload.js'
+import { InputTags, SelectTags } from '~/components/TaxonomyTags.js'
+import { FieldElement } from '~/components/ui/form/field.js'
+import { Textarea } from '~/components/ui/form/textarea.js'
 import { tuyau } from '~/lib/tuyau.js'
 
 type taxonomiesProps = {
@@ -122,6 +122,14 @@ export default function Form(props: Props) {
     })
     formThumbnails.post(url)
   }
+
+  const url = new URL(tuyau.$url('assets.show').split('*')[0], globalThis.localhost)
+  const search = url.searchParams.set(
+    'load',
+    '7f6b8c50-f982-4c30-8625-1689855b94de/qbpjrbawei65wl55rsz31fap.png'
+  )
+
+  console.log(form.data)
 
   console.log(formThumbnails.data)
 
@@ -257,6 +265,10 @@ export default function Form(props: Props) {
         </div>
       </form>
 
+      <a href={url.toString()}>
+        <img src={props.image} alt="" />
+      </a>
+
       <input
         onChange={(ev) => formThumbnails.setData('thumbnails', ev.currentTarget.files![0])}
         type="file"
@@ -265,11 +277,7 @@ export default function Form(props: Props) {
       />
       <button onClick={handleUploadFile}>Upload</button>
 
-      {/* <AssetUpload
-        value={form.data.thumbnails}
-        onChange={handleChange('thumbnails')}
-        name="thumbnails"
-      /> */}
+      <AssetUpload name="thumbnails" />
     </div>
   )
 }

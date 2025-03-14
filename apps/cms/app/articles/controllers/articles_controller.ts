@@ -24,6 +24,10 @@ export default class ArticlesController {
 
   async create({ inertia }: HttpContext) {
     const taxonomies = await Taxonomy.query().orderBy('name')
+    const [images] = await Article.query().preload('thumbnails')
+    inertia.share({
+      image: images.thumbnails[0].filename,
+    })
     return inertia.render('articles/form', {
       taxonomies: AllTAxonomiesCmsModel.fromArray(taxonomies),
     })

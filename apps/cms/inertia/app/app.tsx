@@ -6,7 +6,7 @@ import { hydrateRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 import { setLayout } from './helper.js'
-import LayoutAdmin from '~/composants/layouts/admin.js'
+import LayoutAdmin from '~/components/layouts/admin.js'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 

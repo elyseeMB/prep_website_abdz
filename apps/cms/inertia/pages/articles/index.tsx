@@ -1,7 +1,7 @@
-import { Breadcrumps } from '~/composants/ui/breadcrumbs/breadcrumbs.js'
-import { Navbar } from '~/composants/ui/navbar/navbar.js'
-import { Wrapper } from '~/composants/ui/dropdown-menu/wrapper.js'
-import { ListItem } from '~/composants/ui/list/ListItem.js'
+import { Breadcrumps } from '~/components/ui/breadcrumbs/breadcrumbs.js'
+import { Navbar } from '~/components/ui/navbar/navbar.js'
+import { Wrapper } from '~/components/ui/dropdown-menu/wrapper.js'
+import { ListItem } from '~/components/ui/list/ListItem.js'
 
 const data = [
   {

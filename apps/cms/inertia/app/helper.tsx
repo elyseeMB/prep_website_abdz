@@ -1,4 +1,4 @@
-import LayoutAdmin from '~/composants/layouts/admin.js'
+import LayoutAdmin from '~/components/layouts/admin.js'
 
 export function setLayout(name: string, page: { layout?: any }) {
   page.layout = (page) => {

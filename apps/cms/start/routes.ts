@@ -10,13 +10,14 @@
 import ArticlesController from '../app/articles/controllers/articles_controller.js'
 import router from '@adonisjs/core/services/router'
 const AssetsController = () => import('../app/assets/controllers/assets_controller.js')
-const DashboardController = () => import('../app/dashboard/dashboard_controller.js')
+const DashboardController = () => import('../app/dashboard/controller/dashboard_controller.js')
 const CollectionController = () => import('../app/collections/controller.js')
 
 router.group(() => {
   // ASSETS
   router.get('/assets', [AssetsController, 'show'])
   router.get('/assets/*', [AssetsController, 'show']).as('assets.show')
+  router.delete('/assets/:id', [AssetsController, 'destroy']).as('assets.destroy')
   router
     .post('/assets/:typeId?', [AssetsController, 'store'])
     .as('assets.store')
