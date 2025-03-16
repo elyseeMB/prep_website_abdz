@@ -67,6 +67,13 @@ const routes = [
     types: {} as unknown,
   },
   {
+    params: ["id"],
+    name: 'articles.edit',
+    path: '/articles/:id',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
     params: [],
     name: 'collections.index',
     path: '/collections',

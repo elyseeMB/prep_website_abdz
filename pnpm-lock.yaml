@@ -10,6 +10,9 @@ importers:
 
   apps/cms:
     dependencies:
+      '@adocasts.com/dto':
+        specifier: ^0.0.9
+        version: 0.0.9(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@adonisjs/lucid@21.6.0(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@vinejs/vine@3.0.0)(luxon@3.5.0)(pg@8.13.3))(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0)
       '@adonisjs/auth':
         specifier: ^9.3.1
         version: 9.3.1(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@adonisjs/lucid@21.6.0(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@vinejs/vine@3.0.0)(luxon@3.5.0)(pg@8.13.3))(@adonisjs/session@7.5.1(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(edge.js@6.2.1))(@japa/plugin-adonisjs@4.0.0(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@japa/runner@4.2.0))
@@ -43,6 +46,9 @@ importers:
       '@inertiajs/react':
         specifier: ^2.0.1
         version: 2.0.3(react@19.0.0)
+      '@packages/tooling':
+        specifier: workspace:*
+        version: link:../../packages/tooling
       '@tuyau/client':
         specifier: ^0.2.3
         version: 0.2.5
@@ -149,6 +155,9 @@ importers:
       typescript:
         specifier: ~5.7.3
         version: 5.7.3
+      unocss:
+        specifier: ^65.4.3
+        version: 65.4.3(postcss@8.5.3)(rollup@4.34.1)(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(tsx@4.19.2))(vue@3.5.13(typescript@5.7.3))
       vite:
         specifier: ^6.1.0
         version: 6.2.0(@types/node@22.13.9)(jiti@2.4.2)(tsx@4.19.2)
@@ -406,6 +415,13 @@ packages:
 
   '@adobe/css-tools@4.4.1':
     resolution: {integrity: sha512-12WGKBQzjUAI4ayyF4IAtfw2QR/IDoqk6jTddXDhtYTJF9ASmoE1zst7cVtP0aL/F1jUJL5r+JxKXKEgHNbEUQ==}
+
+  '@adocasts.com/dto@0.0.9':
+    resolution: {integrity: sha512-iR11StngVFtBz411imdQfz2DgIlgj5T0X3u1OZgOqKJmyUH4oQusxLtu/3sz0nYPR04NF4XdX+zGS0lGkLXBGw==}
+    engines: {node: '>=20.6.0'}
+    peerDependencies:
+      '@adonisjs/core': ^6.2.0
+      '@adonisjs/lucid': ^21.1.0
 
   '@adonisjs/ace@13.3.0':
     resolution: {integrity: sha512-68dveDFd766p69cBvK/MtOrOP0+YKYLeHspa9KLEWcWk9suPf3pbGkHQ2pwDnvLJxBPHk4932KbbSSzzpGNZGw==}
@@ -1428,6 +1444,13 @@ packages:
   '@japa/errors-printer@4.1.2':
     resolution: {integrity: sha512-exl/r07ssJhEEsMdFT2sXgP1sV7Tp3mZvYUEDMXZ8YjWZPHTFLLcA7o9q9FJSSB1ITrEIbx2SWTB+2fFUaZ3NA==}
     engines: {node: '>=18.16.0'}
+
+  '@japa/file-system@2.3.2':
+    resolution: {integrity: sha512-BY1M2NJkZze8zqLI8mpMHu5HuFQLe+xyspBHHyC1pXYvEWlgILoYZ8kkKwxLwo7yVW6VVkDb72pBbjHBTTXv1g==}
+    engines: {node: '>=18.16.0'}
+    peerDependencies:
+      '@japa/assert': ^2.0.0 || ^3.0.0 || ^4.0.0
+      '@japa/runner': ^3.0.0 || ^4.0.0
 
   '@japa/plugin-adonisjs@3.0.2':
     resolution: {integrity: sha512-yrIif8YYcV4GPXygIm/ndULid/6gIJ/NcylDaAsCw/iKPooU+sgUcZjYWe9AO04xuUJ5nFCvzsM/7q1yP7lxNg==}
@@ -5570,6 +5593,15 @@ snapshots:
 
   '@adobe/css-tools@4.4.1': {}
 
+  '@adocasts.com/dto@0.0.9(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@adonisjs/lucid@21.6.0(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@vinejs/vine@3.0.0)(luxon@3.5.0)(pg@8.13.3))(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0)':
+    dependencies:
+      '@adonisjs/core': 6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1)
+      '@adonisjs/lucid': 21.6.0(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@adonisjs/core@6.17.2(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@vinejs/vine@3.0.0)(luxon@3.5.0)(pg@8.13.3)
+      '@japa/file-system': 2.3.2(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0)
+    transitivePeerDependencies:
+      - '@japa/assert'
+      - '@japa/runner'
+
   '@adonisjs/ace@13.3.0':
     dependencies:
       '@poppinss/cliui': 6.4.2
@@ -6654,6 +6686,15 @@ snapshots:
       jest-diff: 29.7.0
       supports-color: 10.0.0
       youch: 4.1.0-beta.5
+
+  '@japa/file-system@2.3.2(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0)':
+    dependencies:
+      '@japa/assert': 4.0.1(@japa/runner@4.2.0)
+      '@japa/runner': 4.2.0
+      '@paralleldrive/cuid2': 2.2.2
+      '@poppinss/macroable': 1.0.4
+      readdirp: 4.1.1
+      slash: 5.1.0
 
   '@japa/plugin-adonisjs@3.0.2(@adonisjs/core@6.17.1(@adonisjs/assembler@7.8.2(typescript@5.7.3))(@vinejs/vine@3.0.0)(edge.js@6.2.1))(@japa/runner@3.1.4)':
     dependencies:

@@ -1,13 +1,16 @@
 import AssetTypes from '#enums/asset_types'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
-import { FilePondFile, FilePondInitialFile } from 'filepond'
+import { FilePondFile, FilePondInitialFile, FilePondServerConfigProps } from 'filepond'
 import { registerPlugin, FilePond } from 'react-filepond'
-import 'filepond/dist/filepond.min.css'
+
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+import 'filepond/dist/filepond.min.css'
+
 import { tuyau } from '~/lib/tuyau.js'
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
@@ -22,11 +25,15 @@ type Props = {
   name?: string
   label?: string
   assets?: Asset[]
-  value?: string
-  onChange?: any
+  value: {
+    id?: number
+    altText?: string
+    credit?: string
+  }
+  onChange: (value: { id?: number; altText?: string; credit?: string }) => void
 }
 
-const server = {
+const server: FilePondServerConfigProps['server'] = {
   process: {
     url: `/assets/${AssetTypes.THUMBNAIL}`,
     withCredentials: true,
@@ -42,11 +49,17 @@ const server = {
 }
 
 export function AssetUpload({ value, onChange, name, label, assets }: Props) {
+  const [internalValue, SetInternalValue] = useState(null)
   const [files, setFiles] = useState<FilePondInitialFile[]>([])
   const pondRef = useRef<FilePond>(null)
 
   const handleInit = () => {
-    const response = pondRef.current?.getFiles()[0]
+    const file = pondRef.current?.getFiles()[0]
+    const response = JSON.parse(file?.serverId!)
+    onChange({
+      ...value,
+      id: response.id,
+    })
     const data: FilePondInitialFile = {
       source: response?.filename!,
       options: {
@@ -59,31 +72,16 @@ export function AssetUpload({ value, onChange, name, label, assets }: Props) {
     setFiles((v) => [...v, data])
   }
 
-  const handleRemove = async (err, file) => {
+  const handleRemove = async (_: any, file: FilePondFile) => {
     const { id } = file.getMetadata()
     if (!id) {
-      console.log('error')
-      console.error(err)
       return
     }
     await tuyau.$route('assets.destroy', { id }).$delete()
   }
 
-  console.log(files)
+  // console.log(internalValue)
 
-  // useEffect(() => {
-  //   if (pondRef.current) {
-  //     pondRef.current.addEventListener('FilePond:removefile', (e) => {
-  //       console.log(e)
-  //     })
-  //   }
-
-  //   return () => {
-  //     if (pondRef.current) {
-  //       pondRef.current = null
-  //     }
-  //   }
-  // }, [])
   return (
     <div className="col-span-full">
       <label htmlFor="cover-photo" className="block text-sm/6 font-medium text-gray-900">
@@ -96,13 +94,24 @@ export function AssetUpload({ value, onChange, name, label, assets }: Props) {
           onremovefile={handleRemove}
           // onupdatefiles={setFiles}
           allowMultiple={true}
-          allowImagePreview={true}
           server={server}
           accepted-file-types="image/jpeg, image/png"
           name={name}
           onprocessfiles={handleInit}
           labelIdle="Drag & Drop"
         />
+        {value.id && (
+          <input
+            value={value.id}
+            type="text"
+            onChange={(e) =>
+              onChange({
+                ...value,
+                id: parseInt(e.currentTarget.value, 10),
+              })
+            }
+          />
+        )}
       </div>
     </div>
   )

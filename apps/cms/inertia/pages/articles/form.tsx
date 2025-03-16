@@ -43,38 +43,32 @@ type articlesProps = {
 
 type Props = {
   taxonomies: taxonomiesProps[]
-  articles?: articlesProps
+  article?: articlesProps
 }
 
 export default function Form(props: Props) {
   const form = useForm({
-    title: props.articles?.title ?? '',
-    slug: props.articles?.slug ?? '',
-    summary: props.articles?.summary ?? '',
-    content: props.articles?.content ?? '',
-    stateId: props.articles?.stateId ?? '',
-    viewCount: props.articles?.viewCount ?? '',
-    publishAt: props.articles?.publishAt ?? '',
-    comments: props.articles?.comments ?? '',
-    assets: props.articles?.assets ?? '',
-    thumbnails: props.articles?.thumbnails ?? '',
-    covers: props.articles?.covers ?? '',
-    taxonomyIds: props.articles?.taxonomies ?? '',
-    collections: props.articles?.collections ?? '',
-    authors: props.articles?.authors ?? '',
-    createdAt: props.articles?.createdAt ?? '',
-    updatedAt: props.articles?.updatedAt ?? '',
+    title: props.article?.title ?? '',
+    slug: props.article?.slug ?? '',
+    summary: props.article?.summary ?? '',
+    content: props.article?.content ?? '',
+    stateId: props.article?.stateId ?? '',
+    viewCount: props.article?.viewCount ?? '',
+    publishAt: props.article?.publishAt ?? '',
+    comments: props.article?.comments ?? '',
+    assets: props.article?.assets ?? '',
+    thumbnails: props.article?.thumbnails ?? '',
+    covers: props.article?.covers ?? '',
+    taxonomyIds: props.article?.taxonomies ?? '',
+    collections: props.article?.collections ?? '',
+    authors: props.article?.authors ?? '',
+    createdAt: props.article?.createdAt ?? '',
+    updatedAt: props.article?.updatedAt ?? '',
   })
 
   const formThumbnails = useForm({
-    thumbnails: props.articles?.thumbnails ?? '',
+    thumbnails: props.article?.thumbnails ?? '',
   })
-
-  const formDataRef = useRef(form.data)
-
-  useEffect(() => {
-    formDataRef.current = form.data
-  }, [form.data])
 
   const cleanedFormData = (f: FormData) => {
     const cleaned = new FormData()
@@ -89,18 +83,16 @@ export default function Form(props: Props) {
   const handleSumbit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      const formData = new FormData(e.currentTarget)
-      const cleaned = cleanedFormData(formData)
+      // const formData = new FormData(e.currentTarget)
+      // const cleaned = cleanedFormData(formData)
 
-      for (const [key, value] of cleaned) {
-        form.setData(key as any, value)
-      }
+      // for (const [key, value] of cleaned) {
+      //   form.setData(key as any, value)
+      // }
 
-      form.post(tuyau.$url('articles.store'), {
-        forceFormData: true,
-      })
+      form.post(tuyau.$url('articles.store'))
     },
-    [form]
+    [form.data]
   )
 
   const handleChange = useCallback(
@@ -123,15 +115,7 @@ export default function Form(props: Props) {
     formThumbnails.post(url)
   }
 
-  const url = new URL(tuyau.$url('assets.show').split('*')[0], globalThis.localhost)
-  const search = url.searchParams.set(
-    'load',
-    '7f6b8c50-f982-4c30-8625-1689855b94de/qbpjrbawei65wl55rsz31fap.png'
-  )
-
-  console.log(form.data)
-
-  console.log(formThumbnails.data)
+  console.log(props)
 
   return (
     <div className="flex gap-4">
@@ -141,9 +125,30 @@ export default function Form(props: Props) {
             <h2 className="text-base/7 font-semibold text-gray-900">Create your article</h2>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <FieldElement onChange={handleChange('title')} name="title" label="Title" />
-              <FieldElement name="slug" label="Slug" />
-              <FieldElement name="summary" label="Summary" />
+              <FieldElement
+                value={form.data.title}
+                onChange={(ev) =>
+                  form.setData('title', (ev.currentTarget as HTMLInputElement).value)
+                }
+                name="title"
+                label="Title"
+              />
+              <FieldElement
+                value={form.data.slug}
+                name="slug"
+                onChange={(ev) =>
+                  form.setData('slug', (ev.currentTarget as HTMLInputElement).value)
+                }
+                label="Slug"
+              />
+              <FieldElement
+                name="summary"
+                value={form.data.summary}
+                onChange={(ev) =>
+                  form.setData('summary', (ev.currentTarget as HTMLInputElement).value)
+                }
+                label="Summary"
+              />
             </div>
           </div>
 
@@ -248,7 +253,15 @@ export default function Form(props: Props) {
                   </div>
                 </div>
               </div>
-              <Textarea name="content" label="Body" />
+
+              <Textarea
+                value={form.data.content}
+                onChange={(ev) =>
+                  form.setData('content', (ev.currentTarget as HTMLInputElement).value)
+                }
+                name="content"
+                label="Body"
+              />
             </div>
           </div>
         </div>
@@ -265,19 +278,22 @@ export default function Form(props: Props) {
         </div>
       </form>
 
-      <a href={url.toString()}>
+      {/* <a href={url.toString()}>
         <img src={props.image} alt="" />
-      </a>
-
+      </a> */}
+      {/* 
       <input
-        onChange={(ev) => formThumbnails.setData('thumbnails', ev.currentTarget.files![0])}
+        onChange={(ev) => form.setData('thumbnails', ev.currentTarget.files![0])}
         type="file"
         name="thumbnails"
-        id=""
       />
-      <button onClick={handleUploadFile}>Upload</button>
+      <button onClick={handleUploadFile}>Upload</button> */}
 
-      <AssetUpload name="thumbnails" />
+      <AssetUpload
+        value={form.data.thumbnails}
+        onChange={(value: any) => form.setData('thumbnails', value)}
+        name="thumbnails"
+      />
     </div>
   )
 }

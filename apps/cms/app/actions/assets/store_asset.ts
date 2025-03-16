@@ -24,8 +24,6 @@ export default class StoreAsset {
     this.type = this.#getTypeDetails(this.clx.params.typeId)
     this.file = this.#validate()
 
-    console.log(this.file)
-
     if (!this.file) {
       throw new Exception(`${this.type.fieldName} is missing from the request`, {
         code: 'E_BAD_REQUEST',

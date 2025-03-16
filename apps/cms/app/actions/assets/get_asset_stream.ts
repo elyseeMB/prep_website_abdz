@@ -18,16 +18,14 @@ export default class GetAssetStream {
       throw new Exception('Asset key was not found')
     }
 
-    // const isExist = await drive
-    //   .use()
-    //   .exists(`./storage/c73a6351-57c4-45e4-8f87-744f6fceb67d/libdsbxcj1ap1vefypsmifst.png/1.png`)
-    // console.log(isExist)
-    // return
-
-    const info = await drive.use('fs').getMetaData(key)
-    const stream = await drive.use('fs').getStream(key)
+    const info = await drive.use().getMetaData(key)
+    const stream = await drive.use().getStream(key)
 
     this.ctx.response.header('Content-Type', info.contentType!)
+
+    // this.ctx.response.header('Access-Control-Expose-Headers', 'Content-Disposition')
+    // this.ctx.response.header('Content-Disposition', `inline; filename="${key.split('/').pop()}"`)
+    // this.ctx.response.header('Content-Length', info.contentLength?.toString() || '0')
 
     return this.ctx.response.stream(stream)
   }

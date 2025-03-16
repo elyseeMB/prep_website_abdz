@@ -66,10 +66,11 @@ export function SelectTags({
     multiple,
     create,
   }) as React.RefObject<HTMLSelectElement>
+
   return (
     <select name={name} ref={selectRef} multiple={multiple} className={className}>
       {items.map((option, index) => (
-        <option key={index} value={option.id.props.value}>
+        <option key={index} value={option.id}>
           {option.name}
         </option>
       ))}
