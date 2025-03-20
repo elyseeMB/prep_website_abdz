@@ -281,7 +281,7 @@ export default function Form(props: Props) {
 
         <AssetUpload
           thumbnail={props.article?.thumbnail}
-          value={data.thumbnails.id}
+          value={data.thumbnails}
           onChange={(value: any) => setData((prev) => ({ ...prev, thumbnails: value }))}
           name="thumbnails"
         />

@@ -56,8 +56,8 @@
     "prettier": "^3.5.0",
     "ts-node-maintained": "^10.9.5",
     "typescript": "~5.7.3",
-    "vite": "^6.1.0",
-    "unocss": "^65.4.3"
+    "unocss": "^65.4.3",
+    "vite": "^6.1.0"
   },
   "dependencies": {
     "@adocasts.com/dto": "^0.0.9",
@@ -72,13 +72,14 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^4.0.0",
     "@inertiajs/react": "^2.0.1",
+    "@packages/tooling": "workspace:*",
     "@tuyau/client": "^0.2.3",
     "@tuyau/core": "^0.3.0",
     "@vinejs/vine": "^3.0.0",
     "@website/design-system": "workspace:*",
-    "@packages/tooling": "workspace:*",
     "edge.js": "^6.2.1",
     "filepond": "^4.32.7",
+    "filepond-plugin-file-validate-size": "^2.2.8",
     "filepond-plugin-image-exif-orientation": "^1.0.11",
     "filepond-plugin-image-preview": "^4.6.12",
     "luxon": "^3.5.0",
