@@ -12,19 +12,21 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import 'filepond/dist/filepond.min.css'
 
 import { tuyau } from '~/lib/tuyau.js'
+import AssetDto from '../../app/dto/asset/asset.js'
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 
 interface Asset {
   id: number
-  assetTypeId: AssetTypes
-  filename: string
-  byteSize: number
+  assetTypeId?: AssetTypes
+  filename?: string
+  byteSize?: number
 }
+
 type Props = {
   name?: string
   label?: string
-  assets?: Asset[]
+  thumbnail?: AssetDto
   value: {
     id?: number
     altText?: string
@@ -48,11 +50,25 @@ const server: FilePondServerConfigProps['server'] = {
   },
 }
 
-export function AssetUpload({ value, onChange, name, label, assets }: Props) {
+export function AssetUpload({ value, onChange, name, label, thumbnail }: Props) {
+  console.log(thumbnail)
   const [internalValue, SetInternalValue] = useState(null)
   const [files, setFiles] = useState<FilePondInitialFile[]>([])
-  const pondRef = useRef<FilePond>(null)
 
+  useEffect(() => {
+    const data: FilePondInitialFile = {
+      source: thumbnail?.filename!,
+      options: {
+        type: 'local',
+        metadata: {
+          id: thumbnail?.id,
+        },
+      },
+    }
+    setFiles((v) => [...v, data])
+  }, [thumbnail])
+
+  const pondRef = useRef<FilePond>(null)
   const handleInit = () => {
     const file = pondRef.current?.getFiles()[0]
     const response = JSON.parse(file?.serverId!)

@@ -68,6 +68,11 @@ export default class Taxonomy extends BaseModel {
   })
   declare children: HasMany<typeof Taxonomy>
 
+  @hasMany(() => Taxonomy, {
+    foreignKey: 'rootParentId',
+  })
+  declare rootChildren: HasMany<typeof Taxonomy>
+
   @manyToMany(() => Article, {
     pivotTable: 'article_taxonomies',
     pivotForeignKey: 'article_id',

@@ -54,7 +54,6 @@ export default class Article extends BaseModel {
   @manyToMany(() => Asset, {
     pivotTable: 'asset_articles',
     pivotColumns: ['sort_order'],
-    onQuery: (q) => q.where('assetTypeId', AssetTypes.THUMBNAIL),
   })
   declare assets: ManyToMany<typeof Asset>
 
@@ -81,6 +80,7 @@ export default class Article extends BaseModel {
   declare taxonomies: ManyToMany<typeof Taxonomy>
 
   @manyToMany(() => Collection, {
+    pivotTable: 'collection_articles',
     pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order'],
   })
   declare collections: ManyToMany<typeof Collection>

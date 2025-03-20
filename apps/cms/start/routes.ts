@@ -9,6 +9,7 @@
 
 import ArticlesController from '../app/articles/controllers/articles_controller.js'
 import router from '@adonisjs/core/services/router'
+const TaxonomiesController = () => import('../app/taxonomies/controller/taxonomie_controller.js')
 const AssetsController = () => import('../app/assets/controllers/assets_controller.js')
 const DashboardController = () => import('../app/dashboard/controller/dashboard_controller.js')
 const CollectionController = () => import('../app/collections/controller.js')
@@ -31,6 +32,16 @@ router.group(() => {
   router.get('/articles/create', [ArticlesController, 'create']).as('articles.create')
   router.post('/articles', [ArticlesController, 'store']).as('articles.store')
   router.get('/articles/:id', [ArticlesController, 'edit']).as('articles.edit')
+  router.put('/articles/:id', [ArticlesController, 'update']).as('articles.update')
+  router.delete('/articles/:id', [ArticlesController, 'destroy']).as('articles.destroy')
+
+  // TAXONOMIES
+  router.get('/taxonomies', [TaxonomiesController, 'index']).as('taxonomies.index')
+  router.get('/taxonomies/create', [TaxonomiesController, 'create']).as('taxonomies.create')
+  router.post('/taxonomies', [TaxonomiesController, 'store']).as('taxonomies.store')
+  router.get('/taxonomies/:id', [TaxonomiesController, 'edit']).as('taxonomies.edit')
+  router.put('/taxonomies/:id', [TaxonomiesController, 'update']).as('taxonomies.update')
+  router.delete('/taxonomies/:id', [TaxonomiesController, 'destroy']).as('taxonomies.destroy')
 
   router.get('/collections', [CollectionController, 'index']).as('collections.index')
 })

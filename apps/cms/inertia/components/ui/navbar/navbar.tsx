@@ -1,13 +1,12 @@
 import { useToggle } from '~/hooks/useToogle.js'
-import { DropdownItems, Dropdowns, DropdownsWrapper } from '../dropdowns/dropdowns.js'
+import { DropdownItems, Dropdowns } from '../dropdowns/dropdowns.js'
 import { tuyau } from '~/lib/tuyau.js'
 
 export function Navbar() {
-  const [collapsed, toogle] = useToggle(false)
-
   const collection = tuyau.$url('collections.index')
   const articles = tuyau.$url('articles.index')
   const articlesCreate = tuyau.$url('articles.create')
+  const taxonomies = tuyau.$url('taxonomies.index')
 
   return (
     <nav className="bg-gray-100">
@@ -54,6 +53,20 @@ export function Navbar() {
                     },
                   ]}
                 />
+                <Dropdowns
+                  onSubmit={() => {}}
+                  name="Taxonomy"
+                  items={[
+                    {
+                      name: 'All post',
+                      url: taxonomies,
+                    },
+                    {
+                      name: 'create',
+                      url: 'Blog',
+                    },
+                  ]}
+                />
               </div>
             </div>
           </div>
@@ -95,14 +108,14 @@ export function Navbar() {
                 className="block size-6"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 aria-hidden="true"
                 data-slot="icon"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                 />
               </svg>
@@ -110,12 +123,12 @@ export function Navbar() {
                 className="hidden size-6"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 aria-hidden="true"
                 data-slot="icon"
               >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
             </button>
           </div>

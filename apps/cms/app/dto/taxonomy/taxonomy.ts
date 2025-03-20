@@ -20,9 +20,11 @@ export default class TaxonomyDto extends BaseModelDto {
 
   declare asset: AssetDto[] | null
   declare parent: TaxonomyDto | null
-  declare children: TaxonomyDto[]
-  declare articles: AssetDto[]
+  declare children: TaxonomyDto[] | null
+  declare articles: ArticleDto[]
   declare Collections: unknown
+
+  declare meta: Record<string, any>
 
   constructor(taxonomy?: Taxonomy) {
     super()
@@ -46,5 +48,7 @@ export default class TaxonomyDto extends BaseModelDto {
     this.children = taxonomy.asset && new AssetDto(taxonomy.children)
     this.articles = ArticleDto.fromArray(taxonomy.articles)
     this.Collections = taxonomy.Collections
+
+    this.meta = taxonomy.$extras
   }
 }

@@ -7,26 +7,38 @@ type Props = PropsWithChildren<{
   label?: string;
   backgroundColor?: string;
   size?: "small" | "medium" | "large";
+  onClick?: () => void;
+  value?: number | null;
+  variant?: "danger" | "success" | "info";
 }>;
 
 export function Button({
+  onClick,
   children,
   className,
+  value,
   primary = false,
   label,
-  type = "button",
   backgroundColor,
+  variant,
 }: Props) {
   const mode = primary ? "btn-primary" : "btn-secondary";
 
   const style: React.HTMLAttributes<HTMLElement>["style"] = {
     backgroundColor,
   };
+
   return (
     <button
-      type={type}
+      value={value ?? ""}
+      onClick={onClick}
       style={style}
-      className={["btn", mode, className].join(" ")}
+      className={[
+        "btn",
+        variant === "danger" && "bg-red text-white",
+        mode,
+        className,
+      ].join(" ")}
     >
       {children}
     </button>

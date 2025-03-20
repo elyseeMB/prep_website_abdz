@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.min.css'
 import { useTomSelect } from '~/hooks/useTomSelect.js'
@@ -19,7 +19,7 @@ interface InputTagsProps {
   options?: Partial<Options>
   onChange?: (value: string[]) => void
   className?: string
-  create: boolean
+  create?: boolean
 }
 
 export function InputTags({
@@ -42,14 +42,17 @@ interface SelectTagsProps {
   items: any[]
   placeholder?: string
   options?: {}
-  onChange?: (e: string[]) => void
+  onChange?: (e: number[]) => void
   className?: string
   multiple?: boolean
   name?: string
   create?: boolean
+  taxonomyIds?: number[]
+  value?: any
 }
 
 export function SelectTags({
+  taxonomyIds,
   items,
   placeholder = 'Sélectionnez des options...',
   options = {},
@@ -58,17 +61,40 @@ export function SelectTags({
   className = '',
   multiple = true,
   create = false,
+  value,
 }: SelectTagsProps) {
+  // Utilisez useCallback pour éviter trop de re-rendus
+  const handleChange = React.useCallback(
+    (selectedValues: string[]) => {
+      if (onChange) {
+        // Convertir en nombres si nécessaire
+        const numericValues = selectedValues.map((v) => parseInt(v, 10))
+        onChange(numericValues)
+      }
+    },
+    [onChange]
+  )
+
+  // Passez handleChange à useTomSelect
   const selectRef = useTomSelect({
     placeholder,
     options,
-    onChange,
+    onChange: handleChange,
     multiple,
     create,
   }) as React.RefObject<HTMLSelectElement>
 
+  // Préparez les valeurs par défaut
+  const defaultValues = taxonomyIds || []
+
   return (
-    <select name={name} ref={selectRef} multiple={multiple} className={className}>
+    <select
+      name={name}
+      ref={selectRef}
+      multiple={multiple}
+      className={className}
+      defaultValue={defaultValues.map((id) => id.toString())}
+    >
       {items.map((option, index) => (
         <option key={index} value={option.id}>
           {option.name}
@@ -77,9 +103,3 @@ export function SelectTags({
     </select>
   )
 }
-
-// function bindBehaviour(clx: Props) {
-//   const widget = new TomSelect()
-// }
-
-// Array.from([InputTags, SelectTags]).forEach(bindBehaviour)

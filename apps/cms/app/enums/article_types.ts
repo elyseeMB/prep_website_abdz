@@ -7,7 +7,7 @@ enum ArticleTypes {
 
 export const ArticleTypesDesc: Record<ArticleTypes, string> = {
   [ArticleTypes.LESSON]: 'Lesson',
-  [ArticleTypes.BLOG]: 'Blof',
+  [ArticleTypes.BLOG]: 'Blog',
   [ArticleTypes.LINK]: 'Link',
   [ArticleTypes.NEWS]: 'News',
 }
