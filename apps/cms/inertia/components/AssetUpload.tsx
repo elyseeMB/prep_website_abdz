@@ -62,7 +62,6 @@ const server = {
 export function AssetUpload({ value, onChange, name, label, thumbnail }: Props) {
   const [files, setFiles] = useState<FilePondInitialFile[]>([])
   const pondRef = useRef<FilePond>(null)
-  console.log(thumbnail)
 
   // Gérer le fichier thumbnail initial
   useEffect(() => {

@@ -211,22 +211,25 @@ export default function Form(props: Props) {
                       <select
                         className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                         name="articleTypeId"
-                        defaultValue={data.articleTypeId}
+                        value={data.articleTypeId}
                         onChange={
                           (ev) =>
                             setData((v) => ({
                               ...v,
-                              articleTypeId: Number(ev.currentTarget.value),
-                            })) // Convertit en nombre
+                              articleTypeId: Number(ev.target.value),
+                            })) //
                         }
                       >
-                        {Object.entries(ArticleTypes)
-                          .filter(([key, value]) => typeof value === 'number') // Filtre les clés numériques
-                          .map(([key, value]) => (
-                            <option key={value} value={value}>
-                              {key} {/* Affiche le nom de l'option */}
-                            </option>
-                          ))}
+                        {Object.keys(ArticleTypes)
+                          .filter((key) => isNaN(Number(key)))
+                          .map((typeName) => {
+                            const typeId = ArticleTypes[typeName as keyof typeof ArticleTypes]
+                            return (
+                              <option key={typeId} value={typeId}>
+                                {ArticleTypesDesc[typeId as ArticleTypes]}
+                              </option>
+                            )
+                          })}
                       </select>
 
                       <svg

@@ -63,11 +63,9 @@ export function SelectTags({
   create = false,
   value,
 }: SelectTagsProps) {
-  // Utilisez useCallback pour éviter trop de re-rendus
   const handleChange = React.useCallback(
     (selectedValues: string[]) => {
       if (onChange) {
-        // Convertir en nombres si nécessaire
         const numericValues = selectedValues.map((v) => parseInt(v, 10))
         onChange(numericValues)
       }
@@ -75,7 +73,6 @@ export function SelectTags({
     [onChange]
   )
 
-  // Passez handleChange à useTomSelect
   const selectRef = useTomSelect({
     placeholder,
     options,
@@ -84,7 +81,6 @@ export function SelectTags({
     create,
   }) as React.RefObject<HTMLSelectElement>
 
-  // Préparez les valeurs par défaut
   const defaultValues = taxonomyIds || []
 
   return (
