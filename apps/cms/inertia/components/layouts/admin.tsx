@@ -2,6 +2,7 @@ import { PropsWithChildren } from 'react'
 import { Wrapper } from '../ui/dropdown-menu/wrapper.js'
 import { Breadcrumps } from '../ui/breadcrumbs/breadcrumbs.js'
 import { Navbar } from '../ui/navbar/navbar.js'
+import '../../css/app.css'
 
 const data = [
   {

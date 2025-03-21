@@ -16,6 +16,7 @@ import { FieldElement } from '~/components/ui/form/field.js'
 import { Textarea } from '~/components/ui/form/textarea.js'
 import { tuyau } from '~/lib/tuyau.js'
 import ArticleFormDto from '../../../app/dto/article/article_form.js'
+import { TiptapEditor } from '~/components/TiptapEditor.js'
 
 type taxonomiesProps = {
   id: any
@@ -106,7 +107,11 @@ export default function Form(props: Props) {
 
   const handleChange = useCallback(
     (e: ChangeEvent) => {
+      console.log(e)
+
       const element = e.currentTarget as HTMLInputElement
+
+      return
       setData((data) => ({ ...data, [element.name]: element.value }))
     },
     [data]
@@ -212,12 +217,11 @@ export default function Form(props: Props) {
                         className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                         name="articleTypeId"
                         value={data.articleTypeId}
-                        onChange={
-                          (ev) =>
-                            setData((v) => ({
-                              ...v,
-                              articleTypeId: Number(ev.target.value),
-                            })) //
+                        onChange={(ev) =>
+                          setData((v) => ({
+                            ...v,
+                            articleTypeId: Number(ev.target.value),
+                          }))
                         }
                       >
                         {Object.keys(ArticleTypes)
@@ -249,14 +253,19 @@ export default function Form(props: Props) {
                   </div>
                 </div>
 
-                <Textarea
+                {/* <Textarea
                   value={data.content}
                   onChange={handleChange}
                   name="content"
                   label="Body"
-                />
+                /> */}
               </div>
             </div>
+            <TiptapEditor
+              value={data.content}
+              onChange={(ev: string) => setData((v) => ({ ...v, content: ev }))}
+              name="content"
+            />
           </div>
 
           <div className="mt-6 flex items-center justify-end gap-x-6">
