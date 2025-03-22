@@ -1,3 +1,5 @@
+import { Link } from '@inertiajs/react'
+
 type Props = {
   items: any[]
 }
@@ -5,9 +7,9 @@ type Props = {
 function Item({ item, lastElement, className = '' }) {
   return (
     <li className="flex items-center">
-      <a className={[lastElement && 'text-gray-500', className].join(' ')} href="#">
+      <Link className={[lastElement && 'text-gray-500', className].join(' ')} href="#">
         {item.page}{' '}
-      </a>
+      </Link>
       {!lastElement ? (
         <svg
           className="fill-current w-3 h-3 mx-3"

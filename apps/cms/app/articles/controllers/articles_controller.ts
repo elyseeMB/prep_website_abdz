@@ -16,6 +16,7 @@ export default class ArticlesController {
   async index({ request, inertia }: HttpContext) {
     const data = await request.validateUsing(articleIndexValidator)
     const paginator = await GetPaginatedArticles.handle(data)
+
     return inertia.render('articles/index', {
       articles: ArticleDto.fromPaginator(paginator, {
         start: paginator.firstPage,

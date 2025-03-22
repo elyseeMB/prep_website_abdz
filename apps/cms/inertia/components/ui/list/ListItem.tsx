@@ -2,8 +2,8 @@ import ArticleTypes from '#enums/article_types'
 import States from '#enums/state'
 import { router } from '@inertiajs/react'
 import { Button, Tag, TdWrapper, TrWrapper } from '@website/design-system'
-import { ChangeEvent } from 'react'
 import { tuyau } from '~/lib/tuyau.js'
+import { Link } from '@inertiajs/react'
 
 type Author = {
   fullName: string
@@ -36,7 +36,7 @@ export function ListItem({ id, title, authors, stateId, publisheAt, articleTypeI
   return (
     <TrWrapper className="border border-1.4 border-b-gray/20" key={id}>
       <TdWrapper className="w-50">
-        <a href={route}>{title}</a>
+        <Link href={route}>{title}</Link>
       </TdWrapper>
       <TdWrapper>{authors[0]?.fullName}</TdWrapper>
       <TdWrapper>

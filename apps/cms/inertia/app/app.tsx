@@ -2,7 +2,7 @@
 /// <reference path="../../config/inertia.ts" />
 
 import '@website/design-system/src/setup.js'
-import { hydrateRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 import { setLayout } from './helper.js'
@@ -10,7 +10,7 @@ import { setLayout } from './helper.js'
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 
 createInertiaApp({
-  progress: { color: '#5468FF' },
+  progress: { color: '#5468FF', showSpinner: true },
 
   title: (title) => `${title} - ${appName}`,
 
@@ -19,11 +19,12 @@ createInertiaApp({
       `../pages/${name}.tsx`,
       import.meta.glob('../pages/**/*.tsx')
     )
+
     setLayout(name, page.default)
     return page
   },
 
   setup({ el, App, props }) {
-    hydrateRoot(el, <App {...props} />)
+    createRoot(el).render(<App {...props} />)
   },
 })

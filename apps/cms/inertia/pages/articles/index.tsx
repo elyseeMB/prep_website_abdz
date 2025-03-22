@@ -1,16 +1,14 @@
 import { SimplePaginatorDtoContract } from '@adocasts.com/dto/types'
 import ArticleDto from '../../../app/dto/article/article.js'
+
 import ArticleTypes from '#enums/article_types'
-import { Tag, TheadWrapper } from '@website/design-system'
+import { TheadWrapper } from '@website/design-system'
 import {
   TableWrapper,
   TbodyWrapper,
-  TdWrapper,
   ThWrapper,
   TrWrapper,
 } from '@website/design-system/src/organisms/table/table.js'
-import States from '#enums/state'
-import { tuyau } from '~/lib/tuyau.js'
 import { ListItem } from '~/components/ui/list/ListItem.js'
 
 type Props = {

@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react'
 import React, { FormEvent, PropsWithChildren, ReactElement, ReactNode } from 'react'
 import { useToggle } from '~/hooks/useToogle.js'
 
@@ -82,7 +83,7 @@ export function Dropdowns({ name, items, onSubmit, children, action }: Props) {
         >
           <div className="py-1" role="none">
             {items?.map((item) => (
-              <a
+              <Link
                 key={item.name}
                 href={item.url}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -91,7 +92,7 @@ export function Dropdowns({ name, items, onSubmit, children, action }: Props) {
                 id="menu-item-0"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
             {onSubmit && (
               <form

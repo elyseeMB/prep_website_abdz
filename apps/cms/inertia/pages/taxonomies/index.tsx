@@ -7,10 +7,10 @@ import {
   TheadWrapper,
   TrWrapper,
 } from '@website/design-system/src/organisms/table/table.js'
-import { usePage } from '@inertiajs/react'
 import { tuyau } from '~/lib/tuyau.js'
 import TaxonomyDto from '../../../app/dto/taxonomy/taxonomy.js'
 import { router } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 
 type Params = {
   parent?: TaxonomyDto | null
@@ -89,7 +89,7 @@ export default function Index(props: Params) {
         <div className="breadcrumbs">
           <ul className="flex items-center flex-wrap gap-2">
             <li>
-              <a
+              <Link
                 href="#"
                 onClick={(e) => {
                   e.preventDefault()
@@ -98,11 +98,11 @@ export default function Index(props: Params) {
                 className="hover:underline"
               >
                 Dashboard
-              </a>
+              </Link>
             </li>
             <li className="mx-1">/</li>
             <li>
-              <a
+              <Link
                 href="#"
                 onClick={(e) => {
                   e.preventDefault()
@@ -111,7 +111,7 @@ export default function Index(props: Params) {
                 className="hover:underline"
               >
                 Taxonomies
-              </a>
+              </Link>
             </li>
 
             {/* Display taxonomy type if provided */}
@@ -119,7 +119,7 @@ export default function Index(props: Params) {
               <>
                 <li className="mx-1">/</li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     onClick={(e) => {
                       e.preventDefault()
@@ -132,7 +132,7 @@ export default function Index(props: Params) {
                     className="hover:underline"
                   >
                     {taxonomyTypeId}
-                  </a>
+                  </Link>
                 </li>
               </>
             )}
@@ -141,7 +141,7 @@ export default function Index(props: Params) {
             {breadcrumbs.map((crumb, index) => (
               <li key={crumb.id} className="flex items-center">
                 <li className="mx-1">/</li>
-                <a
+                <Link
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
@@ -150,7 +150,7 @@ export default function Index(props: Params) {
                   className="hover:underline"
                 >
                   {crumb.name}
-                </a>
+                </Link>
               </li>
             ))}
 
@@ -166,13 +166,13 @@ export default function Index(props: Params) {
 
         {/* Action buttons */}
         <div className="flex items-center gap-3">
-          <a
+          <Link
             href={tuyau.$url('taxonomies.create', {
               query: parent ? { parentId: parent.id } : {},
             })}
           >
             <Button>{parent ? 'Add New Child' : 'New Taxonomy'}</Button>
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -192,28 +192,28 @@ export default function Index(props: Params) {
             {taxonomies.map((taxonomy) => (
               <TrWrapper key={taxonomy.id}>
                 <TdWrapper>
-                  <a
+                  <Link
                     href={tuyau.$url('taxonomies.edit', { params: [taxonomy.id] })}
                     className="hover:underline"
                   >
                     {taxonomy.name}
-                  </a>
+                  </Link>
                   <div className="text-slate-600 text-xs">
-                    <a href={``} className="hover:underline">
+                    <Link href={``} className="hover:underline">
                       {taxonomy.slug}
-                    </a>
+                    </Link>
                   </div>
                 </TdWrapper>
 
                 {parent && (
                   <TdWrapper>
                     {taxonomy.parent && (
-                      <a
+                      <Link
                         href={tuyau.$url('taxonomies.edit', { params: [taxonomy.parent.id] })}
                         className="hover:underline"
                       >
                         {taxonomy.parent.name}
-                      </a>
+                      </Link>
                     )}
                   </TdWrapper>
                 )}
