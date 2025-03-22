@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { MouseEventHandler, PropsWithChildren } from "react";
 
 type Props = PropsWithChildren<{
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
@@ -7,7 +7,7 @@ type Props = PropsWithChildren<{
   label?: string;
   backgroundColor?: string;
   size?: "small" | "medium" | "large";
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   value?: number | null;
   variant?: "danger" | "success" | "info";
 }>;

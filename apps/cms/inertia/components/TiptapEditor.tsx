@@ -11,7 +11,7 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import suggestion from './libs/suggestion.ts'
-import { useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { UploadImage } from './libs/uploadFile.ts'
 import { EditorCommand } from './editorCommand.tsx'
 
@@ -52,7 +52,7 @@ const CustomTableCell = TableCell.extend({
   },
 })
 
-export function TiptapEditor({
+export function TiptapEditorComponent({
   value,
   onChange,
   name,
@@ -61,11 +61,8 @@ export function TiptapEditor({
   onChange: (ev: string) => void
   name: string
 }) {
-  const [content, setContent] = useState('')
-
-  const editor = useEditor({
-    content: content,
-    extensions: [
+  const extensions = useMemo(
+    () => [
       CustomDocument,
       StarterKit.configure({
         document: false,
@@ -97,25 +94,42 @@ export function TiptapEditor({
       Image,
       UploadImage.configure({ uploadFn: uploadFile }),
     ],
+    []
+  )
 
+  const editor = useEditor({
+    extensions,
     // editorProps: {
     //   attributes: {
     //     class: '',
     //   },
     // },
-    onUpdate: (event) => {
-      setContent(event.editor.getHTML())
-      onChange(event.editor.getHTML())
+    onUpdate: ({ editor }) => {
+      const newContent = editor.getHTML()
+      onChange(newContent)
     },
-    onBlur: (event) => {
-      setContent(event.editor.getHTML())
+    onBlur: ({ editor }) => {
+      if (editor && value !== editor.getHTML()) {
+        const newContent = editor.getHTML()
+        onChange(newContent)
+      }
     },
   })
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor?.commands.setContent(value)
+    }
+  }, [editor, value])
 
   return (
     <div className="wrapper">
       <EditorCommand editor={editor!} />
-      <EditorContent name={name} onChange={() => onChange} content={value} editor={editor} />
+      <EditorContent name={name} editor={editor} />
     </div>
   )
 }
+
+export const TiptapEditor = React.memo(TiptapEditorComponent, (prevProps, nextProps) => {
+  return prevProps.value === nextProps.value
+})

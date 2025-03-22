@@ -1,5 +1,6 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
+const AssetController = () => import('../../app/assets/controller/assets_controller.js')
 const HomeController = () => import('#pages/home/controllers/home_controller')
 const SerieController = () => import('#pages/series/controller/series_controller')
 const LoginController = () => import('#auth/controllers/login_controller')
@@ -7,6 +8,9 @@ const StoreCommentController = () =>
   import('../../app/comments/controller/store_comment_controller.js')
 const TopicsController = () => import('#pages/topics/controller/topics_controller')
 const BlogController = () => import('#pages/blog/controller/blog_controller')
+
+/* ASSET */
+router.get('/img/*', [AssetController, 'show']).where('path', /.*/).as('img')
 
 router.get('/', [HomeController, 'render']).as('home')
 

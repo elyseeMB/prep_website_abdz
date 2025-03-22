@@ -9,7 +9,15 @@ import {
   FieldInput,
   FieldTextarea,
 } from '@website/design-system/src/molecules/field/field.js'
-import React, { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { AssetUpload } from '~/components/AssetUpload.js'
 import { InputTags, SelectTags } from '~/components/TaxonomyTags.js'
 import { FieldElement } from '~/components/ui/form/field.js'
@@ -107,11 +115,7 @@ export default function Form(props: Props) {
 
   const handleChange = useCallback(
     (e: ChangeEvent) => {
-      console.log(e)
-
       const element = e.currentTarget as HTMLInputElement
-
-      return
       setData((data) => ({ ...data, [element.name]: element.value }))
     },
     [data]
@@ -119,7 +123,7 @@ export default function Form(props: Props) {
 
   // Modifiez handleSubmitAction pour corriger la mise à jour d'état
   const handleSubmitAction = useCallback(
-    (e: ChangeEvent) => {
+    (e: MouseEvent) => {
       const newStateId = e.currentTarget.value
 
       // Mise à jour de l'état avec callback pour s'assurer d'avoir la valeur actuelle
@@ -267,17 +271,6 @@ export default function Form(props: Props) {
               name="content"
             />
           </div>
-
-          <div className="mt-6 flex items-center justify-end gap-x-6">
-            <FormPrimaryButton
-              className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold
-            text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2
-            focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              type="submit"
-            >
-              Save
-            </FormPrimaryButton>
-          </div>
         </form>
 
         {/* <a href={url.toString()}>
@@ -292,7 +285,7 @@ export default function Form(props: Props) {
       <button onClick={handleUploadFile}>Upload</button> */}
 
         <AssetUpload
-          thumbnail={props.article?.thumbnail}
+          thumbnail={props.article?.thumbnail!}
           value={data.thumbnails}
           onChange={(value: any) => setData((prev) => ({ ...prev, thumbnails: value }))}
           name="thumbnails"

@@ -22,6 +22,15 @@ services:
             - postgres-db-volume:/var/lib/postgresql/data
         networks:
             - postgres-db-network
+    redis:
+        image: redis:7-alpine
+        container_name: redis
+        ports:
+        - "6379:6379"
+        volumes:
+        - redis-data:/data
+        networks:
+        - redis-net
 
 volumes:
     postgres-db-volume:
@@ -30,6 +39,9 @@ volumes:
             type: none
             o: bind
             device: ./data
+    redis-data:
 networks:
     postgres-db-network:
+        driver: bridge
+    redis-net:
         driver: bridge
