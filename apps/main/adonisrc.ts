@@ -44,6 +44,7 @@ export default defineConfig({
     () => import('@adonisjs/inertia/inertia_provider'),
     () => import('@tuyau/core/tuyau_provider'),
     () => import('@adonisjs/redis/redis_provider'),
+    () => import('@adonisjs/drive/drive_provider')
   ],
 
   /*

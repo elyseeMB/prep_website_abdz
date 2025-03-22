@@ -1,13 +1,19 @@
 import redis from '@adonisjs/redis/services/main'
 
 export default class CacheService {
-  constructor() {
-    redis.connection('main')
+  static async has(key: string): Promise<boolean> {
+    return (await redis.exists(key)) === 1
   }
 
-  async handle(key: string, value: any) {
+  static async get(key: string): Promise<string | null> {
+    return await redis.get(key)
+  }
+
+  static async set(key: string, value: any) {
     await redis.set(key, value)
-    const doc = await redis.get(key)
-    return doc
+  }
+
+  static async delete(key: string) {
+    await redis.del(key)
   }
 }
