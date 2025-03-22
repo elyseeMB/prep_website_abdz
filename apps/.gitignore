@@ -1,6 +1,5 @@
-# Dependencies and AdonisJS build
-storages
-data
+storage/
+data/
 
 .env
 .env.local
