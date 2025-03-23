@@ -12,11 +12,12 @@ export default class BlogController {
   async render({ view, request, params, response }: HttpContext) {
     const { page = 1, sortBy = 'createdAt', sort = 'desc' } = request.qs()
 
+    console.log(request.qs())
+
     const items = await this.articleRepository
       .getBlogs()
       .orderBy(sortBy, sort)
       .paginate(page, 5, router.makeUrl('blog.index', params))
-    // .paginate(page, 5, router.makeUrl('blog.index', params))
 
     const rows = items.map((article) => new ArticleListVM(article))
 
