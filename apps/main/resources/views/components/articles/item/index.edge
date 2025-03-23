@@ -1,3 +1,4 @@
+@let(img = item.asset)
 @let(path = '/img/')
 
 <article class="article-item" {{$props.toAttrs()}}>
@@ -7,7 +8,7 @@
             {{padStartToSTring(index)}}
         </h2>
         <h2 class="article__title">
-            <a href="{{route('home')}}">{{title}}</a>
+            <a href="{{route('home')}}">{{item.title}}</a>
         </h2>
         <h3 class="hidden"></h3>
         <h3 class="hidden"></h3>
@@ -15,13 +16,16 @@
 
         <div class="col-start-9 col-span-3 aspect-1">
             <a href="{{route('home')}}">
-                <img class="w-100% h-100% object-cover" src='http://localhost:3333{{path}}{{asset}}' alt="" />
+                <img class="w-100% h-100% object-cover"
+                    src='http://localhost:3333{{path}}{{item.article.thumbnails[0].filename}}?width=800&format=webp&quality=85'
+                    alt="" />
             </a>
         </div>
         <div class="article__body">
             <p>
-                {{content}}
+                {{item.article.summary}}
             </p>
         </div>
+
     </span>
 </article>

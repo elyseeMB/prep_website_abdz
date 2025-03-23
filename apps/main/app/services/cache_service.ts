@@ -10,10 +10,18 @@ export default class CacheService {
   }
 
   static async set(key: string, value: any) {
-    await redis.set(key, value)
+    return await redis.set(key, value)
   }
 
   static async delete(key: string) {
-    await redis.del(key)
+    return await redis.del(key)
+  }
+
+  static async destroyAll() {
+    return await redis.flushdb()
+  }
+
+  static async keys(pattern: string = '') {
+    return await redis.keys(pattern)
   }
 }

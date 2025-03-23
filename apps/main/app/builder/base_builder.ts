@@ -44,4 +44,17 @@ export class BaseBuilder<Model extends LucidModel, Record extends LucidRow> {
     this.query.limit(limit)
     return this
   }
+
+  orderBy(column: string, direction: 'desc' | 'asc' = 'asc') {
+    this.query.orderBy(column, direction)
+    return this
+  }
+
+  async paginate(page: number, perPage?: number | undefined, url: string | undefined = undefined) {
+    const result = await this.query.paginate(page, perPage)
+    if (url) {
+      result.baseUrl(url)
+    }
+    return result
+  }
 }

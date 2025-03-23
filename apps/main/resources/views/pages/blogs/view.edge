@@ -6,12 +6,22 @@ index: true
 })
 
 
-@section()
-<div class='bg-red'>je suis le blog
-    @each((item, index) in vm)
-    @!articles.item({index: index, title: item.title, content: item.summary, asset:item.thumbnails[0].filename})
+
+
+<div class=''>je suis le blog
+    @each((item, index) in rows)
+    @!articles.item({index: index, item})
     @end
 </div>
+
+@if(items.hasPages)
+@!pagination({items})
+@endif
+
+
+
+
+
 @end
 
 

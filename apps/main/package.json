@@ -99,7 +99,8 @@
     "pg": "^8.13.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "sharp": "^0.33.5"
   },
   "hotHook": {
     "boundaries": [
