@@ -7,6 +7,9 @@ import ArticleBuilder from '../builder/article_builder.js'
 import { HttpContext } from '@adonisjs/core/http'
 import ArticleTypes from '#enums/article_types'
 import { inject } from '@adonisjs/core'
+import { bento } from '#services/bento_service'
+import CacheNamespace from '../../enums/cache_namespaces.js'
+import { ArticleListVM } from '../view_model/view_model_article.js'
 
 interface StoreArticleDTO {
   title: string
@@ -31,6 +34,37 @@ export default class ArticleRepository {
     return this.ctx.auth.isAuthenticated ? this.ctx.auth.user : undefined
   }
 
+  get cache() {
+    return bento.namespace(CacheNamespace.POSTS)
+  }
+
+  /**
+   * Returns the latest 12 published lessons
+   */
+  async getCachedLatestLessons() {
+    const results = await this.cache.getOrSet({
+      key: 'GET_LATEST_LESSONS',
+      factory: async () => await this.getLastestLessons(12).toListVM(),
+    })
+
+    return ArticleListVM.consume(results)
+  }
+
+  /**
+   * Returns the latest 3 published blogs
+   */
+  async getCachedLatestBlogs() {
+    const results = await this.cache.getOrSet({
+      key: 'GET_LATEST_BLOG',
+      factory: async () => {
+        const latest = await this.getLatestBlogs(3).query.exec()
+        return latest.map((article) => new ArticleListVM(article))
+      },
+    })
+
+    return ArticleListVM.consume(results)
+  }
+
   builder() {
     return ArticleBuilder.new(this.user)
   }
@@ -47,11 +81,33 @@ export default class ArticleRepository {
 
   getLatest(
     limit: number | undefined = undefined,
+    excludeIds: number[] = [],
     articleTypeIds: ArticleTypes[] | ArticleTypes | null = null
   ) {
     return this.getList(articleTypeIds)
+      .if(excludeIds, (builder) => builder.exclude(excludeIds))
       .if(limit, (query) => query.limit(limit!))
       .orderPublished()
+  }
+
+  /**
+   * Returns the latest lessons
+   * @param limit
+   * @param excludeIds
+   * @returns
+   */
+  getLastestLessons(limit: number | undefined = undefined, excludeIds: number[] = []) {
+    return this.getLatest(limit, excludeIds, [ArticleTypes.LESSON])
+  }
+
+  /**
+   *  Returns the latest blogs and news
+   * @param limit
+   * @param excludeIds
+   * @returns
+   */
+  getLatestBlogs(limit: number | undefined = undefined, excludeIds: number[] = []) {
+    return this.getLatest(limit, excludeIds, [ArticleTypes.BLOG, ArticleTypes.NEWS])
   }
 
   findBy(column: keyof ArticleModel, value: any) {

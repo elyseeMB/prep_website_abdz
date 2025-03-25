@@ -57,4 +57,9 @@ export class BaseBuilder<Model extends LucidModel, Record extends LucidRow> {
     }
     return result
   }
+
+  exclude(values: any[], column: string = 'id') {
+    this.query.whereNotIn(column, values)
+    return this
+  }
 }

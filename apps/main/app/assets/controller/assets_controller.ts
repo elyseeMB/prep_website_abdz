@@ -28,7 +28,7 @@ export default class AssetController {
     if (isCache) {
       // Servir depuis le cache
       const cachedImageBase64 = await CacheService.get(cacheKey)
-      // console.log('Cache hit, data length:', cachedImageBase64 ? cachedImageBase64.length : 'null')
+      // console.log('Cache hit, data length:', cachedImageBase64 ? cachedImageBase64.lengtht : 'null')
 
       if (cachedImageBase64) {
         const imageBuffer = Buffer.from(cachedImageBase64, 'base64')

@@ -92,6 +92,7 @@
     "@vinejs/vine": "^3.0.0",
     "@website/design-system": "workspace:*",
     "@website/rpc": "workspace:*",
+    "bentocache": "^1.2.1",
     "better-sqlite3": "^11.8.0",
     "edge.js": "^6.2.0",
     "luxon": "^3.5.0",

@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto'
 import { ArticleIdentifier } from '../domain/article_identitfier.js'
 import ArticleTypes from '#enums/article_types'
 import States from '#enums/state'
-import { AssetVM } from '../../assets/view_model/view_model_asset.js'
+import { AssetVM } from '../../assets/view_model/asset_view_model.js'
 
 export default class ArticleBaseVM extends ArticleIdentifier {
   declare id: number

@@ -7,10 +7,66 @@ index: true
 },
 })
 
+
+
 @section()
-hello world
+<h1 class="text-2xl mb-10">Home Page
+</h1>
+
+<section>
+    <h1 class="text-2xl mb-5">Lessons
+    </h1>
+
+    <div class="p-3 flex flex-col gap-2">
+        @each(item in lessons)
+        <article class="border border-2 border-gray p-2 rounded">
+            <div> {{item.title}}
+            </div>
+            {{item.article.summary}}
+        </article>
+        @end
+    </div>
+</section>
+
+
+
+<section>
+    <h1 class="text-2xl mb-5">Blogs
+    </h1>
+
+    <div class="p-3 flex flex-col gap-2">
+        @each(item in blogs)
+        <article class="border border-2 border-gray p-2 rounded">
+            <div> {{item.title}}
+            </div>
+            <div>
+                @if(item.article.thumbnails)
+                <a href="">
+                    <img class="w-100% h-100% object-cover"
+                        src='http://localhost:3333/img/{{item.article.thumbnails[0].filename}}?width=800&format=webp&quality=85'
+                        alt="" />
+                </a>
+                @endif
+            </div>
+            <div>
+                {{item.article.summary}}
+            </div>
+        </article>
+</section>
 @end
 
+
+</div>
+@end
+
+
+
+
+
+
 <button class="contrast">sauvegarder</button>
+
+
+
 
 @end
