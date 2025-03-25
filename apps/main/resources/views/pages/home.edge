@@ -9,6 +9,7 @@ index: true
 
 
 
+
 @section()
 <h1 class="text-2xl mb-10">Home Page
 </h1>
@@ -23,6 +24,20 @@ index: true
             <div> {{item.title}}
             </div>
             {{item.article.summary}}
+        </article>
+        @end
+    </div>
+</section>
+
+<section class="mt-5 mb-2">
+    <h1 class="text-2xl mb-5">Topics
+    </h1>
+    <div class="p-3 grid cols-2 gap-2">
+        @each(item in topics)
+        <article class="gray border border-2 border-gray p-2 rounded">
+            <div> {{item.name}}
+            </div>
+            {{item.description}}
         </article>
         @end
     </div>

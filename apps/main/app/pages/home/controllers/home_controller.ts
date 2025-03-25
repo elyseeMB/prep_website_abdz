@@ -15,8 +15,9 @@ export default class HomeController {
 
   async render({ view }: HttpContext) {
     const lessons = await this.ArticleRepository.getCachedLatestLessons()
+    const topics = await this.taxonomyRepository.getCachedList()
     const blogs = await this.ArticleRepository.getCachedLatestBlogs()
 
-    return view.render('pages/home', { lessons, blogs })
+    return view.render('pages/home', { lessons, blogs, topics })
   }
 }

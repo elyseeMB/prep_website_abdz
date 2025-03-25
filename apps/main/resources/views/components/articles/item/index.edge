@@ -16,9 +16,7 @@
 
         <div class="col-start-9 col-span-3 aspect-1">
             <a href="{{route('home')}}">
-                <img class="w-100% h-100% object-cover"
-                    src='http://localhost:3333{{path}}{{item.article.thumbnails[0].filename}}?width=800&format=webp&quality=85'
-                    alt="" />
+                @!articles.picture({item, path})
             </a>
         </div>
         <div class="article__body">

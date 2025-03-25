@@ -3,10 +3,28 @@ import { Taxonomy } from '../domain/taxonomy.js'
 import { TaxonomyIdentifier } from '../domain/taxonomy_identifier.js'
 import TaxonomyBuilder from '../builder/taxonomy_builder.js'
 import TaxonomyModel from '#models/taxonomy'
+import { bento } from '#services/bento_service'
+import CacheNamespace from '../../enums/cache_namespaces.js'
+import { TopicListVM } from '../../topics/view_models/topicsVM.js'
 
 export class TaxonomyRepository {
   builder() {
     return TaxonomyBuilder.new()
+  }
+
+  get cache() {
+    return bento.namespace(CacheNamespace.TAXONOMIES)
+  }
+
+  async getCachedList() {
+    const results = await this.cache.getOrSet({
+      key: 'GET_DISPLAY_LIST',
+      factory: async () => {
+        const list = await this.getList(3).query.exec()
+        return list.map((taxonomy) => new TopicListVM(taxonomy))
+      },
+    })
+    return TopicListVM.consume(results)
   }
 
   async all() {
@@ -32,7 +50,10 @@ export class TaxonomyRepository {
     return this.builder().where('parent_id', taxonomy.id).display().order()
   }
 
-  getList() {
-    return this.builder().display().order()
+  getList(articleLimit: number = 0) {
+    return this.builder()
+      .if(articleLimit, (builder) => builder.withArticles())
+      .display()
+      .order()
   }
 }

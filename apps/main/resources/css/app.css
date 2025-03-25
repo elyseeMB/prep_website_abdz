@@ -35,6 +35,7 @@
   --grid-template-taxonomy: repeat(9, 1fr);
   --grid-gap: 24px;
 }
+
 .contrast {
   @apply: bg-contrast p1 rounded;
 }
