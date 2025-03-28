@@ -22,9 +22,6 @@ type Params = {
 export default function Index(props: Params) {
   const { parent, taxonomies = [], taxonomyTypeId, breadcrumbs = [] } = props
 
-  // With Inertia, we'll rely on the server to maintain breadcrumb state
-  // Each request will include the breadcrumb trail in the props
-
   const onDelete = (taxonomy: TaxonomyDto) => {
     if (
       confirm(
@@ -40,16 +37,12 @@ export default function Index(props: Params) {
     return taxonomy.meta?.children_count && Number(taxonomy.meta.children_count) > 0
   }
 
-  // Navigate to view children of a taxonomy
   const viewChildren = (taxonomy: TaxonomyDto) => {
-    // With Inertia, we include the current breadcrumbs in the query to maintain state
-    // The server will handle adding the current taxonomy to the breadcrumb trail
     router.get(
       tuyau.$url('taxonomies.index', {
         query: {
           parentId: taxonomy.id,
           taxonomyTypeId,
-          // We encode the current breadcrumbs in a format the server can understand
           breadcrumbsData: JSON.stringify([
             ...breadcrumbs,
             { id: taxonomy.id, name: taxonomy.name },
@@ -177,7 +170,7 @@ export default function Index(props: Params) {
       </div>
 
       {/* Table display */}
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-xl">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow">
         <TableWrapper>
           <TheadWrapper>
             <TrWrapper>

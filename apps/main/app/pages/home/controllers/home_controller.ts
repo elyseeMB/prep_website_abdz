@@ -4,6 +4,7 @@ import { TaxonomyRepository } from '../../../taxonomies/repositories/taxonomy_re
 import CollectionRepository from '../../../collections/repository/collection_repository.js'
 import { CollectionListViewModel } from '#collections/view_models/collection_list_view_model'
 import ArticleRepository from '../../../articles/respository/article_repository.js'
+import { bento } from '#services/bento_service'
 
 @inject()
 export default class HomeController {
@@ -16,6 +17,7 @@ export default class HomeController {
   async render({ view }: HttpContext) {
     const lessons = await this.ArticleRepository.getCachedLatestLessons()
     const topics = await this.taxonomyRepository.getCachedList()
+
     const blogs = await this.ArticleRepository.getCachedLatestBlogs()
 
     return view.render('pages/home', { lessons, blogs, topics })

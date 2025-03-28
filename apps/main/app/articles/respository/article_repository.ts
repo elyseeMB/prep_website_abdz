@@ -110,150 +110,149 @@ export default class ArticleRepository {
     return this.getLatest(limit, excludeIds, [ArticleTypes.BLOG, ArticleTypes.NEWS])
   }
 
-  findBy(column: keyof ArticleModel, value: any) {
-    return this.builder()
-      .where(column, value)
-      .display({ skipPublishCheck: true })
-      .withComments()
-      .firstOrFail()
-  }
+  // findBy(column: keyof ArticleModel, value: any) {
+  //   return this.builder()
+  //     .where(column, value)
+  //     .display({ skipPublishCheck: true })
+  //     .withComments()
+  //     .firstOrFail()
+  // }
 
-  async all() {
-    const articleRecords = await db
-      .from('articles')
-      .join('article_taxonomies', 'articles.id', 'article_taxonomies.article_id')
-      .join('taxonomies', 'article_taxonomies.taxonomy_id', 'taxonomies.id')
-      .select([
-        'articles.id as article_id',
-        'articles.title',
-        'articles.summary',
-        'articles.content',
-        'articles.state_id',
-        'taxonomies.id as taxonomy_id',
-        'taxonomies.name as taxonomy_name',
-      ])
-      .orderBy('articles.created_at', 'desc')
-      .exec()
-    return articleRecords.map((article) => {
-      return Article.create({
-        id: ArticleIdentifier.fromString(article.article_id),
-        title: article.title,
-        slug: article.slug,
-        content: article.content,
-        summary: article.summary,
-        taxonomies: article.taxonomy_name,
-        stateId: article.state_id,
-      })
-    })
-  }
+  // async all() {
+  //   const articleRecords = await db
+  //     .from('articles')
+  //     .join('article_taxonomies', 'articles.id', 'article_taxonomies.article_id')
+  //     .join('taxonomies', 'article_taxonomies.taxonomy_id', 'taxonomies.id')
+  //     .select([
+  //       'articles.id as article_id',
+  //       'articles.title',
+  //       'articles.summary',
+  //       'articles.content',
+  //       'articles.state_id',
+  //       'taxonomies.id as taxonomy_id',
+  //       'taxonomies.name as taxonomy_name',
+  //     ])
+  //     .orderBy('articles.created_at', 'desc')
+  //     .exec()
+  //   return articleRecords.map((article) => {
+  //     return Article.create({
+  //       id: ArticleIdentifier.fromString(article.article_id),
+  //       title: article.title,
+  //       slug: article.slug,
+  //       content: article.content,
+  //       summary: article.summary,
+  //       taxonomies: article.taxonomy_name,
+  //       stateId: article.state_id,
+  //     })
+  //   })
+  // }
 
-  async create(payload: StoreArticleDTO, taxonomyId?: number | string) {
-    const data = await ArticleModel.create({
-      title: payload.title,
-      summary: payload.summary,
-      content: payload.contentHTML,
-      slug: payload.slug,
-      stateId: payload.stateId,
-    })
-    data.related('taxonomies').attach([taxonomyId!])
-    return
-    const trx = await db.transaction()
-    try {
-      const [articleId] = await trx
-        .table('articles')
-        .insert({
-          title: payload.title,
-          summary: payload.summary,
-          content: payload.contentHTML,
-          slug: payload.slug,
-          state_id: payload.stateId,
-          created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
-          updated_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
-        })
-        .returning('id')
-        .exec()
-      await trx
-        .table('taxonomies')
-        .insert({
-          article_id: articleId,
-          taxonomy_id: taxonomyId,
-        })
-        .exec()
-      await trx.commit()
-    } catch (error) {
-      trx.rollback()
-      throw new Error(error)
-    }
+  // async create(payload: StoreArticleDTO, taxonomyId?: number | string) {
+  //   const data = await ArticleModel.create({
+  //     title: payload.title,
+  //     summary: payload.summary,
+  //     content: payload.contentHTML,
+  //     slug: payload.slug,
+  //     stateId: payload.stateId,
+  //   })
+  //   data.related('taxonomies').attach([taxonomyId!])
+  //   const trx = await db.transaction()
+  //   try {
+  //     const [articleId] = await trx
+  //       .table('articles')
+  //       .insert({
+  //         title: payload.title,
+  //         summary: payload.summary,
+  //         content: payload.contentHTML,
+  //         slug: payload.slug,
+  //         state_id: payload.stateId,
+  //         created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
+  //         updated_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
+  //       })
+  //       .returning('id')
+  //       .exec()
+  //     await trx
+  //       .table('taxonomies')
+  //       .insert({
+  //         article_id: articleId,
+  //         taxonomy_id: taxonomyId,
+  //       })
+  //       .exec()
+  //     await trx.commit()
+  //   } catch (error) {
+  //     trx.rollback()
+  //     throw new Error(error)
+  //   }
 
-    // const article = await ArticleModel.create({
-    //   title: payload.title,
-    //   summary: payload.summary,
-    //   content: payload.contentHTML,
-    // })
-    // if (categoryId) {
-    //   article.related('categories').attach([categoryId])
-    // }
-  }
+  //   // const article = await ArticleModel.create({
+  //   //   title: payload.title,
+  //   //   summary: payload.summary,
+  //   //   content: payload.contentHTML,
+  //   // })
+  //   // if (categoryId) {
+  //   //   article.related('categories').attach([categoryId])
+  //   // }
+  // }
 
-  async update(payload: UpdateArticleDTO, taxonomyId?: number | string) {
-    const trx = await db.transaction()
-    try {
-      const articleId = await trx
-        .from('articles')
-        .where('id', '=', payload.id)
-        .update({
-          title: payload.title,
-          summary: payload.summary,
-          content: payload.content,
-          created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
-          updated_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
-        })
-        .returning('id')
-        .exec()
+  // async update(payload: UpdateArticleDTO, taxonomyId?: number | string) {
+  //   const trx = await db.transaction()
+  //   try {
+  //     const articleId = await trx
+  //       .from('articles')
+  //       .where('id', '=', payload.id)
+  //       .update({
+  //         title: payload.title,
+  //         summary: payload.summary,
+  //         content: payload.content,
+  //         created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
+  //         updated_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
+  //       })
+  //       .returning('id')
+  //       .exec()
 
-      await trx
-        .from('article_taxonomies')
-        .update({
-          taxonomy_id: taxonomyId,
-        })
-        .where('article_id', '=', payload.id)
-        .exec()
-      await trx.commit()
-    } catch (error) {
-      trx.rollback()
-      throw new Error(error)
-    }
+  //     await trx
+  //       .from('article_taxonomies')
+  //       .update({
+  //         taxonomy_id: taxonomyId,
+  //       })
+  //       .where('article_id', '=', payload.id)
+  //       .exec()
+  //     await trx.commit()
+  //   } catch (error) {
+  //     trx.rollback()
+  //     throw new Error(error)
+  //   }
 
-    // return await db.from('articles').update({ payload }).where('id', '=', payload.id)
-  }
+  //   // return await db.from('articles').update({ payload }).where('id', '=', payload.id)
+  // }
 
-  findById(id: string) {
-    return db.from('articles').where('id', id).first()
-  }
+  // findById(id: string) {
+  //   return db.from('articles').where('id', id).first()
+  // }
 
-  async withTaxonomy(id: number) {
-    const [articleRecords] = await db
-      .from('articles')
-      .join('article_taxonomies', 'articles.id', 'article_taxonomies.article_id')
-      .join('taxonomies', 'article_taxonomies.taxonomy_id', 'taxonomies.id')
-      .where('articles.id', id)
-      .select(
-        'articles.id as article_id',
-        'articles.title',
-        'articles.summary',
-        'articles.content',
-        'taxonomies.id as taxonomy_id',
-        'taxonomies.name as taxonomy_name'
-      )
-      .exec()
+  // async withTaxonomy(id: number) {
+  //   const [articleRecords] = await db
+  //     .from('articles')
+  //     .join('article_taxonomies', 'articles.id', 'article_taxonomies.article_id')
+  //     .join('taxonomies', 'article_taxonomies.taxonomy_id', 'taxonomies.id')
+  //     .where('articles.id', id)
+  //     .select(
+  //       'articles.id as article_id',
+  //       'articles.title',
+  //       'articles.summary',
+  //       'articles.content',
+  //       'taxonomies.id as taxonomy_id',
+  //       'taxonomies.name as taxonomy_name'
+  //     )
+  //     .exec()
 
-    return Article.create({
-      id: ArticleIdentifier.fromString(articleRecords.article_id.toString()),
-      title: articleRecords.title,
-      content: articleRecords.content,
-      summary: articleRecords.summary,
-      taxonomyId: articleRecords.taxonomy_id,
-      taxonomyName: articleRecords.taxonomy_name,
-    })
-  }
+  //   return Article.create({
+  //     id: ArticleIdentifier.fromString(articleRecords.article_id.toString()),
+  //     title: articleRecords.title,
+  //     content: articleRecords.content,
+  //     summary: articleRecords.summary,
+  //     taxonomyId: articleRecords.taxonomy_id,
+  //     taxonomyName: articleRecords.taxonomy_name,
+  //   })
+  // }
 }

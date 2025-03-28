@@ -8,6 +8,8 @@ import CacheNamespace from '../../enums/cache_namespaces.js'
 import { TopicListVM } from '../../topics/view_models/topicsVM.js'
 
 export class TaxonomyRepository {
+  private CACHE_KEY = 'GET_DISPLAY_LIST'
+
   builder() {
     return TaxonomyBuilder.new()
   }
@@ -18,28 +20,13 @@ export class TaxonomyRepository {
 
   async getCachedList() {
     const results = await this.cache.getOrSet({
-      key: 'GET_DISPLAY_LIST',
+      key: this.CACHE_KEY,
       factory: async () => {
         const list = await this.getList(3).query.exec()
         return list.map((taxonomy) => new TopicListVM(taxonomy))
       },
     })
     return TopicListVM.consume(results)
-  }
-
-  async all() {
-    const TaxonomyRecords = await db
-      .from('taxonomies')
-      .select(['id', 'name'])
-      .orderBy('name')
-      .exec()
-
-    return TaxonomyRecords.map((taxonomyRecord) => {
-      return Taxonomy.create({
-        id: TaxonomyIdentifier.fromString(taxonomyRecord.id),
-        name: taxonomyRecord.name,
-      })
-    })
   }
 
   getBySlug(slug: string) {
@@ -56,4 +43,19 @@ export class TaxonomyRepository {
       .display()
       .order()
   }
+
+  // async all() {
+  //   const TaxonomyRecords = await db
+  //     .from('taxonomies')
+  //     .select(['id', 'name'])
+  //     .orderBy('name')
+  //     .exec()
+
+  //   return TaxonomyRecords.map((taxonomyRecord) => {
+  //     return Taxonomy.create({
+  //       id: TaxonomyIdentifier.fromString(taxonomyRecord.id),
+  //       name: taxonomyRecord.name,
+  //     })
+  //   })
+  // }
 }

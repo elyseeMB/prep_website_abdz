@@ -10,6 +10,7 @@ export default class TaxonomiesController {
   async index({ inertia, request }: HttpContext) {
     const data = request.only(['parentId'])
     const taxonomies = await GetTaxonomies.handle(data)
+
     console.log(taxonomies.map((el) => el.$extras))
     let parent: Taxonomy | null = null
 
@@ -39,7 +40,6 @@ export default class TaxonomiesController {
       data,
     })
 
-    console.log(data)
     return response
       .redirect()
       .toRoute('taxonomies.index', {}, { qs: { parentId: taxonomy.parentId } })

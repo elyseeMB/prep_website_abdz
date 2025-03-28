@@ -14,7 +14,7 @@ export default class DestroyTaxonomy {
   }
 
   static async #destroy(taxonomy: Taxonomy) {
-    const children = await taxonomy.related('children').query().select('id')
+    const children = await taxonomy.related('rootChildren').query().select('id')
 
     const cascadeIds = [...children.map((child) => child.id), taxonomy.id]
 
