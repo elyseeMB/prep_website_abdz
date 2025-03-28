@@ -1,0 +1,18 @@
+@layout({
+title: article.title,
+meta: {
+url: '',
+canonical: '',
+}
+})
+
+{{-- {{inspect(article)}} --}}
+@section({id: 'content'})
+<div>{{
+    html.safe(
+    article.content
+    )
+    }}</div>
+@end
+
+@end

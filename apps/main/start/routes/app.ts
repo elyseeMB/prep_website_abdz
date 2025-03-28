@@ -1,5 +1,6 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
+const LessonsController = () => import('../../app/lessons/controller/lessons_controller.js')
 const AssetController = () => import('../../app/assets/controller/assets_controller.js')
 const HomeController = () => import('#pages/home/controllers/home_controller')
 const SerieController = () => import('#pages/series/controller/series_controller')
@@ -26,7 +27,10 @@ router.post('/login', [LoginController, 'execute']).as('login_route')
 router.get('/topics', [TopicsController, 'render']).as('topics.index')
 router.get('/topics/:slug', [TopicsController, 'show']).as('topics.show')
 router.get('/series', [SerieController, 'render']).as('series.index')
+router.get('/lessons', [LessonsController, 'index']).as('lessons.index')
+router.get('/lessons/:slug', [LessonsController, 'show']).as('lessons.show')
 router.get('/blog', [BlogController, 'render']).as('blog.index')
+router.get('/blog/:slug', [BlogController, 'render']).as('blog.show')
 
 /* Comments */
 router

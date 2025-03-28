@@ -1,5 +1,6 @@
 import ArticleSync from '#events/article_sync'
 import Article from '#models/article'
+import app from '@adonisjs/core/services/app'
 import emitter from '@adonisjs/core/services/emitter'
 const ArticleListener = () => import('#listeners/article_listener')
 

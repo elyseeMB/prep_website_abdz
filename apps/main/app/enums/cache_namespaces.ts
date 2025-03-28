@@ -1,7 +1,7 @@
-const enum CacheNamespace {
-  POSTS = 'POSTS',
+const enum CacheNamespaces {
+  ARTICLES = 'ARTICLES',
   COLLECTIONS = 'COLLECTIONS',
   TAXONOMIES = 'TAXONOMIES',
 }
 
-export default CacheNamespace
+export default CacheNamespaces

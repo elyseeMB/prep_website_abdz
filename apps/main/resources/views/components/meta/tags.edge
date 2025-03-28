@@ -3,10 +3,13 @@
 <title> {{seriesTitle}} </title>
 <meta name="description" content="{{desc}}" />
 
+@if(canonical && request.url(true) !== canonical)
+<link rel="canonical" href="http://localhost:333{{canonical || url }}">
+@endif
 
 {{-- Robots --}}
 @if (index)
-  <meta  name="robots" content="index, follow" />
+<meta name="robots" content="index, follow" />
 @elseif (index === false)
-  <meta  name="robots" content="noindex, nofollow" />
+<meta name="robots" content="noindex, nofollow" />
 @endif

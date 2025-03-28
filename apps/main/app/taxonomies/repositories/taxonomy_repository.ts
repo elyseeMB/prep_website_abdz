@@ -4,7 +4,7 @@ import { TaxonomyIdentifier } from '../domain/taxonomy_identifier.js'
 import TaxonomyBuilder from '../builder/taxonomy_builder.js'
 import TaxonomyModel from '#models/taxonomy'
 import { bento } from '#services/bento_service'
-import CacheNamespace from '../../enums/cache_namespaces.js'
+import CacheNamespaces from '../../enums/cache_namespaces.js'
 import { TopicListVM } from '../../topics/view_models/topicsVM.js'
 
 export class TaxonomyRepository {
@@ -15,7 +15,7 @@ export class TaxonomyRepository {
   }
 
   get cache() {
-    return bento.namespace(CacheNamespace.TAXONOMIES)
+    return bento.namespace(CacheNamespaces.TAXONOMIES)
   }
 
   async getCachedList() {
@@ -27,6 +27,11 @@ export class TaxonomyRepository {
       },
     })
     return TopicListVM.consume(results)
+  }
+
+  async getForArticleFilter() {
+    const topics = await this.getCachedList()
+    return topics.filter((topic) => Number(topic.meta.articleCount) || '0')
   }
 
   getBySlug(slug: string) {

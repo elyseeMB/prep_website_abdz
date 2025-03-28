@@ -64,3 +64,22 @@ export class ArticleListVM extends ArticleBaseVM {
     return this.consumable(ArticleListVM, results)
   }
 }
+
+export class ArticleShowVM extends ArticleBaseVM {
+  declare authors: any
+  declare body: string | null
+
+  constructor(article: Article | undefined = undefined) {
+    super(article)
+
+    if (!article) {
+      return
+    }
+    this.body = article.content
+    this.authors = article.authors
+  }
+
+  static consume(result: unknown) {
+    return this.consumable(ArticleShowVM, [result])[0]
+  }
+}

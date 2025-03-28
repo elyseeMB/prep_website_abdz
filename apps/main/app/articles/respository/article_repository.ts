@@ -8,8 +8,8 @@ import { HttpContext } from '@adonisjs/core/http'
 import ArticleTypes from '#enums/article_types'
 import { inject } from '@adonisjs/core'
 import { bento } from '#services/bento_service'
-import CacheNamespace from '../../enums/cache_namespaces.js'
-import { ArticleListVM } from '../view_model/view_model_article.js'
+import CacheNamespaces from '../../enums/cache_namespaces.js'
+import { ArticleListVM, ArticleShowVM } from '../view_model/view_model_article.js'
 
 interface StoreArticleDTO {
   title: string
@@ -35,7 +35,7 @@ export default class ArticleRepository {
   }
 
   get cache() {
-    return bento.namespace(CacheNamespace.POSTS)
+    return bento.namespace(CacheNamespaces.ARTICLES)
   }
 
   /**
@@ -65,6 +65,18 @@ export default class ArticleRepository {
     return ArticleListVM.consume(results)
   }
 
+  async findCachedBySlug(slug: string) {
+    const results = await this.cache.getOrSet({
+      key: `GET_BY_SLUG:${slug}`,
+      factory: async () => {
+        const [article] = await this.findBy('slug', slug).query.exec()
+        return new ArticleShowVM(article)
+      },
+    })
+
+    return ArticleShowVM.consume(results)
+  }
+
   builder() {
     return ArticleBuilder.new(this.user)
   }
@@ -77,6 +89,10 @@ export default class ArticleRepository {
 
   getBlogs() {
     return this.getList([ArticleTypes.BLOG, ArticleTypes.NEWS])
+  }
+
+  getLessons() {
+    return this.getList([ArticleTypes.LESSON])
   }
 
   getLatest(
@@ -110,13 +126,13 @@ export default class ArticleRepository {
     return this.getLatest(limit, excludeIds, [ArticleTypes.BLOG, ArticleTypes.NEWS])
   }
 
-  // findBy(column: keyof ArticleModel, value: any) {
-  //   return this.builder()
-  //     .where(column, value)
-  //     .display({ skipPublishCheck: true })
-  //     .withComments()
-  //     .firstOrFail()
-  // }
+  findBy(column: keyof ArticleModel, value: any) {
+    return this.builder()
+      .where(column, value)
+      .display({ skipPublishCheck: true })
+      .withComments()
+      .firstOrFail()
+  }
 
   // async all() {
   //   const articleRecords = await db

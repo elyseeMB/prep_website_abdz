@@ -4,7 +4,13 @@
 
 
 
-{{-- {{inspect(hasNext)}} --}}
+@if(withQs)
+@let(qs = request.qs())
+@assign(filterQs = Object.keys(qs).filter(key =>key !== 'page').map(key => `${key}=${qs[key]}`))
+@if(filterQs)
+@assign(filterQs = '&' + filterQs)
+@endif
+@endif
 
 
 <nav>
