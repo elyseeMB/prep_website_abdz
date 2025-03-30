@@ -1,5 +1,7 @@
 ---
 - name: AdonisJs | Clone
   git:
-    repo: 'https://github.com/elyseeMB/prep_website_abdz.git'
-    dest: '{{root_path}}'
+    repo: 'git@github.com:elyseeMB/prep_website_abdz.git'
+    dest: 'eembou'
+    key_file: '/home/elysee/.ssh/id_ed25519'
+    accept_hostkey: yes

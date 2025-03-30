@@ -6,8 +6,13 @@ canonical: '',
 }
 })
 
+
+
 {{-- {{inspect(article)}} --}}
-@section({id: 'content'})
+@section({id: 'content', class:'show'})
+
+@!heading({title: article.title, size: "xs", subtitle: article.summary})
+
 <div>{{
     html.safe(
     article.content
