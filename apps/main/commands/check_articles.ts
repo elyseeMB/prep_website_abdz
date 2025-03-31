@@ -18,9 +18,9 @@ export default class CheckArticles extends BaseCommand {
     this.logger.info('Starting "CheckArticles"')
 
     const end = DateTime.now().toSQL()
-    const endDelayed = DateTime.now().minus({ days: 14 }).toSQL()
+    // const endDelayed = DateTime.now().minus({ days: 14 }).toSQL()
     const start = DateTime.now().minus({ minutes: 5 }).toSQL()
-    const startDelayed = DateTime.now().minus({ days: 14, minutes: 5 }).toSQL()
+    // const startDelayed = DateTime.now().minus({ days: 14, minutes: 5 }).toSQL()
 
     const articles = await Article.query().whereBetween('updatedAt', [start, end])
 

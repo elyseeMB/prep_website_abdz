@@ -1,0 +1,133 @@
+# Tasks for building and deploying the application
+- name: build production
+  become: yes
+  become_user: '{{ ansible_user }}'
+  block:
+    - name: AdonisJs | Clone
+      git:
+        repo: 'https://github.com/elyseeMB/prep_website_abdz.git'
+        dest: '{{ root_path }}'
+        version: refactor/replace-inertia-with-edge
+        force: yes
+
+    - name: Copier le fichier .env
+      template:
+        src: env.j2
+        dest: '{{ root_path }}/apps/cms/.env'
+
+    - name: Install dependencies with pnpm
+      shell: |
+        export NVM_DIR="{{ nvm_dir }}"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        pnpm install
+      args:
+        chdir: '{{ root_path }}/apps/cms'
+        executable: /bin/bash
+
+    - name: Build du projet
+      shell: |
+        export NVM_DIR="{{ nvm_dir }}"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        pnpm run build --ignore-ts-errors
+      args:
+        chdir: '{{ root_path }}/apps/cms'
+        executable: /bin/bash
+
+    - name: Installation des dépendances de production
+      shell: |
+        set -e
+        export NVM_DIR="{{ nvm_dir }}"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+        rm -rf node_modules
+        timeout 600 pnpm install --prod --frozen-lockfile=false
+
+        touch .pnpm-install-success
+      args:
+        chdir: '{{ root_path }}/apps/cms/build'
+        executable: /bin/bash
+      async: 1200
+      poll: 30
+      register: pnpm_install
+      ignore_errors: yes
+
+    - name: Vérifier l'installation
+      stat:
+        path: '{{ root_path }}/apps/cms/build/.pnpm-install-success'
+      register: pnpm_check
+
+    - name: Échouer si l'installation a raté
+      fail:
+        msg: "L'installation PNPM a échoué - Voir les logs sur le serveur"
+      when: not pnpm_check.stat.exists
+
+    - name: Copier le fichier .env dans le dossier build
+      template:
+        src: env.j2
+        dest: '{{ root_path }}/apps/cms/build/.env'
+
+    - name: Installer PM2 globalement
+      shell: |
+        export NVM_DIR="{{ nvm_dir }}"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        npm install -g pm2
+      args:
+        executable: /bin/bash
+      changed_when: false
+
+    - name: Création du fichier ecosystem
+      template:
+        src: ecosystem.config.cjs.j2
+        dest: '{{ root_path }}/apps/cms/build/ecosystem.config.cjs'
+
+    - name: Démarrer avec PM2
+      shell: |
+        export NVM_DIR="{{ nvm_dir }}"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+        nvm use default
+        pm2 start ecosystem.config.cjs --watch
+      args:
+        chdir: '{{ root_path }}/apps/cms/build/'
+        executable: /bin/bash
+
+    - name: Vérifier les processus PM2 après démarrage
+      shell: |
+        export NVM_DIR="{{ nvm_dir }}"
+        [ -s "$NVM_DIR/nvm.sh" ] && \ . "$NVM_DIR/nvm.sh"
+        pm2 list
+      args:
+        chdir: '{{ root_path }}/apps/cms/build'
+        executable: /bin/bash
+      register: pm2_list
+
+    - debug:
+        var: pm2_list.stdout_lines
+
+    - name: Setup PM2 startup script
+      shell: |
+        export NVM_DIR="{{ nvm_dir }}"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
+      args:
+        executable: /bin/bash
+      register: pm2_output
+      failed_when: false
+
+    - name: Debug - Afficher la sortie de PM2 startup
+      debug:
+        var: pm2_output.stdout_lines
+
+    - name: Extraire et exécuter la commande PM2 startup
+      become: yes
+      become_method: sudo
+      become_user: root
+      shell: '{{ pm2_output.stdout_lines[-1] }}'
+      when: pm2_output.stdout is search("sudo env PATH=")
+
+    - name: Save PM2 process list
+      shell: |
+        export NVM_DIR="{{ nvm_dir }}"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        pm2 save
+      args:
+        executable: /bin/bash

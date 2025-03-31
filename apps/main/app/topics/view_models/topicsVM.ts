@@ -10,7 +10,7 @@ export class TopicBaseVM extends TopicIdentifier {
   declare slug: string
   declare description: string
   declare asset: unknown
-  declare articles: ArticleListVM[]
+  declare articles: ArticleListVM[] | null
   declare Collections: unknown
   declare meta: Record<string, any>
 

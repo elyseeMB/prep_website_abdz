@@ -1,6 +1,3 @@
-import SlugService from '#articles/services/slug_service'
-import { UserRole } from '#auth/enums/user_role'
-import { ArticleFactory } from '#database/factories/article_factory'
 import { TaxonomyFactory } from '#database/factories/taxonomy_factory'
 import { CollectionFactory } from '#database/factories/collection_factory'
 import { UserFactory } from '#database/factories/user_factory'
@@ -10,6 +7,7 @@ import UtilityService from '#services/utility_service'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
+import { UserRole } from '../../app/enums/user_role.js'
 
 export default class extends BaseSeeder {
   getRandom<T>(array: T[]) {

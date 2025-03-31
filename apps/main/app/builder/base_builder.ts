@@ -1,4 +1,3 @@
-import ArticleTypes from '#enums/article_types'
 import { LucidModel, LucidRow, ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 
 export class BaseBuilder<Model extends LucidModel, Record extends LucidRow> {

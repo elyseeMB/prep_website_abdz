@@ -1,4 +1,3 @@
-import { User } from '#auth/domain/user'
 import ArticleTypes from '#enums/article_types'
 import States from '#enums/state'
 import Article from '#models/article'
@@ -8,12 +7,12 @@ import { TopicListVM } from '../../topics/view_models/topicsVM.js'
 import { ArticleListVM } from '../view_model/view_model_article.js'
 
 export default class ArticleBuilder extends BaseBuilder<typeof Article, Article> {
-  constructor(protected user: User | undefined = undefined) {
+  constructor(/*protected user: User | undefined = undefined*/) {
     super(Article)
   }
 
-  static new(user: User | undefined = undefined) {
-    return new ArticleBuilder(user)
+  static new(/*user: User | undefined = undefined*/) {
+    return new ArticleBuilder(/*user*/)
   }
 
   display({ skipPublishCheck = false } = {}) {

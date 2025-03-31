@@ -1,8 +1,5 @@
 import { Entity } from '#core/domain/entity.'
-import { DateTime } from 'luxon'
 import { ArticleIdentifier } from './article_identitfier.js'
-import { ManyToMany } from '@adonisjs/lucid/types/relations'
-import Asset from '#models/asset'
 import States from '#enums/state'
 import ArticleTypes from '#enums/article_types'
 

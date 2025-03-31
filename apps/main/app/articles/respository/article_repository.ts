@@ -1,8 +1,4 @@
-import db from '@adonisjs/lucid/services/db'
-import { Article } from '../domain/article.js'
-import { ArticleIdentifier } from '../domain/article_identitfier.js'
 import ArticleModel from '#models/article'
-import { DateTime } from 'luxon'
 import ArticleBuilder from '../builder/article_builder.js'
 import { HttpContext } from '@adonisjs/core/http'
 import ArticleTypes from '#enums/article_types'
@@ -11,20 +7,20 @@ import { bento } from '#services/bento_service'
 import CacheNamespaces from '../../enums/cache_namespaces.js'
 import { ArticleListVM, ArticleShowVM } from '../view_model/view_model_article.js'
 
-interface StoreArticleDTO {
-  title: string
-  summary: string
-  contentHTML: string
-  slug?: string
-  stateId: number
-}
+// interface StoreArticleDTO {
+//   title: string
+//   summary: string
+//   contentHTML: string
+//   slug?: string
+//   stateId: number
+// }
 
-interface UpdateArticleDTO {
-  id: string
-  summary: string
-  title: string
-  content: string
-}
+// interface UpdateArticleDTO {
+//   id: string
+//   summary: string
+//   title: string
+//   content: string
+// }
 
 @inject()
 export default class ArticleRepository {
@@ -78,7 +74,7 @@ export default class ArticleRepository {
   }
 
   builder() {
-    return ArticleBuilder.new(this.user)
+    return ArticleBuilder.new(/*this.user*/)
   }
 
   getList(ArticleTypeIds: ArticleTypes[] | ArticleTypes | null = null) {

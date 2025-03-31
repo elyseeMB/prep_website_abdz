@@ -1,4 +1,3 @@
-import Article from '#models/article'
 import { Exception } from '@adonisjs/core/exceptions'
 import string from '@adonisjs/core/helpers/string'
 import db from '@adonisjs/lucid/services/db'

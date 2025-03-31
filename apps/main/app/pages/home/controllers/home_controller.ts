@@ -3,7 +3,6 @@ import { inject } from '@adonisjs/core'
 import { TaxonomyRepository } from '../../../taxonomies/repositories/taxonomy_repository.js'
 import CollectionRepository from '../../../collections/repository/collection_repository.js'
 import ArticleRepository from '../../../articles/respository/article_repository.js'
-import { bento } from '#services/bento_service'
 
 @inject()
 export default class HomeController {

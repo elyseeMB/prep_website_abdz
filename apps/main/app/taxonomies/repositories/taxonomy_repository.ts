@@ -1,6 +1,3 @@
-import db from '@adonisjs/lucid/services/db'
-import { Taxonomy } from '../domain/taxonomy.js'
-import { TaxonomyIdentifier } from '../domain/taxonomy_identifier.js'
 import TaxonomyBuilder from '../builder/taxonomy_builder.js'
 import TaxonomyModel from '#models/taxonomy'
 import { bento } from '#services/bento_service'

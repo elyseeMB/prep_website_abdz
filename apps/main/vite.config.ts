@@ -1,11 +1,7 @@
 import { defineConfig } from 'vite'
-import { getDirname } from '@adonisjs/core/helpers'
-import inertia from '@adonisjs/inertia/client'
 import react from '@vitejs/plugin-react'
 import adonisjs from '@adonisjs/vite/client'
 import UnoCss from 'unocss/vite'
-import prefresh from '@prefresh/vite'
-import { resolve } from 'path'
 
 export default defineConfig({
   server: {

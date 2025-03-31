@@ -61,7 +61,7 @@ export default class LessonsController {
     return view.render('pages/lessons/view', { recent, rows, items, topics, topic })
   }
 
-  async show({ view, params, route }: HttpContext) {
+  async show({ view, params }: HttpContext) {
     const article = await this.articleRepository.findCachedBySlug(params.slug)
 
     const comments = await Comment.query()

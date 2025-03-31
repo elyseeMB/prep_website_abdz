@@ -1,7 +1,6 @@
 import { randomUUID } from 'crypto'
 import { ValueObject } from './value_object.js'
 import is from '@adonisjs/core/helpers/is'
-import { AnyTxtRecord } from 'dns'
 
 export class Identifier<T extends string> extends ValueObject<{ value: string }> {
   declare meta: Record<string, any>

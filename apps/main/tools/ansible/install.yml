@@ -4,7 +4,6 @@
   become: yes
   vars:
     domain: dev.com
-    ssh_passphrase: git
     nvm_version: 'v0.40.1'
     node_version: '22'
     nvm_dir: '{{ ansible_env.HOME }}/.nvm'
@@ -19,7 +18,105 @@
   tasks:
 
   roles:
-    # - { role: tools, tags: tools }
-    # - { role: node, tags: node }
+    - { role: docker, tags: docker }
+    - { role: user, tags: user }
+    - { role: tools, tags: tools }
+    - { role: node, tags: node }
     - { role: app, tags: app }
     - { role: nginx, tags: nginx }
+    - { role: stats, tags: stats }
+# ---
+# - hosts: local
+#   become: yes
+#   vars:
+#     app_name: adonis-app
+#     app_directory: '/var/www/{{ app_name }}'
+#     node_version: '16.x'
+#     domain_name: 'example.com'
+#     app_port: 3333
+
+#   tasks:
+#     - name: Mise à jour du système
+#       apt:
+#         update_cache: yes
+#         upgrade: yes
+
+#     - name: Installation des dépendances système
+#       apt:
+#         name:
+#           - curl
+#           - git
+#           - nginx
+#           - certbot
+#           - python3-certbot-nginx
+#         state: present
+
+#     - name: Installation de Node.js et npm
+#       shell: |
+#         curl -fsSL https://deb.nodesource.com/setup_{{ node_version }} | bash -
+#         apt-get install -y nodejs
+
+#     - name: Installation de PM2 globalement
+#       npm:
+#         name: pm2
+#         global: yes
+
+#     - name: Création du répertoire de l'application
+#       file:
+#         path: '{{ app_directory }}'
+#         state: directory
+#         owner: '{{ ansible_user }}'
+#         group: '{{ ansible_user }}'
+#         mode: '0755'
+
+#     - name: Clonage du dépôt de l'application
+#       git:
+#         repo: 'https://github.com/elyseeMB/testAdonisjs.git'
+#         dest: '{{ app_directory }}'
+#         version: main # ou la branche souhaitée
+
+#     - name: Installation des dépendances de l'application
+#       npm:
+#         path: '{{ app_directory }}'
+#         state: present
+
+#     - name: Construction de l'application AdonisJS
+#       command:
+#         cmd: npm run build
+#         chdir: '{{ app_directory }}'
+
+#     - name: Configuration PM2 pour l'application
+#       template:
+#         src: ecosystem.config.js.j2
+#         dest: '{{ app_directory }}/ecosystem.config.js'
+
+#     - name: Démarrage de l'application avec PM2
+#       command:
+#         cmd: pm2 start ecosystem.config.js
+#         chdir: '{{ app_directory }}'
+
+#     - name: Configuration Nginx
+#       template:
+#         src: nginx-site.conf.j2
+#         dest: '/etc/nginx/sites-available/{{ app_name }}'
+
+#     - name: Activation du site Nginx
+#       file:
+#         src: '/etc/nginx/sites-available/{{ app_name }}'
+#         dest: '/etc/nginx/sites-enabled/{{ app_name }}'
+#         state: link
+
+#     - name: Redémarrage de Nginx
+#       systemd:
+#         name: nginx
+#         state: restarted
+
+#     - name: Configuration du démarrage automatique de PM2
+#       command: pm2 startup
+#       become: yes
+#       become_user: '{{ ansible_user }}'
+
+#     - name: Sauvegarde de la configuration PM2
+#       command: pm2 save
+#       become: yes
+#       become_user: '{{ ansible_user }}'

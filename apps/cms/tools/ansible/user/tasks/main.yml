@@ -1,0 +1,31 @@
+---
+- name: Créer un utilisateur dédié au déploiement
+  become: yes
+  block:
+    - name: Ajouter l'utilisateur '{{ ansible_user }}' au groupe sudo
+      user:
+        name: '{{ ansible_user }}'
+        groups: sudo
+        append: yes
+
+    - name: Autoriser sudo sans mot de passe pour '{{ ansible_user }}'
+      copy:
+        dest: '/etc/sudoers.d/{{ ansible_user }}'
+        content: '{{ ansible_user }} ALL=(ALL) NOPASSWD: ALL'
+        mode: 0440
+
+    - name: Copier la clé SSH pour '{{ ansible_user }}'
+      copy:
+        src: ~/.ssh/id_ed25519.pub
+        dest: '/home/{{ ansible_user }}/.ssh/authorized_keys'
+        owner: '{{ ansible_user }}'
+        group: '{{ ansible_user }}'
+        mode: '0600'
+
+    - name: Assurer les permissions correctes sur le répertoire du projet
+      file:
+        path: '{{ root_path }}'
+        owner: '{{ ansible_user }}'
+        group: '{{ ansible_user }}'
+        mode: '0755'
+        recurse: yes
