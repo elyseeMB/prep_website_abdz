@@ -68,14 +68,14 @@
         src: env.j2
         dest: '{{ root_path }}/apps/main/build/.env'
 
-    - name: Installer PM2 globalement
-      shell: |
-        export NVM_DIR="{{ nvm_dir }}"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        npm install -g pm2
-      args:
-        executable: /bin/bash
-      changed_when: false
+    # - name: Installer PM2 globalement
+    #   shell: |
+    #     export NVM_DIR="{{ nvm_dir }}"
+    #     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    #     npm install -g pm2
+    #   args:
+    #     executable: /bin/bash
+    #   changed_when: false
 
     - name: Copier le script start.sh
       template:

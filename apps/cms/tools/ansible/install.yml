@@ -7,12 +7,12 @@
     node_version: '22'
     nvm_dir: '{{ ansible_env.HOME }}/.nvm'
 
-  pre_tasks:
-    - name: 'APT | Update & Upgrade'
-      become: yes
-      apt:
-        upgrade: dist
-        update_cache: yes
+  # pre_tasks:
+  #   - name: 'APT | Update & Upgrade'
+  #     become: yes
+  #     apt:
+  #       upgrade: dist
+  #       update_cache: yes
 
   tasks:
 
@@ -21,5 +21,5 @@
     # - { role: tools, tags: tools }
     # - { role: node, tags: node }
     - { role: app, tags: app }
-    - { role: nginx, tags: nginx }
-    - { role: stats, tags: stats }
+    # - { role: nginx, tags: nginx }
+    # - { role: stats, tags: stats }

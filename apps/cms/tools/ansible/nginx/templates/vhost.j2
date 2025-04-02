@@ -1,4 +1,4 @@
-proxy_cache_path /var/cache/nginx/jscache levels=1:2 keys_zone=jscache:100m inactive=30d use_temp_path=off max_size=100m;
+proxy_cache_path /var/cache/nginx/studio_cache levels=1:2 keys_zone=STUDIO_CACHE:100m inactive=30d use_temp_path=off max_size=100m;
 
 # Disable logging for medias (resize/convert)
 map $request $loggable {
@@ -6,7 +6,7 @@ map $request $loggable {
     default 1;
 }
 
-upstream gwsocket {
+upstream gwsocket_studio {
   server 127.0.0.1:7891;
 }
 
@@ -50,7 +50,7 @@ server {
     }
 
     location /goaccessws {
-        proxy_pass http://gwsocket;
+        proxy_pass http://gwsocket_studio;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
@@ -69,8 +69,9 @@ server {
 
 # subdomains redirect
 server {
-    listen                  443 ssl http2;
-    listen                  [::]:443 ssl http2;
+    listen 443 ssl;
+    http2 on;
+    listen [::]:443 ssl;
     server_name             *.{{ domain }};
 
     # SSL

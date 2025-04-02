@@ -1,27 +1,11 @@
 import ArticleTypes, { ArticleTypesDesc } from '#enums/article_types'
-import AssetTypes from '#enums/asset_types'
-import States, { ArticleStatusText } from '#enums/state'
-import { router, useForm } from '@inertiajs/react'
-import { Button, FormField, FormPrimaryButton } from '@website/design-system'
-import {
-  Field,
-  FieldCheckbox,
-  FieldInput,
-  FieldTextarea,
-} from '@website/design-system/src/molecules/field/field.js'
-import React, {
-  ChangeEvent,
-  FormEvent,
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import States from '#enums/state'
+import { router } from '@inertiajs/react'
+import { Button } from '@website/design-system'
+import { ChangeEvent, FormEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
 import { AssetUpload } from '~/components/AssetUpload.js'
-import { InputTags, SelectTags } from '~/components/TaxonomyTags.js'
+import { SelectTags } from '~/components/TaxonomyTags.js'
 import { FieldElement } from '~/components/ui/form/field.js'
-import { Textarea } from '~/components/ui/form/textarea.js'
 import { tuyau } from '~/lib/tuyau.js'
 import ArticleFormDto from '../../../app/dto/article/article_form.js'
 import { TiptapEditor } from '~/components/TiptapEditor.js'
@@ -31,26 +15,26 @@ type taxonomiesProps = {
   name: string
 }
 
-type articlesProps = {
-  id: any
-  title: any
-  slug: any
-  summary: any
-  content: any
-  stateId: any
-  viewCount: any
-  publishAt: any
-  articleTypeId: any
-  comments: any
-  assets: any
-  thumbnails: any
-  covers: any
-  taxonomies: any[]
-  collections: any
-  authors: any
-  createdAt: any
-  updatedAt: any
-}
+// type articlesProps = {
+//   id: any
+//   title: any
+//   slug: any
+//   summary: any
+//   content: any
+//   stateId: any
+//   viewCount: any
+//   publishAt: any
+//   articleTypeId: any
+//   comments: any
+//   assets: any
+//   thumbnails: any
+//   covers: any
+//   taxonomies: any[]
+//   collections: any
+//   authors: any
+//   createdAt: any
+//   updatedAt: any
+// }
 
 type Props = {
   article?: ArticleFormDto

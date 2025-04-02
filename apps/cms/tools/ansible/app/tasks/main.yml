@@ -3,12 +3,12 @@
   become: yes
   become_user: '{{ ansible_user }}'
   block:
-    - name: AdonisJs | Clone
-      git:
-        repo: 'https://github.com/elyseeMB/prep_website_abdz.git'
-        dest: '{{ root_path }}'
-        version: refactor/replace-inertia-with-edge
-        force: yes
+    # - name: AdonisJs | Clone
+    #   git:
+    #     repo: 'https://github.com/elyseeMB/prep_website_abdz.git'
+    #     dest: '{{ root_path }}'
+    #     version: refactor/replace-inertia-with-edge
+    #     force: yes
 
     - name: Copier le fichier .env
       template:
@@ -69,16 +69,6 @@
         src: env.j2
         dest: '{{ root_path }}/apps/cms/build/.env'
 
-    # - name: Installer PM2 globalement
-    #   shell: |
-    #     export NVM_DIR="{{ nvm_dir }}"
-    #     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    #     export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
-    #     npm install -g pm2
-    #   args:
-    #     executable: /bin/bash
-    #   changed_when: false
-
     - name: Création du fichier ecosystem
       template:
         src: ecosystem.config.cjs.j2
@@ -95,23 +85,11 @@
         chdir: '{{ root_path }}/apps/cms/build/'
         executable: /bin/bash
 
-    - name: Vérifier les processus PM2 après démarrage
-      shell: |
-        export NVM_DIR="{{ nvm_dir }}"
-        [ -s "$NVM_DIR/nvm.sh" ] && \ . "$NVM_DIR/nvm.sh"
-        pm2 list
-      args:
-        chdir: '{{ root_path }}/apps/cms/build'
-        executable: /bin/bash
-      register: pm2_list
-
-    - debug:
-        var: pm2_list.stdout_lines
-
     - name: Setup PM2 startup script
       shell: |
         export NVM_DIR="{{ nvm_dir }}"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
         pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
       args:
         executable: /bin/bash
@@ -133,6 +111,7 @@
       shell: |
         export NVM_DIR="{{ nvm_dir }}"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
         pm2 save
       args:
         executable: /bin/bash

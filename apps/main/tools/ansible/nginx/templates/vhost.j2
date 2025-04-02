@@ -1,4 +1,4 @@
-proxy_cache_path /var/run/nginx-cache/jscache levels=1:2 keys_zone=jscache:100m inactive=30d  use_temp_path=off max_size=100m;
+proxy_cache_path /var/cache/nginx/eembouz_jscache levels=1:2 keys_zone=EEMBOUZ:100m inactive=30d use_temp_path=off max_size=100m;
 
 # Disable logging for medias (resize/convert)
 map $request $loggable {
@@ -6,10 +6,9 @@ map $request $loggable {
     default 1;
 }
 
-upstream gwsocket {
+upstream gwsocket_eembouz {
   server 127.0.0.1:7890;
 }
-
 server {
     listen      80;
     listen      [::]:80;
@@ -50,7 +49,7 @@ server {
     }
 
     location /goaccessws {
-        proxy_pass http://gwsocket;
+        proxy_pass http://gwsocket_eembouz;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
