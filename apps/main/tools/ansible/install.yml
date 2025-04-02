@@ -19,7 +19,7 @@
   roles:
     # - { role: docker, tags: docker }
     # - { role: tools, tags: tools }
-    # - { role: node, tags: node }
+    - { role: node, tags: node }
     - { role: app, tags: app }
     # - { role: nginx, tags: nginx }
     # - { role: stats, tags: stats }

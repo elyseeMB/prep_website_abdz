@@ -3,12 +3,12 @@
   become: yes
   become_user: '{{ ansible_user }}'
   block:
-    # - name: AdonisJs | Clone
-    #   git:
-    #     repo: 'https://github.com/elyseeMB/prep_website_abdz.git'
-    #     dest: '{{ root_path }}'
-    #     version: refactor/replace-inertia-with-edge
-    #     force: yes
+    - name: AdonisJs | Clone
+      git:
+        repo: 'https://github.com/elyseeMB/prep_website_abdz.git'
+        dest: '{{ root_path }}'
+        version: refactor/replace-inertia-with-edge
+        force: yes
 
     - name: Copier le fichier .env
       template:
