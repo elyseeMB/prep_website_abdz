@@ -19,6 +19,8 @@
       shell: |
         export NVM_DIR="{{ nvm_dir }}"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
+        nvm use default
         pnpm install
       args:
         chdir: '{{ root_path }}/apps/main'
@@ -74,6 +76,16 @@
       args:
         executable: /bin/bash
       changed_when: false
+
+    - name: Copier le script start.sh
+      template:
+        src: start.sh.j2
+        dest: '{{ root_path }}/apps/main/build/start.sh'
+
+    - name: Vérifier que start.sh existe
+      stat:
+        path: '{{ root_path }}/apps/main/build/start.sh'
+      register: start_script
 
     - name: Création du fichier ecosystem
       template:

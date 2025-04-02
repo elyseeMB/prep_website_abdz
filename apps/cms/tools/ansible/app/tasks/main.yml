@@ -19,6 +19,7 @@
       shell: |
         export NVM_DIR="{{ nvm_dir }}"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
         pnpm install
       args:
         chdir: '{{ root_path }}/apps/cms'
@@ -28,6 +29,7 @@
       shell: |
         export NVM_DIR="{{ nvm_dir }}"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
         pnpm run build --ignore-ts-errors
       args:
         chdir: '{{ root_path }}/apps/cms'
@@ -38,6 +40,7 @@
         set -e
         export NVM_DIR="{{ nvm_dir }}"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
 
         rm -rf node_modules
         timeout 600 pnpm install --prod --frozen-lockfile=false
@@ -66,14 +69,15 @@
         src: env.j2
         dest: '{{ root_path }}/apps/cms/build/.env'
 
-    - name: Installer PM2 globalement
-      shell: |
-        export NVM_DIR="{{ nvm_dir }}"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        npm install -g pm2
-      args:
-        executable: /bin/bash
-      changed_when: false
+    # - name: Installer PM2 globalement
+    #   shell: |
+    #     export NVM_DIR="{{ nvm_dir }}"
+    #     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    #     export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
+    #     npm install -g pm2
+    #   args:
+    #     executable: /bin/bash
+    #   changed_when: false
 
     - name: Création du fichier ecosystem
       template:
@@ -84,7 +88,8 @@
       shell: |
         export NVM_DIR="{{ nvm_dir }}"
         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-        nvm use default
+        export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
+
         pm2 start ecosystem.config.cjs --watch
       args:
         chdir: '{{ root_path }}/apps/cms/build/'

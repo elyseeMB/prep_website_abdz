@@ -5,7 +5,7 @@ import UnoCss from 'unocss/vite'
 
 export default defineConfig({
   server: {
-    allowedHosts: ['d501-2c0f-ef58-1656-3b00-e98c-eb73-f15c-c8db.ngrok-free.app', 'localhost'],
+    allowedHosts: ['e027-2c0f-ef58-1656-3b00-41b9-3f9a-5e65-c763.ngrok-free.app', 'localhost'],
   },
   plugins: [
     adonisjs({

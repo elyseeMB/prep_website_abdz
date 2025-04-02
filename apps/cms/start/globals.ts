@@ -1,4 +1,4 @@
 import edge from 'edge.js'
-import env from './env.ts'
+import env from './env.js'
 
 edge.global('APP_DOMAIN', env.get('APP_DOMAIN'))

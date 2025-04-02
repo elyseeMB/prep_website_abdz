@@ -3,7 +3,6 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "./build",
-    "allowImportingTsExtensions": true
   },
   "exclude": ["./inertia/**/*", "node_modules", "build"]
 }

@@ -59,3 +59,27 @@
       if command -v node >/dev/null 2>&1; then
         corepack enable pnpm >/dev/null 2>&1 || true
       fi
+
+- name: Vérifier et sourcer NVM pour la session courante
+  become: yes
+  become_user: '{{ ansible_user }}'
+  shell: |
+    export NVM_DIR="{{ nvm_dir }}"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use {{ node_version }}
+    mkdir -p {{ nvm_dir }}/bin
+    ln -sf $(which node) {{ nvm_dir }}/bin/node
+    ln -sf $(which npm) {{ nvm_dir }}/bin/npm
+    ln -sf $(which npx) {{ nvm_dir }}/bin/npx
+  args:
+    executable: /bin/bash
+  register: node_sourcing
+  changed_when: node_sourcing.rc == 0
+
+- name: Ajouter le répertoire des binaires NVM au PATH du système
+  become: yes
+  lineinfile:
+    path: /etc/profile.d/nvm-path.sh
+    create: yes
+    mode: 0644
+    line: 'export PATH="{{ nvm_dir }}/bin:$PATH"'

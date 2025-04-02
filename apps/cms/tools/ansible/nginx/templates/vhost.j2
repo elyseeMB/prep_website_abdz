@@ -1,4 +1,4 @@
-levels=1:2 keys_zone=jscache:100m inactive=30d  use_temp_path=off max_size=100m;
+proxy_cache_path /var/cache/nginx/jscache levels=1:2 keys_zone=jscache:100m inactive=30d use_temp_path=off max_size=100m;
 
 # Disable logging for medias (resize/convert)
 map $request $loggable {
@@ -7,7 +7,7 @@ map $request $loggable {
 }
 
 upstream gwsocket {
-  server 127.0.0.1:7890;
+  server 127.0.0.1:7891;
 }
 
 server {
@@ -83,12 +83,4 @@ server {
     ssl_trusted_certificate /etc/letsencrypt/live/{{ domain }}/chain.pem;
 {% endif %}
     return                  301 https://{{ domain }}$request_uri;
-}
-
-# subdomains redirect
-server {
-    listen      80;
-    listen      [::]:80;
-    server_name *.{{domain}};
-    return      301 http://{{ domain }}$request_uri;
 }
