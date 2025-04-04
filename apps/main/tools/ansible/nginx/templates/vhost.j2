@@ -13,6 +13,17 @@ server {
     listen      80;
     listen      [::]:80;
     server_name {{domain}};
+    # root /home/eembouz/eembouz.com/apps/main/build/public;
+
+
+    # location /assets/ {
+    #     root /home/eembouz/eembouz.com/apps/main/build/public; 
+    #     add_header Cache-Control "public, max-age=604800";
+    #     expires 7d;
+    #     access_log off;
+    #     try_files $uri =404;
+    # }
+
 
 
     # SSL

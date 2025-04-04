@@ -11,7 +11,7 @@ const driveConfig = defineConfig({
    */
   services: {
     fs: services.fs({
-      location: app.makePath('/home/eembouz/storage'),
+      location: app.makePath('../../storage'),
       serveFiles: true,
       routeBasePath: '/uploads',
       visibility: 'public',

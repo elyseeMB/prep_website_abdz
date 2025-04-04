@@ -23,10 +23,6 @@ export default class GetAssetStream {
 
     this.ctx.response.header('Content-Type', info.contentType!)
 
-    // this.ctx.response.header('Access-Control-Expose-Headers', 'Content-Disposition')
-    // this.ctx.response.header('Content-Disposition', `inline; filename="${key.split('/').pop()}"`)
-    // this.ctx.response.header('Content-Length', info.contentLength?.toString() || '0')
-
     return this.ctx.response.stream(stream)
   }
 }

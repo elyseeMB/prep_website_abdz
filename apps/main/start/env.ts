@@ -18,6 +18,7 @@ export default await Env.create(new URL('../', import.meta.url), {
   APP_URL: Env.schema.string(),
   HOST: Env.schema.string({ format: 'host' }),
   LOG_LEVEL: Env.schema.string(),
+  ASSET_DOMAIN: Env.schema.string(),
 
   /*
   |----------------------------------------------------------
@@ -46,5 +47,5 @@ export default await Env.create(new URL('../', import.meta.url), {
   | Variables for configuring the drive package
   |----------------------------------------------------------
   */
-  DRIVE_DISK: Env.schema.enum(['fs'] as const)
+  DRIVE_DISK: Env.schema.enum(['fs'] as const),
 })

@@ -19,7 +19,8 @@
   roles:
     # - { role: docker, tags: docker }
     # - { role: tools, tags: tools }
-    - { role: node, tags: node }
-    - { role: app, tags: app }
     # - { role: nginx, tags: nginx }
+    - { role: pgsql, tags: pgsql }
+    # - { role: node, tags: node }
+    # - { role: app, tags: app }
     # - { role: stats, tags: stats }

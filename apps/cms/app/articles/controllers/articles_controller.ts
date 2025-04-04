@@ -42,7 +42,9 @@ export default class ArticlesController {
   async store({ request, response }: HttpContext) {
     const data = request.all()
 
-    await StoreArticle.handle(data)
+    const a = await StoreArticle.handle(data)
+    response.json(a)
+    return
     return response.redirect().toRoute('articles.index')
   }
 
