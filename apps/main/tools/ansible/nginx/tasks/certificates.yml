@@ -15,6 +15,6 @@
 - name: Nginx | Self signed certificate
   when: self_signed
   shell:
-    cmd: "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/letsencrypt/dev/{{domain}}.key -out /etc/letsencrypt/dev/{{domain}}.crt -subj '/C=CG/ST=Brazzaville/L=Brazzaville/CN={{domain}}'"
+    cmd: "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/letsencrypt/live/{{domain}}.key -out /etc/letsencrypt/live/{{domain}}.crt -subj '/C=CG/ST=Brazzaville/L=Brazzaville/CN={{domain}}'"
 
-    creates: '/etc/letsencrypt/dev/{{ domain }}.key'
+    creates: '/etc/letsencrypt/live/{{ domain }}.key'

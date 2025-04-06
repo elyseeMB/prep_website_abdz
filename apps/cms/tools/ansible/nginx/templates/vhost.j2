@@ -11,10 +11,10 @@ upstream gwsocket_studio {
 }
 
 server {
-    listen      80;
-    listen      [::]:80;
-    server_name {{domain}};
-
+    listen                  443 ssl http2;
+    listen                  [::]:443 ssl http2;
+    server_name             {{ domain }};
+    root /home/eembouz/studio.eembouz.com/apps/cms/build/public;
 
     # SSL
 {% if self_signed %}
@@ -41,6 +41,19 @@ server {
         include               nginxconfig.io/proxy.conf;
     }
 
+# location ^~ /assets/ {
+#     root /home/eembouz/eembouz.com/apps/main/build/public;
+#     expires 7d;
+#     access_log off;
+#     add_header Cache-Control "public";
+#     try_files $uri =404;
+
+#     # Désactive les autres regex pour ce chemin
+#     location ~* \.(css|js|jpe?g|png|gif|ico|svg|ttf|woff2?)$ {
+#         expires off;
+#     }
+# }
+
 
      # GoAccess report
     location ~ ^/report.html$ {
@@ -57,7 +70,6 @@ server {
         proxy_set_header Host $host;
         proxy_buffering off;
         proxy_read_timeout 7d;
-        
         # If you need authentication, use AdonisJS middleware
         # auth_request /auth;  # Point to your Adonis auth endpoint
     }
@@ -69,9 +81,8 @@ server {
 
 # subdomains redirect
 server {
-    listen 443 ssl;
-    http2 on;
-    listen [::]:443 ssl;
+    listen                  443 ssl http2;
+    listen                  [::]:443 ssl http2;
     server_name             *.{{ domain }};
 
     # SSL
@@ -84,4 +95,17 @@ server {
     ssl_trusted_certificate /etc/letsencrypt/live/{{ domain }}/chain.pem;
 {% endif %}
     return                  301 https://{{ domain }}$request_uri;
+}
+
+
+# HTTP redirect
+server {
+    listen      80;
+    listen      [::]:80;
+    server_name .{{ domain }};
+    include     nginxconfig.io/letsencrypt.conf;
+
+    location / {
+        return 301 https://{{ domain }}$request_uri;
+    }
 }

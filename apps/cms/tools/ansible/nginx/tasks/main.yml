@@ -29,30 +29,8 @@
     state: directory
     path: /etc/nginx/sites-available
 
-- name: Désactiver le site par défaut
-  file:
-    path: '/etc/nginx/conf.d/default.conf'
-    state: absent
-  notify: nginx reloaded
-
-- name: Nginx | Default Vhost
-  template:
-    src: default.j2
-    dest: '/etc/nginx/sites-available/default'
-
 - name: Nginx | création de /etc/nginx/nginxconfig.io
   file: state=directory path=/etc/nginx/nginxconfig.io
-
-- name: Nginx | nginx.conf
-  template:
-    src: '{{ item }}.j2'
-    dest: '/etc/nginx/{{item}}'
-  loop:
-    - nginx.conf
-    - nginxconfig.io/general.conf
-    - nginxconfig.io/proxy.conf
-    - nginxconfig.io/letsencrypt.conf
-    - nginxconfig.io/security.conf
 
 - name: 'Nginx | Vhost {{ domain }}'
   template:
@@ -75,15 +53,4 @@
   template:
     src: vhost.j2
     dest: '/etc/nginx/sites-available/{{ domain }}'
-  notify: nginx reload
-
-- name: 'Nginx | NginxReqLimit fail2ban filter'
-  template:
-    src: fail2ban/nginx-req-limit.conf.j2
-    dest: /etc/fail2ban/filter.d/nginx-req-limit.conf
-
-- name: 'Nginx | fail2ban Jail'
-  template:
-    src: fail2ban/jail.local.j2
-    dest: /etc/fail2ban/jail.local
-  notify: fail2ban restart
+  notify: nginx reloaded
