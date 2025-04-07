@@ -1,0 +1,41 @@
+@let(routeIdentifier = 'lessons.index')
+@let(url = route(routeIdentifier))
+
+@layout({title: 'Lessons', meta: {
+url: url,
+canonical: items.currentPage !== 1 && url,
+index: true,
+}})
+
+
+@if(recent)
+@each((item, index) in rows)
+@!articles.item({index: index, item})
+@endeach
+@endif
+
+
+@if(items.hasPages)
+@!pagination({
+items,
+withQs: true,
+})
+@endif
+
+{{-- @section({id: 'lessonFilter'})
+@if(topics)
+<div class="break border-slate-200/50 pt-6 -mt-8 border-b">
+    <div class="flex justify-between gap-1.5">
+        @form.field({label: 'Filter by topic'})
+        <div class="flex flex-wrap gap-1.5">
+            @button()
+            All Lesson Topics
+            @end
+        </div>
+        @end
+    </div>
+</div>
+@endif
+@end --}}
+
+@end

@@ -1,0 +1,25 @@
+---
+- name: Installation du serveurs
+  hosts: remote
+  become: yes
+  vars:
+    nvm_version: 'v0.40.1'
+    node_version: '22'
+    nvm_dir: '{{ ansible_env.HOME }}/.nvm'
+
+  # pre_tasks:
+  #   - name: 'APT | Update & Upgrade'
+  #     become: yes
+  #     apt:
+  #       upgrade: dist
+  #       update_cache: yes
+
+  tasks:
+
+  roles:
+    # - { role: docker, tags: docker }
+    # - { role: tools, tags: tools }
+    # - { role: node, tags: node }
+    - { role: app, tags: app }
+    # - { role: nginx, tags: nginx }
+    # - { role: stats, tags: stats }

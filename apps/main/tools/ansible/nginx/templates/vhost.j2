@@ -1,13 +1,166 @@
-server {
-    listen 80;
-    server_name 127.0.0.1;
+proxy_cache_path /var/cache/nginx/eembouz_jscache levels=1:2 keys_zone=EEMBOUZ:100m inactive=30d use_temp_path=off max_size=100m;
 
-    location / {
-        proxy_pass http://127.0.0.1:3333;
+# Disable logging for medias (resize/convert)
+map $request $loggable {
+    ~/media/* 0;
+    default 1;
+}
+
+upstream gwsocket_eembouz {
+  server 127.0.0.1:7890;
+}
+server {
+    listen                  443 ssl http2;
+    listen                  [::]:443 ssl http2;
+    server_name             {{ domain }};
+    root /home/eembouz/eembouz.com/apps/main/build/public;
+
+
+    location ~ ^/img/https?:// {
+        # Extraire l'URL externe
+        rewrite ^/img/(https?://.*)$ $1 break;
+        proxy_pass $uri;
+        proxy_ssl_server_name on;
+        proxy_set_header Host $proxy_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        # Cache des images
+        proxy_cache_valid 200 24h;
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000";
+    }
+
+    location ~ ^/img/([a-f0-9-]+)/([a-zA-Z0-9]+)\.([a-zA-Z]+) {
+        limit_except GET HEAD {
+            deny all;
+        }
+
+        # On passe toute la requête (avec les paramètres d'URL) au serveur Node.js
+        proxy_pass http://localhost:3000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Paramètres pour Node.js
+        proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "Upgrade";
+        proxy_set_header Connection 'upgrade';
+        proxy_cache_bypass $http_upgrade;
+
+        # Cache des images traitées
+        proxy_cache_valid 200 24h;
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000";
+    }
+
+    # location ~ ^/img/([a-f0-9-]+)/([a-zA-Z0-9]+)\.([a-zA-Z]+) {
+    #     # Structure: /img/UUID/filename.ext
+    #     alias /home/eembouz/storage/$1/$2.$3;
+    #     expires 30d;
+    #     add_header Cache-Control "public, max-age=2592000";
+    #     error_page 404 /404.html;
+    #     access_log /var/log/nginx/image-access.log;
+    #     error_log /var/log/nginx/image-error.log notice;
+    #     add_header X-Debug-Path $request_uri always;
+    # }
+
+# Configuration optimisée pour vos assets
+location ^~ /assets/ {
+    root /home/eembouz/eembouz.com/apps/main/build/public;
+    expires 7d;
+    access_log off;
+    add_header Cache-Control "public";
+    try_files $uri =404;
+
+    # Désactive les autres regex pour ce chemin
+    location ~* \.(css|js|jpe?g|png|gif|ico|svg|ttf|woff2?)$ {
+        expires off;
+    }
+}
+
+
+
+    # SSL
+{% if self_signed %}
+    ssl_certificate /etc/letsencrypt/dev/{{ domain }}.crt;
+    ssl_certificate_key /etc/letsencrypt/dev/{{ domain }}.key;
+{% else %}
+    ssl_certificate         /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/{{ domain }}/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/{{ domain }}/chain.pem;
+{% endif %}
+
+
+    # security
+    include     nginxconfig.io/security.conf;
+
+    # logging
+    access_log  /var/log/nginx/access.log combined buffer=512k flush=1m;
+    error_log   /var/log/nginx/error.log warn;
+
+    # reverse proxy
+    location / {
+        proxy_pass            http://localhost:3333;
+        proxy_set_header Host $host;
+        include               nginxconfig.io/proxy.conf;
+    }
+
+
+     # GoAccess report
+    location ~ ^/report.html$ {
+        auth_request     /index.html;
+        auth_request_set $auth_status $upstream_status;
+	add_header Content-Security-Policy "script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'";
+    }
+
+    location /goaccessws {
+        proxy_pass http://gwsocket_eembouz;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host $host;
+        proxy_buffering off;
+        proxy_read_timeout 7d;
+        
+        # If you need authentication, use AdonisJS middleware
+        # auth_request /auth;  # Point to your Adonis auth endpoint
+    }
+
+    # additional config
+    include nginxconfig.io/general.conf;
+}
+
+
+# subdomains redirect
+server {
+    listen                  443 ssl http2;
+    listen                  [::]:443 ssl http2;
+    server_name             *.{{ domain }};
+
+    # SSL
+{% if self_signed %}
+    ssl_certificate /etc/letsencrypt/dev/{{ domain }}.crt;
+    ssl_certificate_key /etc/letsencrypt/dev/{{ domain }}.key;
+{% else %}
+    ssl_certificate         /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/{{ domain }}/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/{{ domain }}/chain.pem;
+{% endif %}
+    return                  301 https://{{ domain }}$request_uri;
+}
+
+# HTTP redirect
+server {
+    listen      80;
+    listen      [::]:80;
+    server_name .{{ domain }};
+    include     nginxconfig.io/letsencrypt.conf;
+
+    location / {
+        return 301 https://{{ domain }}$request_uri;
     }
 }

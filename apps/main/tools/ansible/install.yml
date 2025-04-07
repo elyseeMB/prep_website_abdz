@@ -1,10 +1,8 @@
 ---
 - name: Installation du serveurs
-  hosts: local
+  hosts: remote
   become: yes
   vars:
-    domain: dev.com
-    ssh_passphrase: git
     nvm_version: 'v0.40.1'
     node_version: '22'
     nvm_dir: '{{ ansible_env.HOME }}/.nvm'
@@ -19,7 +17,10 @@
   tasks:
 
   roles:
+    # - { role: docker, tags: docker }
     # - { role: tools, tags: tools }
-    # - { role: node, tags: node }
-    # - { role: app, tags: app }
-    - { role: nginx, tags: nginx }
+    - { role: node, tags: node }
+    - { role: app, tags: app }
+    # - { role: nginx, tags: nginx }
+    # - { role: stats, tags: stats }
+    # - { role: pgsql, tags: pgsql }

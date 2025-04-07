@@ -1,34 +1,18 @@
 import { inject } from '@adonisjs/core'
-import { HttpContext } from '@adonisjs/core/http'
 import { CollectionListViewModel } from '../../../collections/view_models/collection_list_view_model.js'
 import CollectionRepository from '../../../collections/repository/collection_repository.js'
-import CollectionBuilder from '../../../collections/builder/collection_builder.js'
-import { Collection } from '#collections/domain/collection'
-import { CollectionIdentifier } from '#collections/domain/collection_identifier'
 import { CollectionTransformer } from '#collections/domain/collection_transfomer'
+import { HttpContext } from '@adonisjs/core/http'
 
 @inject()
 export default class SerieController {
   constructor(protected collectionRepository: CollectionRepository) {}
 
-  // static async transformer(builder: CollectionBuilder) {
-  //   const collections = await builder.query.exec()
-  //   return collections.map((collection) => {
-  //     return Collection.create({
-  //       id: CollectionIdentifier.fromString(collection.id.toString()),
-  //       name: collection.name,
-  //       slug: collection.slug,
-  //       articles: collection.articles,
-  //       asset: collection.asset,
-  //     })
-  //   })
-  // }
-
-  async render({ inertia, view }: HttpContext) {
+  async render({ view }: HttpContext) {
     const series = this.collectionRepository.getLastUpdated(1, true)
     const collections = await CollectionTransformer.fromDomain(series).serialize()
 
-    return inertia.render('series/seriesList', {
+    return view.render('pages/series/view', {
       series: CollectionListViewModel.fromDomain(collections),
     })
   }

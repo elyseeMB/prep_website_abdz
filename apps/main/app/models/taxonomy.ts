@@ -70,8 +70,8 @@ export default class Taxonomy extends BaseModel {
 
   @manyToMany(() => Article, {
     pivotTable: 'article_taxonomies',
-    pivotForeignKey: 'article_id',
-    pivotRelatedForeignKey: 'taxonomy_id',
+    // pivotForeignKey: 'article_id',
+    // pivotRelatedForeignKey: 'taxonomy_id',
     pivotColumns: ['sort_order'],
   })
   declare articles: ManyToMany<typeof Article>
