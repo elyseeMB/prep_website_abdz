@@ -33,6 +33,10 @@ server {
     }
 
     location ~ ^/img/([a-f0-9-]+)/([a-zA-Z0-9]+)\.([a-zA-Z]+) {
+        limit_except GET HEAD {
+            deny all;
+        }
+
         # On passe toute la requête (avec les paramètres d'URL) au serveur Node.js
         proxy_pass http://localhost:3000;
         proxy_set_header Host $host;
