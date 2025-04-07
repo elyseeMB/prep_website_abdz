@@ -1,26 +1,23 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { AuthService } from '../services/auth_service.js'
 import { inject } from '@adonisjs/core'
+import { loginValidator } from '../validator/auth_validator.js'
+import User from '#models/user'
 
 @inject()
 export default class LoginController {
-  constructor(private authService: AuthService) {}
   async show({ inertia }: HttpContext) {
-    return inertia.render('login')
+    return inertia.render('auth/login')
   }
 
-  async execute({ request, response, auth, session }: HttpContext) {
-    const { email, password } = request.all()
+  async store({ request, response, auth, session }: HttpContext) {
+    const data = await request.validateUsing(loginValidator)
 
-    const user = await this.authService.attempt(email, password)
+    const user = await User.login(auth, data)
+    const baseMessage = 'Bonjour'
 
-    if (!user) {
-      session.flashErrors({
-        E_INVALID_CREDENTIALS: "Aucun compte n'a été trouvé avec les identifiants fournis.",
-      })
-      return response.redirect().back()
-    }
-    await auth.use('web').login(user)
+    session.flash('success', `${baseMessage}, ${user.fullName}`)
     return response.redirect().toPath('/')
   }
+
+  async handle() {}
 }

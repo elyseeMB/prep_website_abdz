@@ -33,15 +33,36 @@ server {
     }
 
     location ~ ^/img/([a-f0-9-]+)/([a-zA-Z0-9]+)\.([a-zA-Z]+) {
-        # Structure: /img/UUID/filename.ext
-        alias /home/eembouz/storage/$1/$2.$3;
+        # On passe toute la requête (avec les paramètres d'URL) au serveur Node.js
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Paramètres pour Node.js
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_cache_bypass $http_upgrade;
+
+        # Cache des images traitées
+        proxy_cache_valid 200 24h;
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
         expires 30d;
         add_header Cache-Control "public, max-age=2592000";
-        error_page 404 /404.html;
-        access_log /var/log/nginx/image-access.log;
-        error_log /var/log/nginx/image-error.log notice;
-        add_header X-Debug-Path $request_uri always;
     }
+
+    # location ~ ^/img/([a-f0-9-]+)/([a-zA-Z0-9]+)\.([a-zA-Z]+) {
+    #     # Structure: /img/UUID/filename.ext
+    #     alias /home/eembouz/storage/$1/$2.$3;
+    #     expires 30d;
+    #     add_header Cache-Control "public, max-age=2592000";
+    #     error_page 404 /404.html;
+    #     access_log /var/log/nginx/image-access.log;
+    #     error_log /var/log/nginx/image-error.log notice;
+    #     add_header X-Debug-Path $request_uri always;
+    # }
 
 # Configuration optimisée pour vos assets
 location ^~ /assets/ {

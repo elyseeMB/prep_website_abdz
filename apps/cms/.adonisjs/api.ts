@@ -18,6 +18,27 @@ const routes = [
     types: {} as unknown,
   },
   {
+    params: [],
+    name: 'auth.login.show',
+    path: '/login',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'auth.login.store',
+    path: '/login',
+    method: ["POST"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'auth.logout',
+    path: '/logout',
+    method: ["POST"],
+    types: {} as unknown,
+  },
+  {
     params: ["*"],
     name: 'assets.show',
     path: '/assets/*',

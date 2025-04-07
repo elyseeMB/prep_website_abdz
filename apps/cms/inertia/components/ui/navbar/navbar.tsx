@@ -1,6 +1,6 @@
-import { useToggle } from '~/hooks/useToogle.js'
-import { DropdownItems, Dropdowns } from '../dropdowns/dropdowns.js'
+import { Dropdowns } from '../dropdowns/dropdowns.js'
 import { tuyau } from '~/lib/tuyau.js'
+import { Link } from '@inertiajs/react'
 
 export function Navbar() {
   const collection = tuyau.$url('collections.index')
@@ -74,7 +74,7 @@ export function Navbar() {
             <div className="ml-4 flex items-center md:ml-6">
               <div className="relative ml-3">
                 <div>
-                  <Dropdowns
+                  {/* <Dropdowns
                     name="Open user menu"
                     items={[
                       {
@@ -90,7 +90,14 @@ export function Navbar() {
                         url: '/',
                       },
                     ]}
-                  ></Dropdowns>
+                  ></Dropdowns> */}
+                  <Link
+                    method="post"
+                    href={tuyau.$url('auth.logout')}
+                    className="flex items-center gap-2"
+                  >
+                    Se déconnecter
+                  </Link>
                 </div>
               </div>
             </div>
