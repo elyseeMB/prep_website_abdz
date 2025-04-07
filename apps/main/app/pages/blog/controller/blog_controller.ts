@@ -10,8 +10,6 @@ export default class BlogController {
   async render({ view, request, params }: HttpContext) {
     const { page = 1, sortBy = 'createdAt', sort = 'desc' } = request.qs()
 
-    console.log(request.qs())
-
     const items = await this.articleRepository
       .getBlogs()
       .orderBy(sortBy, sort)
