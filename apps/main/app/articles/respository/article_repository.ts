@@ -53,7 +53,7 @@ export default class ArticleRepository {
     const results = await this.cache.getOrSet({
       key: 'GET_LATEST_BLOG',
       factory: async () => {
-        const latest = await this.getLatestBlogs(3).query.exec()
+        const latest = await this.getLatestBlogs(5).query.exec()
         return latest.map((article) => new ArticleListVM(article))
       },
     })

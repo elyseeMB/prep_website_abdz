@@ -19,7 +19,7 @@ export class TaxonomyRepository {
     const results = await this.cache.getOrSet({
       key: this.CACHE_KEY,
       factory: async () => {
-        const list = await this.getList(5).query.exec()
+        const list = await this.getList(3).query.exec()
         return list.map((taxonomy) => new TopicListVM(taxonomy))
       },
     })
