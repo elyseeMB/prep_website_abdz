@@ -3,6 +3,8 @@
 
 /*  Modules */
 @import './modules/article.css';
+@import './modules/table.css';
+@import './modules/blog.css';
 
 @unocss;
 

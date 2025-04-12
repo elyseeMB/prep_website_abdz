@@ -1,0 +1,57 @@
+.hero-blog {
+  font-size: 3rem;
+}
+
+.blog-wrapper-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+  place-items: flex-start;
+  gap: 1rem;
+  padding-block: 2rem;
+}
+
+.blog-wrapper-card .card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.3rem;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 2;
+  }
+}
+
+.blog-wrapper-card .summary {
+  font-size: 10px;
+  line-height: 1.7;
+  opacity: 0.5;
+}
+
+.blog-wrapper-card .title {
+  padding-top: 1rem;
+  font-size: 14px;
+}
+
+.blog-wrapper-card .taxonomies {
+  position: relative;
+  font-size: 10px;
+  opacity: 0.5;
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+
+  & .separator {
+    width: 1px;
+    height: 12px;
+    background: gray;
+  }
+
+  & span {
+  }
+}

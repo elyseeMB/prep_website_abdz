@@ -20,12 +20,12 @@ export default class extends BaseSeeder {
     //   password: 'je suis le password',
     //   roleId: 2,
     // })
-    // await User.create({
-    //   fullName: 'david',
-    //   email: 'david@gmail.com',
-    //   password: '123456789',
-    //   roleId: 2,
-    // })
+    await User.create({
+      fullName: 'david',
+      email: 'david@gmail.com',
+      password: '123456789',
+      roleId: 2,
+    })
     // await Category.createMany([
     //   { id: 1, name: 'Actualité' },
     //   { id: 2, name: 'Societé' },

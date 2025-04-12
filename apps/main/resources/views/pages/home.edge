@@ -14,9 +14,9 @@ index: true
 <h1 class="text-2xl mb-10">Home Page
 </h1>
 
-<a href="{{route('lessons.index')}}">Lesson</a>
+{{-- <a href="{{route('lessons.index')}}">Lesson</a> --}}
 
-<section>
+{{-- <section>
     <h1 class="text-2xl mb-5">Lessons
     </h1>
 
@@ -29,51 +29,77 @@ index: true
         </article>
         @end
     </div>
-</section>
+</section> --}}
 
+{{--
 <section class="mt-5 mb-2">
-    <h1 class="text-2xl mb-5">Topics
+    <h1 class="text-2xl m-5">Topics
     </h1>
 
     <div class="p-3 grid cols-2 gap-2">
         @each(item in topics)
-        <article class="gray border border-2 border-gray p-2 rounded">
+        <article class="gray border border-2 border-gray p-2 rounded m-2">
             <div> {{item.name}}
             </div>
             {{item.description}}
         </article>
         @end
     </div>
-</section>
+</section> --}}
 
 
 
-<section>
-    <h1 class="text-2xl mb-5">Blogs
-    </h1>
+@if(blogs)
+<h1 class="hero-blog">Blogs
+</h1>
+<div class="blog-wrapper-card">
+    @each(item in blogs)
+    <article class="card">
+        <div class="image">
+            @if(item.article.thumbnails)
+            <a href="">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <path d="M31 0H15v2h13.59L.29 30.29 1.7 31.7 30 3.41V16h2V1a1 1 0 0 0-1-1z"
+                        data-name="5-Arrow Up" />
+                </svg>
+                {{-- <img width="800" height="800" src="https://picsum.photos/seed/picsum/800/800" alt="" /> --}}
+
+                <img width="800" height="800"
+                    src='https://eembouz.com/img/{{item.article.thumbnails[0].filename}}?width=400&height=400&format=webp&quality=85'
+                    alt="" />
+            </a>
+            @endif
+        </div>
+        <div class="title"> {{item.title}}
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        </div>
+        <div class="summary">
+            {{item.article.summary}}
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga nisi, pariatur aliquam hic accusantium
+        </div>
+
+        <div class="taxonomies">
+            <span>
+                {{item.article.taxonomies[0].name}}
+            </span>
+            <span class="separator"></span>
+            <span>
+                {{item.article.taxonomies[0].name}}
+            </span>
+        </div>
+        <div class="taxonomies">
+            <span>
+                {{timeFormatter(item.article.createdAt)}}
+            </span>
+
+        </div>
+
+    </article>
+    @endeach
+</div>
+@endif
 
 
-
-    <div class="p-3 flex flex-col gap-2">
-        @each(item in blogs)
-        <article class="border border-2 border-gray p-2 rounded">
-            <div> {{item.title}}
-            </div>
-            <div>
-                @if(item.article.thumbnails)
-                <a href="">
-                    <img class="w-100% h-100% object-cover"
-                        src='https://eembouz.com/img/{{item.article.thumbnails[0].filename}}?width=800&format=webp&quality=85'
-                        alt="" />
-                </a>
-                @endif
-            </div>
-            <div>
-                {{item.article.summary}}
-            </div>
-        </article>
-</section>
-@end
 
 
 </div>
@@ -81,10 +107,6 @@ index: true
 
 
 
-
-
-
-<button class="contrast">sauvegarder</button>
 
 
 
