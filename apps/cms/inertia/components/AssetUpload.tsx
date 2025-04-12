@@ -170,7 +170,7 @@ export function AssetUpload({ value, onChange, name, label, thumbnail }: Props) 
       <label htmlFor="cover-photo" className="block text-sm/6 font-medium text-gray-900">
         {label}
       </label>
-      <div className="mt-2 w-100 flex flex-col justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+      <div className="mt-2 w-100% flex flex-col justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
         <FilePond
           ref={pondRef}
           files={files}
