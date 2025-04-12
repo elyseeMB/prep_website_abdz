@@ -28,19 +28,19 @@
 }
 
 .blog-wrapper-card .summary {
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.7;
   opacity: 0.5;
 }
 
 .blog-wrapper-card .title {
   padding-top: 1rem;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .blog-wrapper-card .taxonomies {
   position: relative;
-  font-size: 10px;
+  font-size: 14px;
   opacity: 0.5;
   display: flex;
   gap: 0.2rem;
@@ -52,6 +52,7 @@
     background: gray;
   }
 
-  & span {
+  & .t-span {
+    background-color: red;
   }
 }
