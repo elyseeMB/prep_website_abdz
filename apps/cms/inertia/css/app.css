@@ -1,3 +1,7 @@
+@import './modules/card.css';
+@import './layout/layout.css';
+@import './modules/form-upload.css';
+
 * {
   margin: 0;
   padding: 0;
@@ -34,6 +38,7 @@ body {
   --shadow-m:
     0 0 0 1px rgba(25 28 33 / 0.06), 0 15px 35px -5px rgba(25 28 33 / 0.2),
     0 5px 15px 0 rgba(0 0 0 / 0.08);
+  --space: 8px;
 }
 
 [data-placeholder] {

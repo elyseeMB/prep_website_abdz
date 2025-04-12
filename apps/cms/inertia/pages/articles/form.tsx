@@ -152,15 +152,20 @@ export default function Form(props: Props) {
           Private
         </Button>
 
-        <Button value={States.PUBLIC} onClick={handleSubmitAction} className="text-sm">
+        <Button
+          primary={true}
+          value={States.PUBLIC}
+          onClick={handleSubmitAction}
+          className="text-sm"
+        >
           Publish Now
         </Button>
       </div>
 
-      <div className="flex gap-4">
+      <div className="page-wrapper-2">
         <form onSubmit={handleSumbit}>
-          <div className="space-y-12">
-            <div className="border-b border-gray-900/10 pb-12">
+          <div className="stack">
+            <div className="border-b border-gray-900/10 card">
               <h2 className="text-base/7 font-semibold text-gray-900">Create your article</h2>
 
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -180,17 +185,17 @@ export default function Form(props: Props) {
               </div>
             </div>
 
-            <div className="border-b border-gray-900/10 pb-12">
+            <div className="border-b border-gray-900/10 card">
               <h2 className="text-base/7 font-semibold text-gray-900">Options</h2>
               <p className="mt-1 text-sm/6 text-gray-600">Options de publication</p>
 
-              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="mt-10 ">
                 <div className="sm:col-span-3">
                   <label htmlFor="country" className="block text-sm/6 font-medium text-gray-900">
                     Taxonomy - State
                   </label>
 
-                  <div className="flex gap-5 items-center justify-between">
+                  <div className="grid cols-2 gap-4">
                     <div className="mt-2 grid grid-cols-1">
                       <SelectTags
                         name="taxonomyIds"
@@ -267,7 +272,6 @@ export default function Form(props: Props) {
         name="thumbnails"
       />
       <button onClick={handleUploadFile}>Upload</button> */}
-
         <AssetUpload
           thumbnail={props.article?.thumbnail!}
           value={data.thumbnails}

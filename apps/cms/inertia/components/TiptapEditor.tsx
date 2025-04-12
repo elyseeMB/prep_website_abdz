@@ -123,7 +123,7 @@ export function TiptapEditorComponent({
   }, [editor, value])
 
   return (
-    <div className="wrapper">
+    <div className="wrapper card">
       <EditorCommand editor={editor!} />
       <EditorContent name={name} editor={editor} />
     </div>

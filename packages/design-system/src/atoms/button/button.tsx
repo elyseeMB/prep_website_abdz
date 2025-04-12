@@ -33,12 +33,7 @@ export function Button({
       value={value ?? ""}
       onClick={onClick}
       style={style}
-      className={[
-        "btn",
-        variant === "danger" && "bg-red text-white",
-        mode,
-        className,
-      ].join(" ")}
+      className={["btn", variant === "danger", mode, className].join(" ")}
     >
       {children}
     </button>

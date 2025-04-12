@@ -1,0 +1,20 @@
+.stack {
+  --gap: 2;
+  display: grid !important;
+  grid-template-columns: 1fr;
+  align-content: flex-start;
+  gap: calc(var(--gap) * var(--space));
+
+  & > * {
+    min-width: 0;
+  }
+}
+
+.page-wrapper-2 {
+  --gap: 2;
+  padding-block: calc(var(--gap) * var(--space));
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: calc(var(--gap) * var(--space));
+}
