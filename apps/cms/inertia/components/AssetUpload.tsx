@@ -55,7 +55,6 @@ const server = {
     url: '/assets?load=',
     withCredentials: true,
   },
-  // Désactiver revert pour éviter les redirections
   revert: null,
 }
 

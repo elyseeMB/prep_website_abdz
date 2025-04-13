@@ -14,21 +14,21 @@ import suggestion from './libs/suggestion.ts'
 import React, { useEffect, useMemo } from 'react'
 import { UploadImage } from './libs/uploadFile.ts'
 import { EditorCommand } from './editorCommand.tsx'
+import AssetTypes from '#enums/asset_types'
 
 const CustomDocument = Document.extend({
   content: 'heading block*',
 })
 
-const uploadFile = async (file: File): Promise<string> => {
-  // Ici, on pourrait envoyer le fichier vers un serveur avec `fetch` ou `axios`
-  // Ex: const formData = new FormData();
-  // formData.append('file', file);
-  // const response = await axios.post('/upload', formData);
-  // return response.data.url;
-
-  // Pour ce test, on simule un upload avec `picsum.photos`
-
-  return `https://picsum.photos/seed/${file.name}/800/600`
+const uploadFile = async (file: File) => {
+  const formData = new FormData()
+  formData.set('thumbnails', file)
+  const response = await fetch(`/assets/${AssetTypes.THUMBNAIL}`, {
+    body: formData,
+    method: 'POST',
+  })
+  const data = await response.json()
+  return ` http://localhost:3335/assets/${data.filename}?width=900`
 }
 
 const CustomTableCell = TableCell.extend({
