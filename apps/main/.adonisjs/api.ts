@@ -7,25 +7,38 @@
 import type { MakeTuyauRequest, MakeTuyauResponse } from '@tuyau/utils/types'
 import type { InferInput } from '@vinejs/vine/types'
 
-type LoginGetHead = {
+type TopicsGetHead = {
   request: unknown
-  response: MakeTuyauResponse<import('../app/auth/controllers/login_controller.ts').default['show'], false>
+  response: MakeTuyauResponse<import('../app/pages/topics/controller/topics_controller.ts').default['render'], false>
 }
-type LoginPost = {
+type TopicsIdGetHead = {
   request: unknown
-  response: MakeTuyauResponse<import('../app/auth/controllers/login_controller.ts').default['execute'], false>
+  response: MakeTuyauResponse<import('../app/pages/topics/controller/topics_controller.ts').default['show'], false>
 }
 type SeriesGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/pages/series/controller/series_controller.ts').default['render'], false>
 }
+type BlogGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/pages/blog/controller/blog_controller.ts').default['render'], false>
+}
+type BlogIdGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/pages/blog/controller/blog_controller.ts').default['render'], false>
+}
 export interface ApiDefinition {
-  'login': {
+  'topics': {
     '$url': {
     };
-    '$get': LoginGetHead;
-    '$head': LoginGetHead;
-    '$post': LoginPost;
+    '$get': TopicsGetHead;
+    '$head': TopicsGetHead;
+    ':slug': {
+      '$url': {
+      };
+      '$get': TopicsIdGetHead;
+      '$head': TopicsIdGetHead;
+    };
   };
   'series': {
     '$url': {
@@ -33,61 +46,31 @@ export interface ApiDefinition {
     '$get': SeriesGetHead;
     '$head': SeriesGetHead;
   };
+  'blog': {
+    '$url': {
+    };
+    '$get': BlogGetHead;
+    '$head': BlogGetHead;
+    ':slug': {
+      '$url': {
+      };
+      '$get': BlogIdGetHead;
+      '$head': BlogIdGetHead;
+    };
+  };
 }
 const routes = [
   {
-    params: [],
-    name: 'admin.pages.dashboard',
-    path: '/admin/dashboard',
+    params: ["*"],
+    name: 'drive.fs.serve',
+    path: '/uploads/*',
     method: ["GET","HEAD"],
     types: {} as unknown,
   },
   {
-    params: [],
-    name: 'admin.articles.index',
-    path: '/admin/articles',
-    method: ["GET","HEAD"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
-    name: 'admin.article.create',
-    path: '/admin/articles/create',
-    method: ["GET","HEAD"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
-    name: 'admin.articles.store',
-    path: '/admin/articles',
-    method: ["POST"],
-    types: {} as unknown,
-  },
-  {
-    params: ["id"],
-    name: 'admin.articles.edit',
-    path: '/admin/articles/:id/edit',
-    method: ["GET","HEAD"],
-    types: {} as unknown,
-  },
-  {
-    params: ["id"],
-    name: 'admin.articles.update',
-    path: '/admin/articles/:id',
-    method: ["PUT"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
-    name: 'admin.pages.users',
-    path: '/admin/users',
-    method: ["GET","HEAD"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
-    name: 'admin.pages.blogs',
-    path: '/admin/views',
+    params: ["*"],
+    name: 'img',
+    path: '/img/*',
     method: ["GET","HEAD"],
     types: {} as unknown,
   },
@@ -100,31 +83,17 @@ const routes = [
   },
   {
     params: [],
-    name: 'login_route_show',
-    path: '/login',
-    method: ["GET","HEAD"],
-    types: {} as LoginGetHead,
-  },
-  {
-    params: [],
-    name: 'login_route',
-    path: '/login',
-    method: ["POST"],
-    types: {} as LoginPost,
-  },
-  {
-    params: [],
     name: 'topics.index',
     path: '/topics',
     method: ["GET","HEAD"],
-    types: {} as unknown,
+    types: {} as TopicsGetHead,
   },
   {
     params: ["slug"],
     name: 'topics.show',
     path: '/topics/:slug',
     method: ["GET","HEAD"],
-    types: {} as unknown,
+    types: {} as TopicsIdGetHead,
   },
   {
     params: [],
@@ -132,6 +101,34 @@ const routes = [
     path: '/series',
     method: ["GET","HEAD"],
     types: {} as SeriesGetHead,
+  },
+  {
+    params: [],
+    name: 'lessons.index',
+    path: '/lessons',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: ["slug"],
+    name: 'lessons.show',
+    path: '/lessons/:slug',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'blog.index',
+    path: '/blog',
+    method: ["GET","HEAD"],
+    types: {} as BlogGetHead,
+  },
+  {
+    params: ["slug"],
+    name: 'blog.show',
+    path: '/blog/:slug',
+    method: ["GET","HEAD"],
+    types: {} as BlogIdGetHead,
   },
   {
     params: [],

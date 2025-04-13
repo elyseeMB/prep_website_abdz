@@ -1,0 +1,15 @@
+module.exports = {
+  apps: [
+    {
+      name: 'eembouz.com',
+      script: './start.sh',
+      instances: 'max',
+      exec_mode: 'cluster',
+      autorestart: true,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
+    },
+  ],
+};

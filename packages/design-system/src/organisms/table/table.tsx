@@ -17,14 +17,7 @@ export function TheadWrapper(
 export function TrWrapper(
   props: PropsWithChildren<React.HTMLAttributes<HTMLTableRowElement>>
 ) {
-  return (
-    <tr
-      className="border-b border border-b-[rgb(237,239,242)] hover:bg-gray-100/50"
-      {...props}
-    >
-      {props.children}
-    </tr>
-  );
+  return <tr {...props}>{props.children}</tr>;
 }
 
 export function TdWrapper(

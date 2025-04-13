@@ -1,16 +1,18 @@
-import { User } from '#auth/domain/user'
 import ArticleTypes from '#enums/article_types'
 import States from '#enums/state'
 import Article from '#models/article'
+import Taxonomy from '#models/taxonomy'
 import { BaseBuilder } from '../../builder/base_builder.js'
+import { TopicListVM } from '../../topics/view_models/topicsVM.js'
+import { ArticleListVM } from '../view_model/view_model_article.js'
 
 export default class ArticleBuilder extends BaseBuilder<typeof Article, Article> {
-  constructor(protected user: User | undefined = undefined) {
+  constructor(/*protected user: User | undefined = undefined*/) {
     super(Article)
   }
 
-  static new(user: User | undefined = undefined) {
-    return new ArticleBuilder(user)
+  static new(/*user: User | undefined = undefined*/) {
+    return new ArticleBuilder(/*user*/)
   }
 
   display({ skipPublishCheck = false } = {}) {
@@ -62,5 +64,35 @@ export default class ArticleBuilder extends BaseBuilder<typeof Article, Article>
   orderPublished() {
     this.query.orderBy([{ column: 'createdAt', order: 'desc' }])
     return this
+  }
+
+  clearOrder() {
+    this.query.clearOrder()
+    return this
+  }
+
+  whereHasTaxonomy(taxonomy: Taxonomy | TopicListVM) {
+    this.query.whereHas('taxonomies', (query) => query.where('taxonomies.id', taxonomy.id))
+    return this
+  }
+
+  selectListVM() {
+    this.query.select(
+      'id',
+      'articleTypeId',
+      'stateId',
+      'title',
+      'slug',
+      'summary',
+      'publishAt',
+      'viewCount'
+    )
+
+    return this
+  }
+
+  async toListVM() {
+    const results = await this.selectListVM().query.exec()
+    return results.map((post) => new ArticleListVM(post))
   }
 }

@@ -1,0 +1,8 @@
+# {{ ansible_managed }}  # Indique que ce fichier est géré par Ansible
+# NVM environment setup
+export NVM_DIR="{{ nvm_dir }}"  # Définit la variable d'environnement NVM_DIR
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Charge NVM si le fichier existe
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Charge les auto-complétions
+
+# Set default Node version
+nvm use default > /dev/null 2>&1 || true  # Utilise la version par défaut, ignore les erreurs

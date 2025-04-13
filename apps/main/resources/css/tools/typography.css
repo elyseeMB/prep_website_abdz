@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'Geist';
+  src: url('../fonts/Geist/static/Geist-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('../fonts/Geist/static/Geist-Medium.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('../fonts/Geist/static/Geist-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('../fonts/Geist/static/Geist-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('../fonts/Geist/static/Geist-Black.ttf');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('../fonts/Geist/static/Geist-ExtraBold.ttf');
+  font-weight: 900;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Geist';
+}
+
+h1 {
+  font-size: var(--h1);
+  line-height: var(--h1-line-height);
+}
+
+h2 {
+  font-size: var(--h2);
+  line-height: var(--h2-line-height);
+}
+
+h3 {
+  font-size: var(--h3);
+  line-height: var(--h3-line-height);
+}

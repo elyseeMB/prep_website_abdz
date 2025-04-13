@@ -1,0 +1,41 @@
+@let(hasPrevious = items.currentPage > items.firstPage)
+@let(hasNext = items.lastPage > items.currentPage)
+@let(filterQs = '')
+
+
+
+@if(withQs)
+@let(qs = request.qs())
+@assign(filterQs = Object.keys(qs).filter(key =>key !== 'page').map(key => `${key}=${qs[key]}`))
+@if(filterQs)
+@assign(filterQs = '&' + filterQs)
+@endif
+@endif
+
+
+<nav>
+    <ul
+        class="flex items-center justify-between leading-tight bg-slate-100 border border-slate-200/70 rounded h-[34px] text-slate-600 font-700">
+
+        <li class="h-full">
+            <a {{html.attrs({ href: hasPrevious && items.url + `?page=${items.currentPage - 1}` })}} class="{{html.classNames(['relative items-center h-full px-3 rounded-lg text-2xl', {
+                    'hover:bg-slate-200 hover:text-slate-900' : hasPrevious,
+                    'cursor-not-allowed text-slate-300' : !hasPrevious,
+                    'hidden': !hasPrevious
+                } ])}}">
+                <span>PREV</span>
+            </a>
+        </li>
+
+
+        <li class="h-full">
+            <a {{html.attrs({ href: hasNext && items.url + `?page=${items.currentPage + 1}` })}} class="{{html.classNames(['relative items-center h-full px-3 rounded-lg text-2xl', {
+                    'hover:bg-slate-200 hover:text-slate-900' : hasNext,
+                    'cursor-not-allowed text-slate-300' : !hasNext,
+                    'hidden': !hasNext
+                } ])}}">
+                <span>NEXT</span>
+            </a>
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e  # Arrête le script à la première erreur
+
+# Exécute les migrations
+if ! node ace migration:run --force; then
+  echo "Échec des migrations - vérifiez la configuration de la base de données"
+  exit 1
+fi
+
+# Démarre le serveur (remplace le processus courant)
+exec node ./bin/server.js

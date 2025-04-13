@@ -23,3 +23,10 @@ export const primary: Story = {
     children: "Button +",
   },
 };
+
+export const secondary: Story = {
+  args: {
+    primary: false,
+    children: "Button +",
+  },
+};

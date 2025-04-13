@@ -1,0 +1,114 @@
+@layout({
+title: 'page home',
+meta: {
+desc: `Take your AdonisJS skills to the next level with Adocasts. Our comprehensive video lessons cover everything from
+the basics to advanced topics. Join our community today and start learning!`,
+index: true
+},
+})
+
+
+
+
+@section()
+<h1 class="text-2xl mb-10">Home Page
+</h1>
+
+{{-- <a href="{{route('lessons.index')}}">Lesson</a> --}}
+
+{{-- <section>
+    <h1 class="text-2xl mb-5">Lessons
+    </h1>
+
+    <div class="p-3 flex flex-col gap-2">
+        @each(item in lessons)
+        <article class="border border-2 border-gray p-2 rounded">
+            <div> {{item.title}}
+            </div>
+            {{item.article.summary}}
+        </article>
+        @end
+    </div>
+</section> --}}
+
+{{--
+<section class="mt-5 mb-2">
+    <h1 class="text-2xl m-5">Topics
+    </h1>
+
+    <div class="p-3 grid cols-2 gap-2">
+        @each(item in topics)
+        <article class="gray border border-2 border-gray p-2 rounded m-2">
+            <div> {{item.name}}
+            </div>
+            {{item.description}}
+        </article>
+        @end
+    </div>
+</section> --}}
+
+
+
+@if(blogs)
+<h1 class="hero-blog">Blogs
+</h1>
+<div class="blog-wrapper-card">
+    @each(item in blogs)
+    <article class="card">
+        <div class="image">
+            @if(item.article.thumbnails)
+            <a href="{{route('lessons.show', {slug: item.slug})}}">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <path d="M31 0H15v2h13.59L.29 30.29 1.7 31.7 30 3.41V16h2V1a1 1 0 0 0-1-1z"
+                        data-name="5-Arrow Up" />
+                </svg>
+                {{-- <img width="300" height="200" src="https://picsum.photos/seed/picsum/300/200" alt="" /> --}}
+
+                <img width="400" height="400"
+                    src='https://eembouz.com/img/{{item.article.thumbnails[0].filename}}?width=800&format=webp&quality=85'
+                    alt="" />
+
+            </a>
+            @endif
+        </div>
+        <div class="title"> {{item.title}}
+        </div>
+        <div class="summary">
+            {{item.article.summary}}
+        </div>
+
+        <div class="taxonomies">
+            @each(taxonomy in item.article.taxonomies)
+            <span>
+                {{taxonomy.name}}
+            </span>
+            {{-- @if(item.article.taxonomies)
+            <span class="separator"></span>
+            @endif --}}
+            @endeach
+        </div>
+        <div class="taxonomies">
+            <span>
+                {{timeFormatter(item.article.createdAt)}}
+            </span>
+
+        </div>
+
+    </article>
+    @endeach
+</div>
+@endif
+
+
+
+
+</div>
+@end
+
+
+
+
+
+
+
+@end

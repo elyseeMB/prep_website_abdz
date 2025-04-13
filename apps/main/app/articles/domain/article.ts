@@ -1,8 +1,7 @@
 import { Entity } from '#core/domain/entity.'
-import { DateTime } from 'luxon'
 import { ArticleIdentifier } from './article_identitfier.js'
-import { ManyToMany } from '@adonisjs/lucid/types/relations'
-import Asset from '#models/asset'
+import States from '#enums/state'
+import ArticleTypes from '#enums/article_types'
 
 // type Asset = {
 //   id: number
@@ -15,20 +14,19 @@ import Asset from '#models/asset'
 
 type Properties = {
   id: ArticleIdentifier
-  articleTypeId?: number
+  stateId: States
+  ArticleTypeId: ArticleTypes
   title: string
   slug: string
-  summary: string
-  content: string
-  isPublished?: boolean
-  publishAt?: string | null
-  viewCount?: number
-  stateId?: number
-  authors?: any
-  taxonomies?: any
-  thumbnails?: any
-  createdAt?: DateTime
-  updatedAt?: DateTime
+  description: string | null
+  routeUrl: string
+  publishAtISO: string | null | undefined
+  publishAtDisplay: string
+  watchMinutes: string | number
+  series: any | null
+  topics: any[] | null
+  asset: any | null
+  meta: Record<string, any>
 }
 
 export class Article extends Entity<Properties> {

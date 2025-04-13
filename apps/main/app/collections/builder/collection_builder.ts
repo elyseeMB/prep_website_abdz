@@ -1,18 +1,17 @@
-import { User } from '#auth/domain/user'
 import CollectionTypes from '#collections/enums/collection_types'
 import States from '#enums/state'
 import Collection from '#models/collection'
 import Taxonomy from '#models/taxonomy'
 import { BaseBuilder } from '../../builder/base_builder.js'
 
-type IUser = User | undefined
+// type IUser = User | undefined
 
 export default class CollectionBuilder extends BaseBuilder<typeof Collection, Collection> {
-  constructor(protected user: IUser = undefined) {
+  constructor(/*protected user: IUser = undefined*/) {
     super(Collection)
   }
 
-  static new(user: IUser = undefined) {
+  static new(/*user: IUser = undefined*/) {
     return new CollectionBuilder()
   }
 

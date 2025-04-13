@@ -12,16 +12,16 @@ export default class TopicsController {
     protected taxonomyRepository: TaxonomyRepository
   ) {}
 
-  async render({ inertia }: HttpContext) {
+  async render({ view }: HttpContext) {
     const topics = this.taxonomyRepository.getList()
     const topicsParse = await TaxonomyTransformer.fromDomain(topics).serialize()
 
-    return inertia.render('topics/topicsList', {
+    return view.render('pages/topics/view', {
       topics: AllTaxonomyViewModel.fromDomain(topicsParse).serialize(),
     })
   }
 
-  async show({ inertia, response, params }: HttpContext) {
+  async show({ response, params }: HttpContext) {
     const [item] = await this.taxonomyRepository.getBySlug(params.slug).query.exec()
 
     const children = await this.CollectionRepository.getLastUpdated()

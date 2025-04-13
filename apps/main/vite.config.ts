@@ -1,32 +1,30 @@
 import { defineConfig } from 'vite'
-import { getDirname } from '@adonisjs/core/helpers'
-import inertia from '@adonisjs/inertia/client'
 import react from '@vitejs/plugin-react'
 import adonisjs from '@adonisjs/vite/client'
 import UnoCss from 'unocss/vite'
-import prefresh from '@prefresh/vite'
-import { resolve } from 'path'
 
 export default defineConfig({
   server: {
-    allowedHosts: ['d501-2c0f-ef58-1656-3b00-e98c-eb73-f15c-c8db.ngrok-free.app', 'localhost'],
+    allowedHosts: ['e027-2c0f-ef58-1656-3b00-41b9-3f9a-5e65-c763.ngrok-free.app', 'localhost'],
   },
   plugins: [
-    inertia({ ssr: { enabled: true, entrypoint: 'inertia/app/ssr.tsx' } }),
-    adonisjs({ entrypoints: ['inertia/app/app.tsx'], reload: ['resources/views/**/*.edge'] }),
+    adonisjs({
+      entrypoints: ['resources/css/app.css', 'resources/js/app.jsx'],
+      reload: ['resources/views/**/*.edge'],
+    }),
     react(),
     UnoCss(),
   ],
 
-  /**
-   * Define aliases for importing modules from
-   * your frontend code
-   */
-  resolve: {
-    alias: {
-      '~/': `${getDirname(import.meta.url)}/inertia/`,
-    },
-  },
+  // /**
+  //  * Define aliases for importing modules from
+  //  * your frontend code
+  //  */
+  // resolve: {
+  //   alias: {
+  //     '~/': `${getDirname(import.meta.url)}/inertia/`,
+  //   },
+  // },
 })
 
 /**

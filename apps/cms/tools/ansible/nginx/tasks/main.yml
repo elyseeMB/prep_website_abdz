@@ -1,0 +1,56 @@
+---
+- name: Nginx | GPG Key
+  when: ansible_distribution == 'Debian'
+  apt_key:
+    url: https://nginx.org/keys/nginx_signing.key
+
+- name: Nginx | Debian repository
+  when: ansible_distribution == 'Debian'
+  apt_repository:
+    repo: '{{item}}'
+    state: present
+  with_items:
+    - deb https://nginx.org/packages/debian/ {{ ansible_distribution_release }} nginx
+    - deb-src https://nginx.org/packages/debian/ {{ ansible_distribution_release }} nginx
+
+- name: Nginx | Install
+  apt:
+    name: nginx
+    state: present
+  notify: nginx started
+
+- name: Nginx | création de /etc/nginx/sites-enabled
+  file:
+    state: directory
+    path: /etc/nginx/sites-enabled
+
+- name: Nginx | création de /etc/nginx/sites-available
+  file:
+    state: directory
+    path: /etc/nginx/sites-available
+
+- name: Nginx | création de /etc/nginx/nginxconfig.io
+  file: state=directory path=/etc/nginx/nginxconfig.io
+
+- name: 'Nginx | Vhost {{ domain }}'
+  template:
+    src: vhost.j2
+    dest: '/etc/nginx/sites-available/{{ domain }}'
+  notify: nginx reloaded
+- include_tasks: certificates.yml
+
+- name: 'Nginx | Vhost {{ domain }}'
+  become: yes
+  file:
+    path: '/etc/nginx/sites-enabled/{{ domain }}'
+    src: '/etc/nginx/sites-available/{{ domain }}'
+    state: link
+  notify: nginx reloaded
+- include_tasks: letsencrypt.yml
+  when: not self_signed
+
+- name: 'Nginx | Vhost {{ domain }}'
+  template:
+    src: vhost.j2
+    dest: '/etc/nginx/sites-available/{{ domain }}'
+  notify: nginx reloaded
