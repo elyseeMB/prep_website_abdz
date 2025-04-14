@@ -117,6 +117,8 @@ export default class AssetController {
       case 'jpeg':
       case 'jpg':
         return sharpInstance.jpeg({ quality })
+      case 'png':
+        return sharpInstance.png({ quality })
       case 'webp':
         return sharpInstance.webp({ quality })
       case 'avif':
