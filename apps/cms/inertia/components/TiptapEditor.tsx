@@ -15,6 +15,9 @@ import React, { useEffect, useMemo } from 'react'
 import { UploadImage } from './libs/uploadFile.ts'
 import { EditorCommand } from './editorCommand.tsx'
 import AssetTypes from '#enums/asset_types'
+import env from '#start/env'
+
+const domain = env.get('APP_DOMAIN')
 
 const CustomDocument = Document.extend({
   content: 'heading block*',
@@ -28,7 +31,7 @@ const uploadFile = async (file: File) => {
     method: 'POST',
   })
   const data = await response.json()
-  return ` http://localhost:3335/assets/${data.filename}?width=900`
+  return `${domain}/assets/${data.filename}?width=900`
 }
 
 const CustomTableCell = TableCell.extend({
