@@ -9,6 +9,10 @@ import { FieldElement } from '~/components/ui/form/field.js'
 import { tuyau } from '~/lib/tuyau.js'
 import ArticleFormDto from '../../../app/dto/article/article_form.js'
 import { TiptapEditor } from '~/components/TiptapEditor.js'
+import { BasicTitpapEditor } from '~/components/BasicTiptap.js'
+import { Collapsible } from '~/components/ui/collapsible/collapsible_wrapper.js'
+import { CollapsibleTrigger } from '~/components/ui/collapsible/collapsible_trigger.js'
+import { CollapsibleContent } from '~/components/ui/collapsible/collapsible_content.js'
 
 type taxonomiesProps = {
   id: any
@@ -46,6 +50,9 @@ export default function Form(props: Props) {
     title: '',
     slug: '',
     summary: '',
+    pageTitle: props.article?.pageTitle ?? '',
+    metaDescription: props.article?.metaDescription ?? '',
+    canonical: props.article?.canonical ?? '',
     articleTypeId: ArticleTypes.LESSON,
     content: '',
     stateId: States.DRAFT,
@@ -169,7 +176,28 @@ export default function Form(props: Props) {
               <h2 className="text-base/7 font-semibold text-gray-900">Create your article</h2>
 
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <FieldElement
+                <BasicTitpapEditor
+                  isText={true}
+                  label="Title"
+                  value={data.title}
+                  onChange={(ev: string) => setData((v) => ({ ...v, title: ev }))}
+                  name="title"
+                />
+                <BasicTitpapEditor
+                  isText={true}
+                  label="Slug"
+                  value={data.slug}
+                  onChange={(ev: string) => setData((v) => ({ ...v, slug: ev }))}
+                  name="slug"
+                />
+                <BasicTitpapEditor
+                  isText={true}
+                  label="Summary"
+                  value={data.summary}
+                  onChange={(ev: string) => setData((v) => ({ ...v, summary: ev }))}
+                  name="summary"
+                />
+                {/* <FieldElement
                   value={data.title}
                   onChange={handleChange}
                   name="title"
@@ -181,8 +209,59 @@ export default function Form(props: Props) {
                   value={data.summary}
                   onChange={handleChange}
                   label="Summary"
-                />
+                /> */}
               </div>
+            </div>
+
+            <div className="card">
+              <h2 className="text-base/7 font-semibold text-gray-900 mb-3">
+                Search Engine Optimization (SEO)
+              </h2>
+              <Collapsible>
+                <CollapsibleTrigger className="rounded-t-xl" label="Page Title">
+                  <CollapsibleContent>
+                    <div className="p-5 border border border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+                      <BasicTitpapEditor
+                        isText={true}
+                        value={data.pageTitle}
+                        onChange={(ev: string) => setData((v) => ({ ...v, pageTitle: ev }))}
+                        name="pageTitle"
+                      />
+                    </div>
+                  </CollapsibleContent>
+                </CollapsibleTrigger>
+              </Collapsible>
+              <Collapsible>
+                <CollapsibleTrigger label="Meta Description">
+                  <CollapsibleContent>
+                    <div className="p-5 border border-gray-200 dark:border-gray-700 dark:bg-gray-900 last:border-b">
+                      <BasicTitpapEditor
+                        isText={true}
+                        value={data.metaDescription}
+                        onChange={(ev: string) => setData((v) => ({ ...v, metaDescription: ev }))}
+                        name="metaDescriptioneTitle"
+                      />
+                    </div>
+                  </CollapsibleContent>
+                </CollapsibleTrigger>
+              </Collapsible>
+
+              <Collapsible>
+                <CollapsibleTrigger label="Canonical">
+                  <CollapsibleContent>
+                    <div className="p-5 border border border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+                      <BasicTitpapEditor
+                        description="La balise canonical est un élément HTML utilisé pour indiquer aux moteurs de recherche quelle est la version principale (ou canonique) d'une page web, notamment lorsqu'il existe plusieurs pages avec un contenu similaire ou identique."
+                        isText={true}
+                        placeholder="Lien vers l'original ici."
+                        value={data.canonical}
+                        onChange={(ev: string) => setData((v) => ({ ...v, canonical: ev }))}
+                        name="canonical"
+                      />
+                    </div>
+                  </CollapsibleContent>
+                </CollapsibleTrigger>
+              </Collapsible>
             </div>
 
             <div className="border-b border-gray-900/10 card">

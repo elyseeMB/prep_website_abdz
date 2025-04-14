@@ -8,6 +8,10 @@ export default class ArticleFormDto extends BaseModelDto {
   declare id: number
   declare title: string
   declare slug: string
+  declare pageTitle: string | null
+  declare description: string | null
+  declare metaDescription: string | null
+  declare canonical: string | null
   declare summary: string
   declare content: string | null
   declare stateId: States
@@ -31,6 +35,10 @@ export default class ArticleFormDto extends BaseModelDto {
     this.id = article.id
     this.title = article.title
     this.slug = article.slug
+    this.pageTitle = article.pageTitle
+    this.description = article.description
+    this.metaDescription = article.metaDescription
+    this.canonical = article.canonical
     this.summary = article.summary
     this.content = article.content
     this.stateId = article.stateId

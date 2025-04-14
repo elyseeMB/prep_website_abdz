@@ -31,6 +31,18 @@ export default class Article extends BaseModel {
   declare slug: string
 
   @column()
+  declare pageTitle: string | null
+
+  @column()
+  declare description: string | null
+
+  @column()
+  declare metaDescription: string | null
+
+  @column()
+  declare canonical: string | null
+
+  @column()
   declare summary: string
 
   @column()
