@@ -7,7 +7,7 @@ subtitle: `text-sm font-bold uppercase`,
 })
 
 
-<div {{html.attrs({class: 'grid cols-1' })}}>
+<div {{html.attrs({class: 'grid cols-1 gap-1' })}}>
     @if(title)
     <h2 class="{{html.classNames([sizes[size].title, ...($props.class?.title || [])])}}">
         {{title}}

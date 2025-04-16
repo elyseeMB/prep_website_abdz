@@ -28,3 +28,30 @@
   padding-left: calc(50% - var(--container-width) / 2);
   padding-right: calc(50% - var(--container-width) / 2);
 }
+
+.container > * {
+  box-sizing: border-box;
+  max-width: min(var(--container-width), calc(100% - 2 * var(--container-padding)));
+  margin-inline: auto;
+}
+
+.container.narrow {
+  --container-width: 700px;
+
+  & * + * {
+    padding-bottom: 0.5rem;
+  }
+
+  hr {
+    padding-block: 0.5rem;
+  }
+
+  ul {
+    list-style: circle;
+  }
+
+  h1 {
+    line-height: normal;
+    padding-bottom: 1rem;
+  }
+}
