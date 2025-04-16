@@ -2,11 +2,12 @@ import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { EditorCommand } from './editorCommand.tsx'
 
 export const BasicTitpap = ({
   value,
+  error,
   name,
   onChange,
   label,
@@ -14,6 +15,7 @@ export const BasicTitpap = ({
   placeholder,
   description,
 }: {
+  error?: string
   label?: string
   placeholder?: string
   value: string
@@ -22,6 +24,9 @@ export const BasicTitpap = ({
   description?: string
   onChange: (e: string) => void
 }) => {
+  const [dirty, setDirty] = useState(false)
+  const showError = error && !dirty
+
   const extensions = useMemo(
     () => [
       StarterKit,
@@ -41,11 +46,17 @@ export const BasicTitpap = ({
   const editor = useEditor({
     extensions,
     onUpdate: ({ editor }) => {
+      if (dirty === false) {
+        setDirty(true)
+      }
       const newContent = isText ? editor.getText() : editor.getHTML()
       onChange(newContent)
     },
     onBlur: ({ editor }) => {
       if (editor && value !== (isText ? editor.getText() : editor.getHTML())) {
+        if (dirty === false) {
+          setDirty(true)
+        }
         const newContent = isText ? editor.getText() : editor.getHTML()
         onChange(newContent)
       }
@@ -58,6 +69,10 @@ export const BasicTitpap = ({
     }
   }, [editor, value])
 
+  useLayoutEffect(() => {
+    setDirty(false)
+  }, [error])
+
   return (
     <div className="col-span-full">
       {label && (
@@ -67,7 +82,7 @@ export const BasicTitpap = ({
       )}
       <EditorCommand floated={false} editor={editor!} />
       <EditorContent
-        className=" border border-1 border-black/10 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+        className="border border-1 border-black/10 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
         editor={editor}
         name={name}
       />
@@ -85,6 +100,7 @@ export const BasicTitpap = ({
               clip-rule="evenodd"
             ></path>
           </svg>
+          {showError && <span className="col-span-full">{error}</span>}
           <span className="text-12px opacity-50">{description}</span>
         </div>
       )}

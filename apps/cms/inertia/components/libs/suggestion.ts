@@ -91,7 +91,7 @@ export default {
       },
       {
         title: 'Image',
-        command: ({ editor }: { editor: Editor }) => {
+        command: ({ editor, range }: { editor: Editor; range: Range }) => {
           editor.commands.addImage()
         },
       },

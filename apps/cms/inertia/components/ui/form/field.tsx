@@ -1,5 +1,6 @@
 import { FieldInput } from '@website/design-system/src/molecules/field/field.js'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useContext } from 'react'
+import { FormContext } from './formComponent.tsx'
 
 type Props = {
   type?: React.InputHTMLAttributes<HTMLInputElement>['type']
@@ -24,13 +25,18 @@ export function FieldElement({
   checked = false,
   autoComplete = 'additional-name',
 }: Props) {
+  const { errors, emptyError, loading } = useContext(FormContext)
+  const error = errors[name] || null
   return (
     <div className="col-span-full">
       <label htmlFor="about" className="block text-sm/6 font-medium text-gray-900">
         {label}
       </label>
       <div className="mt-2">
+        {error && <span>{error}</span>}
         <FieldInput
+          onInput={() => emptyError(name)}
+          readOnly={loading}
           checked={checked}
           autoComplete={autoComplete}
           type={type}

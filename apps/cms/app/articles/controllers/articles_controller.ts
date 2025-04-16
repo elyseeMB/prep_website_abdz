@@ -1,9 +1,8 @@
 import Article from '#models/article'
-import { articleIndexValidator } from '#validators/article_index'
+import { articleIndexValidator, articlesValidator } from '#validators/article_index'
 import type { HttpContext } from '@adonisjs/core/http'
 import GetPaginatedArticles from '#actions/articles/get_paginated_articles'
 import Taxonomy from '#models/taxonomy'
-import { AllTAxonomiesCmsModel } from '../../taxonomy/view_model/all_taxonomy_cms_model.js'
 import StoreArticle from '#actions/articles/store_article'
 import GetArticle from '#actions/articles/get_article'
 import ArticleDto from '../../dto/article/article.js'
@@ -39,8 +38,9 @@ export default class ArticlesController {
   /**
    * Handle from submission for the create action
    */
+
   async store({ request, response }: HttpContext) {
-    const data = request.all()
+    const data = await request.validateUsing(articlesValidator)
 
     await StoreArticle.handle(data)
     return response.redirect().toRoute('articles.index')

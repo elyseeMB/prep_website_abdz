@@ -28,8 +28,8 @@ const uploadFile = async (file: File) => {
     method: 'POST',
   })
   const data = await response.json()
-  // return ` http://localhost:3335/assets/${data.filename}?width=900`
-  return ` https://eembouz.com/img/${data.filename}?width=900`
+  return ` http://localhost:3335/assets/${data.filename}?width=900&format=webp`
+  // return ` https://eembouz.com/img/${data.filename}?width=900`
 }
 
 const CustomTableCell = TableCell.extend({

@@ -1,8 +1,16 @@
 import ArticleTypes, { ArticleTypesDesc } from '#enums/article_types'
 import States from '#enums/state'
-import { router } from '@inertiajs/react'
+import { router, useForm } from '@inertiajs/react'
 import { Button } from '@website/design-system'
-import { ChangeEvent, FormEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
+import {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { AssetUpload } from '~/components/AssetUpload.js'
 import { SelectTags } from '~/components/TaxonomyTags.js'
 import { FieldElement } from '~/components/ui/form/field.js'
@@ -13,6 +21,8 @@ import { BasicTitpapEditor } from '~/components/BasicTiptap.js'
 import { Collapsible } from '~/components/ui/collapsible/collapsible_wrapper.js'
 import { CollapsibleTrigger } from '~/components/ui/collapsible/collapsible_trigger.js'
 import { CollapsibleContent } from '~/components/ui/collapsible/collapsible_content.js'
+import { spawn } from 'child_process'
+import { FetchForm } from '~/components/ui/form/formComponent.js'
 
 type taxonomiesProps = {
   id: any
@@ -42,11 +52,12 @@ type taxonomiesProps = {
 
 type Props = {
   article?: ArticleFormDto
+  errors: Record<string, any>
   taxonomies: taxonomiesProps[]
 }
 
 export default function Form(props: Props) {
-  const [data, setData] = useState({
+  const doc = {
     title: '',
     slug: '',
     summary: '',
@@ -64,7 +75,10 @@ export default function Form(props: Props) {
     taxonomyIds: '',
     createdAt: '',
     updatedAt: '',
-  })
+  }
+
+  const [data, setData] = useState(doc)
+  const [errors, setErrors] = useState({})
 
   useEffect(() => {
     if (props.article) {
@@ -115,31 +129,28 @@ export default function Form(props: Props) {
   // Modifiez handleSubmitAction pour corriger la mise à jour d'état
   const handleSubmitAction = useCallback(
     (e: MouseEvent) => {
-      const newStateId = e.currentTarget.value
+      const newStateId = parseInt((e.currentTarget as HTMLButtonElement).value, 10)
 
-      // Mise à jour de l'état avec callback pour s'assurer d'avoir la valeur actuelle
       setData((prevData) => {
         const updatedData = { ...prevData, stateId: newStateId }
 
-        // Vérifier si c'est un article existant et faire la requête
         if (props.article?.id) {
           router.put(
             tuyau.$url('articles.update', {
               params: { id: props.article.id },
             }),
-            updatedData // Utiliser les données mises à jour
+            updatedData
           )
         } else {
           router.post(tuyau.$url('articles.store'), updatedData)
         }
-
         return updatedData
       })
     },
     [props.article?.id]
-  ) // Dépendances réduites
+  )
 
-  console.log(data)
+  console.log(errors)
 
   return (
     <>
@@ -150,11 +161,9 @@ export default function Form(props: Props) {
               Draft
             </Button>
           ))}
-
         <Button value={States.UNLISTED} onClick={handleSubmitAction} className="text-sm">
           Unlisted
         </Button>
-
         <Button value={States.PRIVATE} onClick={handleSubmitAction} className="text-sm">
           Private
         </Button>
@@ -179,10 +188,12 @@ export default function Form(props: Props) {
                 <BasicTitpapEditor
                   isText={true}
                   label="Title"
+                  error={props.errors?.title}
                   value={data.title}
                   onChange={(ev: string) => setData((v) => ({ ...v, title: ev }))}
                   name="title"
                 />
+                {props.errors && <span>{props.errors.title}</span>}
                 <BasicTitpapEditor
                   isText={true}
                   label="Slug"
@@ -274,7 +285,7 @@ export default function Form(props: Props) {
                     Taxonomy - State
                   </label>
 
-                  <div className="grid cols-2 gap-4">
+                  <div className="grid cols-1 gap-1">
                     <div className="mt-2 grid grid-cols-1">
                       <SelectTags
                         name="taxonomyIds"
