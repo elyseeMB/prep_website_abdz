@@ -5,21 +5,32 @@ export function CollapsibleTrigger({
   children,
   label,
   className,
+  onClick,
 }: PropsWithChildren<{
   label?: string
   className?: string
+  loading?: boolean
+  onClick?: () => void
 }>) {
   const [toggle, setToogle] = useToggle(false)
+
+  const handleClick = (cb: Function) => {
+    setToogle()
+    if (cb) {
+      cb()
+    }
+  }
 
   return (
     <div id="accordion-open" data-accordion="open">
       <h2 id="accordion-open-heading-1">
         <button
-          onClick={setToogle}
+          onClick={onClick ? () => handleClick(onClick) : setToogle}
           type="button"
           className={[
             'flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 ring-0.5 focus:ring-4 focus:ring-lightBlue-200 ring-gray-200',
             toggle === true ? 'bg-lightBlue-100/50' : '',
+            onClick && 'ring-none gap-2 p-2 h-24px text-sm',
             className,
           ].join(' ')}
           data-accordion-target="#accordion-open-body-1"

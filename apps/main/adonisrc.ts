@@ -1,6 +1,11 @@
 import { defineConfig } from '@adonisjs/core/app'
 
 export default defineConfig({
+  directories: {
+    config: './src/shared_kernel/infrastructure/config',
+    views: './src/shared_kernel/infrastructure/resources/views',
+  },
+
   /*
   |--------------------------------------------------------------------------
   | Commands
@@ -55,10 +60,10 @@ export default defineConfig({
   |
   */
   preloads: [
-    () => import('#start/routes'),
-    () => import('#start/kernel'),
-    () => import('#start/events'),
-    () => import('#start/globals'),
+    () => import('./src/shared_kernel/infrastructure/http/routes.js'),
+    () => import('./src/shared_kernel/infrastructure/http/kernel.js'),
+    () => import('./src/shared_kernel/infrastructure/http/events.js'),
+    () => import('./src/shared_kernel/infrastructure/http/globals.js'),
   ],
 
   /*
@@ -97,7 +102,7 @@ export default defineConfig({
   */
   metaFiles: [
     {
-      pattern: 'resources/views/**/*.edge',
+      pattern: 'src/shared_kernel/infrastructure/resources/views/**/*.edge',
       reloadServer: false,
     },
     {

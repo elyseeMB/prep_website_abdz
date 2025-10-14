@@ -50,6 +50,7 @@ router
     router.get('/taxonomies', [TaxonomiesController, 'index']).as('taxonomies.index')
     router.get('/taxonomies/create', [TaxonomiesController, 'create']).as('taxonomies.create')
     router.post('/taxonomies', [TaxonomiesController, 'store']).as('taxonomies.store')
+    router.post('/taxonomies/tree', [TaxonomiesController, 'tree']).as('taxonomies.tree')
     router.get('/taxonomies/:id', [TaxonomiesController, 'edit']).as('taxonomies.edit')
     router.put('/taxonomies/:id', [TaxonomiesController, 'update']).as('taxonomies.update')
     router.delete('/taxonomies/:id', [TaxonomiesController, 'destroy']).as('taxonomies.destroy')

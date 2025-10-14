@@ -1,4 +1,4 @@
-import UnauthorizedException from '#exceptions/unauthorized_exception'
+import UnauthorizedException from '../../../src/shared_kernel/http/unauthorized_exception.js'
 import Comment from '#models/comment'
 import { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'

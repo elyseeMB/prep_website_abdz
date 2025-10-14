@@ -30,10 +30,13 @@ export default class Taxonomy extends BaseModel {
   declare parentId: number | null
 
   @column()
-  declare level_index: number
+  declare assetId: number | null
 
   @column()
-  declare assetId: number | null
+  declare depth: number
+
+  @column()
+  declare index: number
 
   @column()
   declare name: string

@@ -15,7 +15,6 @@ export const BasicTitpap = ({
   placeholder,
   description,
 }: {
-  error?: string
   label?: string
   placeholder?: string
   value: string
@@ -73,6 +72,7 @@ export const BasicTitpap = ({
     setDirty(false)
   }, [error])
 
+  console.log(error)
   return (
     <div className="col-span-full">
       {label && (
@@ -100,7 +100,6 @@ export const BasicTitpap = ({
               clip-rule="evenodd"
             ></path>
           </svg>
-          {showError && <span className="col-span-full">{error}</span>}
           <span className="text-12px opacity-50">{description}</span>
         </div>
       )}

@@ -22,6 +22,8 @@
     "typecheck": "tsc --noEmit"
   },
   "imports": {
+    "#shared_kernel/*": "./src/shared_kernel/*.js",
+    "#user_management/*": "./src/contexts/user_management/*.js",
     "#core/*": "./app/core/*js",
     "#auth/*": "./app/auth/*.js",
     "#enums/*": "./app/articles/enums/*.js",
@@ -47,8 +49,7 @@
     "#abilities/*": "./app/abilities/*.js",
     "#database/*": "./database/*.js",
     "#tests/*": "./tests/*.js",
-    "#start/*": "./start/*.js",
-    "#config/*": "./config/*.js"
+    "#config/*": "./src/shared_config/infrastructure/config/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
@@ -101,7 +102,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "reflect-metadata": "^0.2.2",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "uuid": "^13.0.0"
   },
   "hotHook": {
     "boundaries": [

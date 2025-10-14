@@ -15,6 +15,7 @@ import User from './user.js'
 import Asset from './asset.js'
 import Collection from './collection.js'
 import SlugService from '#services/slug_service'
+import TreeItem from './tree_item.js'
 
 export default class Taxonomy extends BaseModel {
   @column({ isPrimary: true })
@@ -30,13 +31,19 @@ export default class Taxonomy extends BaseModel {
   declare parentId: number | null
 
   @column()
-  declare levelIndex: number
-
-  @column()
   declare assetId: number | null
 
   @column()
+  declare depth: number
+
+  @column()
+  declare index: number
+
+  @column()
   declare name: string
+
+  @column()
+  declare organisationId: number | null
 
   @column()
   declare slug: string
@@ -49,6 +56,11 @@ export default class Taxonomy extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @belongsTo(() => TreeItem, {
+    foreignKey: 'organisationId',
+  })
+  declare organisation: BelongsTo<typeof TreeItem>
 
   @belongsTo(() => User, {
     foreignKey: 'ownerId',

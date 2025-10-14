@@ -5,11 +5,11 @@ import ArticleTypes from '#enums/article_types'
 import Article from '#models/article'
 
 export default class ArticleFormDto extends BaseModelDto {
-  declare id: number
+  declare id?: number
   declare title: string
   declare slug: string
   declare pageTitle: string | null
-  declare description: string | null
+  // declare description: string | null
   declare metaDescription: string | null
   declare canonical: string | null
   declare summary: string
@@ -22,7 +22,7 @@ export default class ArticleFormDto extends BaseModelDto {
   declare updatedAt: string
 
   declare thumbnail: AssetDto | null
-  declare covers: AssetDto | null
+  // declare covers: AssetDto | null
   declare taxonomyIds: number[]
 
   constructor(article?: Article) {
@@ -36,7 +36,7 @@ export default class ArticleFormDto extends BaseModelDto {
     this.title = article.title
     this.slug = article.slug
     this.pageTitle = article.pageTitle
-    this.description = article.description
+    // this.description = article.description
     this.metaDescription = article.metaDescription
     this.canonical = article.canonical
     this.summary = article.summary
@@ -48,7 +48,7 @@ export default class ArticleFormDto extends BaseModelDto {
     this.createdAt = article.createdAt?.toISO()!
     this.updatedAt = article.updatedAt?.toISO()!
     this.thumbnail = article.thumbnails.length ? new AssetDto(article.thumbnails[0]) : null
-    this.covers = article.covers.length ? new AssetDto(article.covers[0]) : null
+    // this.covers = article.covers.length ? new AssetDto(article.covers[0]) : null
     this.taxonomyIds = article.taxonomies?.map((row) => row.id) ?? []
   }
 }

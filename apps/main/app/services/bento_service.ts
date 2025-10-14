@@ -1,4 +1,4 @@
-import env from '#start/env'
+import env from '../../src/shared_kernel/infrastructure/env.js'
 import { BentoCache, bentostore } from 'bentocache'
 import { redisDriver } from 'bentocache/drivers/redis'
 import { memoryDriver } from 'bentocache/drivers/memory'

@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, PropsWithChildren } from "react";
+import React, { MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 
 type Props = PropsWithChildren<{
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
@@ -10,6 +10,7 @@ type Props = PropsWithChildren<{
   onClick?: MouseEventHandler<HTMLButtonElement>;
   value?: number | null;
   variant?: "danger" | "success" | "info";
+  icon?: (...args: any) => JSX.Element;
 }>;
 
 export function Button({
@@ -21,6 +22,7 @@ export function Button({
   label,
   backgroundColor,
   variant,
+  icon: IconElement,
 }: Props) {
   const mode = primary ? "btn-primary" : "btn-secondary";
 
@@ -35,6 +37,7 @@ export function Button({
       style={style}
       className={["btn", variant === "danger", mode, className].join(" ")}
     >
+      {IconElement && <IconElement width={20} height={20} />}
       {children}
     </button>
   );

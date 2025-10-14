@@ -1,11 +1,10 @@
 import ArticleTypes, { ArticleTypesDesc } from '#enums/article_types'
 import States from '#enums/state'
-import { router, useForm } from '@inertiajs/react'
+import { router } from '@inertiajs/react'
 import { Button } from '@website/design-system'
 import {
-  ChangeEvent,
-  FormEvent,
-  MouseEvent,
+  FormEventHandler,
+  MouseEventHandler,
   useCallback,
   useEffect,
   useMemo,
@@ -13,7 +12,6 @@ import {
 } from 'react'
 import { AssetUpload } from '~/components/AssetUpload.js'
 import { SelectTags } from '~/components/TaxonomyTags.js'
-import { FieldElement } from '~/components/ui/form/field.js'
 import { tuyau } from '~/lib/tuyau.js'
 import ArticleFormDto from '../../../app/dto/article/article_form.js'
 import { TiptapEditor } from '~/components/TiptapEditor.js'
@@ -21,34 +19,11 @@ import { BasicTitpapEditor } from '~/components/BasicTiptap.js'
 import { Collapsible } from '~/components/ui/collapsible/collapsible_wrapper.js'
 import { CollapsibleTrigger } from '~/components/ui/collapsible/collapsible_trigger.js'
 import { CollapsibleContent } from '~/components/ui/collapsible/collapsible_content.js'
-import { spawn } from 'child_process'
-import { FetchForm } from '~/components/ui/form/formComponent.js'
 
 type taxonomiesProps = {
   id: any
   name: string
 }
-
-// type articlesProps = {
-//   id: any
-//   title: any
-//   slug: any
-//   summary: any
-//   content: any
-//   stateId: any
-//   viewCount: any
-//   publishAt: any
-//   articleTypeId: any
-//   comments: any
-//   assets: any
-//   thumbnails: any
-//   covers: any
-//   taxonomies: any[]
-//   collections: any
-//   authors: any
-//   createdAt: any
-//   updatedAt: any
-// }
 
 type Props = {
   article?: ArticleFormDto
@@ -57,28 +32,30 @@ type Props = {
 }
 
 export default function Form(props: Props) {
-  const doc = {
-    title: '',
-    slug: '',
-    summary: '',
-    pageTitle: props.article?.pageTitle ?? '',
-    metaDescription: props.article?.metaDescription ?? '',
-    canonical: props.article?.canonical ?? '',
-    articleTypeId: ArticleTypes.LESSON,
-    content: '',
-    stateId: States.DRAFT,
-    viewCount: '',
-    publishAt: '',
-    thumbnails: {
-      id: '',
-    },
-    taxonomyIds: '',
-    createdAt: '',
-    updatedAt: '',
-  }
+  const doc = useMemo(
+    () => ({
+      title: '',
+      slug: '',
+      summary: '',
+      pageTitle: props.article?.pageTitle ?? '',
+      metaDescription: props.article?.metaDescription ?? '',
+      canonical: props.article?.canonical ?? '',
+      articleTypeId: ArticleTypes.LESSON,
+      content: '',
+      stateId: States.DRAFT,
+      viewCount: '',
+      publishAt: '',
+      thumbnails: {
+        id: '',
+      },
+      taxonomyIds: '',
+      createdAt: '',
+      updatedAt: '',
+    }),
+    []
+  )
 
   const [data, setData] = useState(doc)
-  const [errors, setErrors] = useState({})
 
   useEffect(() => {
     if (props.article) {
@@ -102,24 +79,8 @@ export default function Form(props: Props) {
     }
   }, [props.article])
 
-  const handleSumbit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-      // const formData = new FormData(e.currentTarget)
-      // const cleaned = cleanedFormData(formData)
-
-      // for (const [key, value] of cleaned) {
-      //   form.setData(key as any, value)
-      // }
-
-      // router.post(tuyau.$url('articles.store'), data)
-    },
-
-    [data]
-  )
-
-  const handleChange = useCallback(
-    (e: ChangeEvent) => {
+  const handleChange: FormEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
       const element = e.currentTarget as HTMLInputElement
       setData((data) => ({ ...data, [element.name]: element.value }))
     },
@@ -127,8 +88,8 @@ export default function Form(props: Props) {
   )
 
   // Modifiez handleSubmitAction pour corriger la mise à jour d'état
-  const handleSubmitAction = useCallback(
-    (e: MouseEvent) => {
+  const handleSubmitAction: MouseEventHandler<HTMLButtonElement> = useCallback(
+    (e) => {
       const newStateId = parseInt((e.currentTarget as HTMLButtonElement).value, 10)
 
       setData((prevData) => {
@@ -149,8 +110,6 @@ export default function Form(props: Props) {
     },
     [props.article?.id]
   )
-
-  console.log(errors)
 
   return (
     <>
@@ -179,7 +138,7 @@ export default function Form(props: Props) {
       </div>
 
       <div className="page-wrapper-2">
-        <form onSubmit={handleSumbit}>
+        <form>
           <div className="stack">
             <div className="border-b border-gray-900/10 card">
               <h2 className="text-base/7 font-semibold text-gray-900">Create your article</h2>
@@ -188,12 +147,11 @@ export default function Form(props: Props) {
                 <BasicTitpapEditor
                   isText={true}
                   label="Title"
-                  error={props.errors?.title}
                   value={data.title}
                   onChange={(ev: string) => setData((v) => ({ ...v, title: ev }))}
                   name="title"
                 />
-                {props.errors && <span>{props.errors.title}</span>}
+                {props.errors && <span className="col-span-full">{props.errors.title}</span>}
                 <BasicTitpapEditor
                   isText={true}
                   label="Slug"

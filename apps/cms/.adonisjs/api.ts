@@ -39,6 +39,13 @@ const routes = [
     types: {} as unknown,
   },
   {
+    params: [],
+    name: 'dashboard',
+    path: '/',
+    method: ["GET","HEAD"],
+    types: {} as unknown,
+  },
+  {
     params: ["*"],
     name: 'assets.show',
     path: '/assets/*',
@@ -57,13 +64,6 @@ const routes = [
     name: 'assets.store',
     path: '/assets/:typeId?',
     method: ["POST"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
-    name: 'dashboard',
-    path: '/',
-    method: ["GET","HEAD"],
     types: {} as unknown,
   },
   {
@@ -126,6 +126,13 @@ const routes = [
     params: [],
     name: 'taxonomies.store',
     path: '/taxonomies',
+    method: ["POST"],
+    types: {} as unknown,
+  },
+  {
+    params: [],
+    name: 'taxonomies.tree',
+    path: '/taxonomies/tree',
     method: ["POST"],
     types: {} as unknown,
   },

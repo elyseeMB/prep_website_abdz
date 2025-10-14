@@ -11,25 +11,111 @@ import { tuyau } from '~/lib/tuyau.js'
 import TaxonomyDto from '../../../app/dto/taxonomy/taxonomy.js'
 import { router } from '@inertiajs/react'
 import { Link } from '@inertiajs/react'
+import { DndContext, DragOverlay, UniqueIdentifier } from '@dnd-kit/core'
+
+import { HTMLAttributes, useState } from 'react'
+
+import { closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { SortableItem } from '~/components/ui/sortableItem/sortableItem.js'
+import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers'
+import { createPortal } from 'react-dom'
+import { Item } from '~/components/ui/sortableItem/item.js'
+import { Sortable } from '~/components/ui/sortableItem/sortable.js'
+import { SortableProvider } from '~/components/ui/sortableItem/sortableContext.js'
+import { MultipleContainers } from '~/components/ui/sortableItem/multi/multiContainer.js'
+import { SortableTree } from '~/components/ui/sortableItem/tree/sortableTree.js'
 
 type Params = {
   parent?: TaxonomyDto | null
   taxonomies?: TaxonomyDto[]
   taxonomyTypeId?: number
-  breadcrumbs?: Array<{ id: number; name: string }> // Breadcrumbs should be passed from the server
+  breadcrumbs?: Array<{ id: number; name: string }>
+  treeItems?: []
+}
+
+function IconElement(props: HTMLAttributes<HTMLOrSVGElement>) {
+  return (
+    <>
+      <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path>
+      </svg>
+    </>
+  )
+}
+
+function sanitizeInput(data: Record<string, any>): Record<string, any> {
+  return Object.fromEntries(
+    Object.entries(data as Record<string, any>).map(([k, v]) => [
+      k,
+      typeof v === 'string' ? v.trim() : v,
+    ])
+  )
 }
 
 export default function Index(props: Params) {
   const { parent, taxonomies = [], taxonomyTypeId, breadcrumbs = [] } = props
 
-  const onDelete = (taxonomy: TaxonomyDto) => {
+  const handleDelete = (id: UniqueIdentifier) => {
     if (
       confirm(
-        `Are you sure you'd like to delete the taxonomy "${taxonomy.name}"? Once deleted, it'll be gone forever.`
+        `Are you sure you'd like to delete the taxonomy ? Once deleted, it'll be gone forever.`
       )
     ) {
-      router.delete(tuyau.$url('taxonomies.destroy', { params: [taxonomy.id] }))
+      router.delete(tuyau.$url('taxonomies.destroy', { params: [id] }))
     }
+  }
+
+  const handleUpdate = (id: UniqueIdentifier, data: any, oldData: any) => {
+    const dataParse = sanitizeInput(data)
+
+    if (oldData) {
+      if (dataParse.name.trim() === oldData.trim()) {
+        return
+      }
+    }
+
+    router.put(
+      tuyau.$url('taxonomies.update', {
+        params: [id],
+      }),
+      dataParse,
+      { preserveState: true, preserveScroll: true }
+    )
+  }
+
+  const treeItemsElements = props.treeItems![0]
+
+  // console.log(props.treeItems)
+
+  function filterKey(item) {
+    const keyToPick = ['id', 'children', 'collapsed', 'parentId', 'depth', 'index', 'organisation']
+    const result = {}
+    keyToPick.forEach((key) => {
+      if (key === 'children' && Array.isArray(item.children)) {
+        result.children = item.children.map((child) => filterKey(child))
+      } else {
+        result[key] = item[key]
+      }
+    })
+    return result
+  }
+
+  const handleMerge = (data) => {
+    const parseData = data.map((item) => filterKey(item))
+    const tree = JSON.stringify(parseData)
+    router.post(
+      tuyau.$url('taxonomies.tree'),
+      {
+        tree,
+      },
+      { preserveState: true, preserveScroll: true }
+    )
   }
 
   // Helper to determine if a taxonomy has children
@@ -75,6 +161,13 @@ export default function Index(props: Params) {
     )
   }
 
+  // const a = props.taxonomies.map((item) => item.organisation).filter(Boolean)
+
+  const a = props.taxonomies?.map((item) => ({
+    ...item,
+    ...item.organisation?.tree[0],
+  }))
+
   return (
     <div className="taxonomy-index">
       {/* Header with breadcrumbs */}
@@ -107,7 +200,6 @@ export default function Index(props: Params) {
               </Link>
             </li>
 
-            {/* Display taxonomy type if provided */}
             {taxonomyTypeId && (
               <>
                 <li className="mx-1">/</li>
@@ -170,95 +262,44 @@ export default function Index(props: Params) {
       </div>
 
       {/* Table display */}
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow">
-        <TableWrapper>
-          <TheadWrapper>
-            <TrWrapper>
-              <ThWrapper>Name</ThWrapper>
-              {parent && <ThWrapper>Parent</ThWrapper>}
-              <ThWrapper>Type</ThWrapper>
-              <ThWrapper>Content</ThWrapper>
-              <ThWrapper>Actions</ThWrapper>
-            </TrWrapper>
-          </TheadWrapper>
-          <TbodyWrapper>
-            {taxonomies.map((taxonomy) => (
-              <TrWrapper key={taxonomy.id}>
-                <TdWrapper>
-                  <Link
-                    href={tuyau.$url('taxonomies.edit', { params: [taxonomy.id] })}
-                    className="hover:underline"
-                  >
-                    {taxonomy.name}
-                  </Link>
-                  <div className="text-slate-600 text-xs">
-                    <Link href={``} className="hover:underline">
-                      {taxonomy.slug}
-                    </Link>
-                  </div>
-                </TdWrapper>
 
-                {parent && (
-                  <TdWrapper>
-                    {taxonomy.parent && (
-                      <Link
-                        href={tuyau.$url('taxonomies.edit', { params: [taxonomy.parent.id] })}
-                        className="hover:underline"
-                      >
-                        {taxonomy.parent.name}
-                      </Link>
-                    )}
-                  </TdWrapper>
-                )}
+      <div className="flex flex-col item-center justify-center">
+        <span> {taxonomies.length} taxonomies </span>
+        <div className="bg-white rounded-lg border-b border-b-slate-200 overflow-hidden shadow"></div>
+        {/* 
+        <SortableProvider
+          itemCount={taxonomies.length}
+          initialItems={taxonomies}
+          onDeleteCallback={handleDelete}
+          onUpdateCallback={handleUpdate}
+        >
+          <Sortable
+            items={taxonomies}
+            itemCount={taxonomies.length}
+            strategy={verticalListSortingStrategy}
+            handle
+            removable
+          />
+        </SortableProvider> */}
 
-                <TdWrapper>'taxonomyTypeId'</TdWrapper>
+        {/* <SortableProvider
+          itemCount={taxonomies.length}
+          initialItems={taxonomies}
+          onDeleteCallback={handleDelete}
+          onUpdateCallback={handleUpdate}
+        >
+          <MultipleContainers handle itemCount={taxonomies.length} vertical />
+        </SortableProvider> */}
 
-                <TdWrapper>
-                  <div className="text-xs">
-                    <div className="font-medium text-orange-600">
-                      {taxonomy.meta?.articles_count || 0} Articles
-                    </div>
-                    <div>{taxonomy.meta?.collections_count || 0} Collections</div>
-                    {hasChildren(taxonomy) && (
-                      <div className="font-medium text-blue-600">
-                        {taxonomy.meta.children_count} Children
-                      </div>
-                    )}
-                  </div>
-                </TdWrapper>
-
-                <TdWrapper>
-                  <div className="flex items-center gap-2">
-                    {/* Always show View Children button for any taxonomy with children */}
-                    {hasChildren(taxonomy) && (
-                      <Button size="small" onClick={() => viewChildren(taxonomy)}>
-                        View {taxonomy.meta.children_count} Children
-                      </Button>
-                    )}
-
-                    {/* Always show Add Child button */}
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        router.get(
-                          tuyau.$url('taxonomies.create', {
-                            query: { parentId: taxonomy.id },
-                          })
-                        )
-                      }}
-                    >
-                      Add Child
-                    </Button>
-
-                    <Button variant="danger" size="small" onClick={() => onDelete(taxonomy)}>
-                      Delete
-                    </Button>
-                  </div>
-                </TdWrapper>
-              </TrWrapper>
-            ))}
-          </TbodyWrapper>
-        </TableWrapper>
+        <SortableProvider
+          itemCount={taxonomies.length}
+          initialItems={taxonomies}
+          onDeleteCallback={handleDelete}
+          onUpdateCallback={handleUpdate}
+          onMergeCallback={handleMerge}
+        >
+          <SortableTree collapsible indicator removable />
+        </SortableProvider>
       </div>
     </div>
   )

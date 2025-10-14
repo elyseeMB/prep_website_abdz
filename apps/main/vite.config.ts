@@ -9,8 +9,11 @@ export default defineConfig({
   },
   plugins: [
     adonisjs({
-      entrypoints: ['resources/css/app.css', 'resources/js/app.jsx'],
-      reload: ['resources/views/**/*.edge'],
+      entrypoints: [
+        'src/shared_kernel/infrastructure/resources/css/app.css',
+        'src/shared_kernel/infrastructure/resources/js/app.jsx',
+      ],
+      reload: ['src/shared_kernel/infrastructure/resources/views/**/*.edge'],
     }),
     react(),
     UnoCss(),

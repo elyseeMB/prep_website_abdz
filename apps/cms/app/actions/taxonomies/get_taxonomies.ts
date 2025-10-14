@@ -10,6 +10,10 @@ export default class GetTaxonomies {
       .if(parentId, (query) => query.where({ parentId }))
       .if(!parentId, (query) => query.whereNull('parentId'))
       .preload('parent')
+      .preload('children')
+      .preload('organisation', (builder) => {
+        builder.select('tree')
+      })
       .withCount('children')
       .withCount('articles')
       .withCount('Collections')

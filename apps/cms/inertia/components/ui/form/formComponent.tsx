@@ -1,5 +1,12 @@
 import { router } from '@inertiajs/react'
-import { PropsWithChildren, createContext, useState } from 'react'
+import { GeneratedRoutes, RouteName, RouteUrlParams } from '@tuyau/client'
+import {
+  FormEventHandler,
+  MouseEventHandler,
+  PropsWithChildren,
+  createContext,
+  useState,
+} from 'react'
 import { tuyau } from '~/lib/tuyau.ts'
 
 export const FormContext = createContext({
@@ -9,10 +16,14 @@ export const FormContext = createContext({
 })
 
 export function FetchForm({
+  data = {},
   onSuccess,
+  actions,
   children,
 }: PropsWithChildren<{
-  onSuccess: () => {}
+  data: Record<string, any>
+  actions: any
+  onSuccess: (arg: any) => {}
 }>) {
   const [{ loading, errors }, setData] = useState({ loading: false, errors: [] })
 
@@ -23,26 +34,13 @@ export function FetchForm({
     setData((s) => ({ ...s, errors: newErrors }))
   }
 
-  const handleSubmitAction = (e: MouseEvent) => {
+  const handleSubmitAction: FormEventHandler<HTMLFormElement> = (e) => {
     const newStateId = e.currentTarget.value
 
-    // Mise à jour de l'état avec callback pour s'assurer d'avoir la valeur actuelle
     setData((prevData) => {
       const updatedData = { ...prevData, stateId: newStateId }
-
-      // Vérifier si c'est un article existant et faire la requête
-      if (props.article?.id) {
-        router.put(
-          tuyau.$url('articles.update', {
-            params: { id: props.article.id },
-          }),
-          updatedData // Utiliser les données mises à jour
-        )
-      } else {
-        router.post(tuyau.$url('articles.store'), updatedData)
-      }
-
-      return updatedData
+      router.post(tuyau.$url(actions), updatedData)
+      onSuccess(updatedData)
     })
   }
 
