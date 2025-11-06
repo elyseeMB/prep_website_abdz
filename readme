@@ -1,4 +1,6 @@
-# CRM/ERP
+# Nom du Projet
+
+> **Note**: Migration d'architecture en cours. Le dossier `apps/main/src` est exclu de cette documentation.
 
 ## 📋 Vue d'ensemble
 
@@ -310,5 +312,9 @@ Versions forcées pour compatibilité:
 
 - **Storybook**: Documentation Design System
 - **Tuyau**: API type-safe auto-générée
+
+## 📄 Licence
+
+ISC
 
 ---
