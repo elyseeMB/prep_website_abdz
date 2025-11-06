@@ -4,6 +4,7 @@ import { ArticleIdentifier } from '../domain/article_identitfier.js'
 import ArticleTypes from '#enums/article_types'
 import States from '#enums/state'
 import { AssetVM } from '../../assets/view_model/asset_view_model.js'
+import { Post } from '../../../src/domain/post/entity/post.js'
 
 export default class ArticleBaseVM extends ArticleIdentifier {
   declare id: number
@@ -22,7 +23,7 @@ export default class ArticleBaseVM extends ArticleIdentifier {
   declare asset: AssetVM | null
   declare meta: Record<string, any>
 
-  constructor(protected article: Article | undefined = undefined) {
+  constructor(protected article: Post | undefined = undefined) {
     super({ value: article?.id.toString() || randomUUID() })
 
     if (!article) {
@@ -52,7 +53,7 @@ export default class ArticleBaseVM extends ArticleIdentifier {
 }
 
 export class ArticleListVM extends ArticleBaseVM {
-  constructor(article: Article | undefined = undefined) {
+  constructor(article: Post | undefined = undefined) {
     super(article)
 
     if (!article) {
@@ -69,7 +70,7 @@ export class ArticleShowVM extends ArticleBaseVM {
   declare authors: any
   declare body: string | null
 
-  constructor(article: Article | undefined = undefined) {
+  constructor(article: Post | undefined = undefined) {
     super(article)
 
     if (!article) {
