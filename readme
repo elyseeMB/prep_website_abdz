@@ -200,33 +200,6 @@ pnpm add -w <package>
 }
 ```
 
----
-
-## 🏛️ Architecture DDD
-
-### Core Domain
-
-```typescript
-// Entity
-import { Entity } from "@website/prep_website_abdz/entity";
-
-// Value Object
-import { ValueObject } from "@website/prep_website_abdz/value_object";
-
-// Identifier
-import { Identifier } from "@website/prep_website_abdz/identifier";
-```
-
-### Modules
-
-- **articles/** : Gestion articles
-- **collections/** : Collections (DDD)
-- **assets/** : Gestion assets
-- **customers/** : Gestion clients
-- **auth/** : Authentification
-
----
-
 ## 🐳 Docker
 
 ```bash
@@ -273,78 +246,7 @@ ansible-playbook -i hosts.yml pgsql/setup.yml
 ansible-playbook -i hosts.yml nginx/configure.yml
 ```
 
----
 
-## 🧪 Tests
 
-```bash
-# Tous les tests
-pnpm --filter <workspace> test
 
-# Tests spécifiques
-pnpm --filter cms test -- --files=tests/functional/users.spec.ts
-```
 
----
-
-## 📊 Monitoring
-
-### GoAccess
-
-```bash
-cd tools/goaccess
-./report.sh
-```
-
----
-
-## 🔐 Sécurité
-
-- **@adonisjs/shield** : CSRF, CSP
-- **@adonisjs/auth** : Authentification
-- **@adonisjs/session** : Sessions sécurisées
-- **@adonisjs/cors** : CORS
-
----
-
-## 📝 Conventions
-
-### Linting
-
-```bash
-pnpm -r lint              # ESLint
-pnpm -r format            # Prettier
-pnpm -r typecheck         # TypeScript
-```
-
-### Hot Module Replacement
-
-```bash
-node ace serve --hmr
-```
-
----
-
-## 🛠️ Overrides
-
-Versions forcées pour compatibilité :
-
-```json
-{
-  "pnpm": {
-    "overrides": {
-      "@inertiajs/core": "2.0.0",
-      "strtok3": "8.0.1"
-    }
-  }
-}
-```
-
----
-
-## 📚 Documentation
-
-- **Storybook** : Documentation Design System
-- **Tuyau** : API type-safe auto-générée
-
----
