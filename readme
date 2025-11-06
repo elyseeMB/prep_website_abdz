@@ -1,0 +1,316 @@
+# Nom du Projet
+
+## 📋 Vue d'ensemble
+
+Monorepo full-stack avec architecture DDD utilisant **pnpm workspaces**. Combine des applications AdonisJS backend avec un design system React partagé.
+
+### Stack Principale
+
+- **Backend**: AdonisJS 6
+- **Frontend**: React 19 + Inertia.js
+- **Database**: PostgreSQL
+- **Styling**: UnoCSS
+- **Build**: Vite 6
+- **Package Manager**: pnpm 9.15.2
+- **Deployment**: Ansible + Docker
+
+## 🏗️ Architecture
+
+```
+prep_website_abdz/
+├── apps/                           # Applications
+│   ├── cms/                       # CMS avec TipTap & FilePond
+│   ├── data/                      # Gestion de données
+│   ├── main/                      # Application principale (DDD)
+│   └── storage/                   # Gestion du stockage
+│
+├── packages/                      # Packages partagés
+│   ├── design-system/            # Design System React + Storybook
+│   ├── rpc/                      # Client RPC typé (Tuyau)
+│   └── tooling/                  # Config UnoCSS partagée
+│
+├── tools/                         # Outils de déploiement
+│   ├── ansible/                  # Playbooks Ansible
+│   │   ├── app/                 # Déploiement application
+│   │   ├── docker/              # Configuration Docker
+│   │   ├── nginx/               # Configuration Nginx
+│   │   ├── node/                # Setup Node.js
+│   │   ├── pgsql/               # Configuration PostgreSQL
+│   │   ├── stats/               # Monitoring & statistiques
+│   │   ├── tools/               # Outils divers
+│   │   ├── hosts.yml            # Inventaire des hôtes
+│   │   └── install.yml          # Playbook d'installation
+│   ├── docker/                   # Dockerfiles
+│   ├── goaccess/                 # Analyse de logs
+│   │   ├── goaccess.conf
+│   │   └── report.sh
+│   └── node/                     # Scripts Node.js
+│
+├── docker-compose.yml
+├── package.json
+├── pnpm-workspace.yaml
+└── tsconfig.json
+```
+
+## 📦 Workspaces
+
+### Applications
+
+#### **main** - `@website/prep_website_abdz`
+
+Application principale avec architecture DDD.
+
+**Exports:**
+
+```typescript
+import { api } from "@website/prep_website_abdz/api";
+import { Entity } from "@website/prep_website_abdz/entity";
+import { Identifier } from "@website/prep_website_abdz/identifier";
+import { ValueObject } from "@website/prep_website_abdz/value_object";
+```
+
+**Scripts:**
+
+```bash
+pnpm dev              # Développement avec HMR
+pnpm build            # Build production
+pnpm start            # Démarrer serveur
+pnpm test             # Tests Japa
+```
+
+#### **cms** - Système de gestion de contenu
+
+CMS avec éditeur riche TipTap et upload FilePond.
+
+### Packages
+
+#### **design-system** - `@website/design-system`
+
+Composants React + Storybook.
+
+```bash
+pnpm storybook        # Storybook sur :6006
+pnpm build            # Build package
+```
+
+#### **rpc** - `@website/rpc`
+
+Client RPC typé avec Tuyau.
+
+```typescript
+import { client } from "@website/rpc/client";
+```
+
+#### **tooling** - `@packages/tooling`
+
+Configuration UnoCSS centralisée.
+
+```typescript
+import unoConfig from "@packages/tooling/unocss";
+```
+
+## 🚀 Démarrage
+
+### Prérequis
+
+- Node.js >= 18.x
+- pnpm 9.15.2 (auto)
+- Docker
+- PostgreSQL >= 14
+
+### Installation
+
+```bash
+# Installation
+pnpm install
+
+# Configuration
+cp apps/main/.env.example apps/main/.env
+cp apps/cms/.env.example apps/cms/.env
+
+# Services Docker
+docker-compose up -d
+
+# Migrations
+pnpm --filter @website/prep_website_abdz exec node ace migration:run
+pnpm --filter cms exec node ace migration:run
+```
+
+### Développement
+
+```bash
+# App principale
+pnpm --filter @website/prep_website_abdz dev
+
+# CMS
+pnpm --filter cms dev
+
+# Storybook
+pnpm --filter @website/design-system storybook
+
+# Tous en parallèle
+pnpm -r --parallel dev
+```
+
+### URLs
+
+- **App principale**: http://localhost:3333
+- **CMS**: http://localhost:3334
+- **Storybook**: http://localhost:6006
+
+## 🔧 Gestion des Dépendances
+
+```bash
+# Workspace spécifique
+pnpm --filter <workspace> add <package>
+
+# Dépendance de dev
+pnpm --filter <workspace> add -D <package>
+
+# Racine
+pnpm add -w <package>
+```
+
+### Références entre workspaces
+
+```json
+{
+  "dependencies": {
+    "@website/design-system": "workspace:*",
+    "@packages/tooling": "workspace:*"
+  }
+}
+```
+
+## 🏛️ Architecture DDD
+
+### Core Domain
+
+```typescript
+// Entity
+import { Entity } from "@website/prep_website_abdz/entity";
+
+// Value Object
+import { ValueObject } from "@website/prep_website_abdz/value_object";
+
+// Identifier
+import { Identifier } from "@website/prep_website_abdz/identifier";
+```
+
+### Modules
+
+- **articles/** : Gestion articles
+- **collections/** : Collections (DDD)
+- **assets/** : Gestion assets
+- **customers/** : Gestion clients
+- **auth/** : Authentification
+
+## 🐳 Docker
+
+```bash
+docker-compose up -d              # Démarrer
+docker-compose logs -f            # Logs
+docker-compose down               # Arrêter
+docker-compose up -d --build      # Rebuild
+```
+
+## 🚀 Déploiement Ansible
+
+### Structure
+
+```
+tools/ansible/
+├── app/                 # Déploiement app
+├── docker/              # Setup Docker
+├── nginx/               # Config Nginx
+├── node/                # Setup Node.js
+├── pgsql/               # Setup PostgreSQL
+├── stats/               # Monitoring
+├── tools/               # Utilitaires
+├── hosts.yml            # Inventaire
+└── install.yml          # Installation
+```
+
+### Commandes
+
+```bash
+cd tools/ansible
+
+# Installation complète
+ansible-playbook -i hosts.yml install.yml
+
+# Déployer application
+ansible-playbook -i hosts.yml app/deploy.yml
+
+# Setup base de données
+ansible-playbook -i hosts.yml pgsql/setup.yml
+
+# Configuration Nginx
+ansible-playbook -i hosts.yml nginx/configure.yml
+```
+
+## 🧪 Tests
+
+```bash
+# Tous les tests
+pnpm --filter <workspace> test
+
+# Tests spécifiques
+pnpm --filter cms test -- --files=tests/functional/users.spec.ts
+```
+
+## 📊 Monitoring
+
+### GoAccess
+
+```bash
+cd tools/goaccess
+./report.sh
+```
+
+## 🔐 Sécurité
+
+- **@adonisjs/shield** : CSRF, CSP
+- **@adonisjs/auth** : Authentification
+- **@adonisjs/session** : Sessions sécurisées
+- **@adonisjs/cors** : CORS
+
+## 📝 Conventions
+
+### Linting
+
+```bash
+pnpm -r lint              # ESLint
+pnpm -r format            # Prettier
+pnpm -r typecheck         # TypeScript
+```
+
+### Hot Module Replacement
+
+```bash
+node ace serve --hmr
+```
+
+## 🛠️ Overrides
+
+Versions forcées pour compatibilité:
+
+```json
+{
+  "pnpm": {
+    "overrides": {
+      "@inertiajs/core": "2.0.0",
+      "strtok3": "8.0.1"
+    }
+  }
+}
+```
+
+## 📚 Documentation
+
+- **Storybook**: Documentation Design System
+- **Tuyau**: API type-safe auto-générée
+
+## 📄 Licence
+
+ISC
