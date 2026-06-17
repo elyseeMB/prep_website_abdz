@@ -17,7 +17,6 @@ import Article from './article.js'
 import User from './user.js'
 import Asset from './asset.js'
 import Taxonomy from './taxonomy.js'
-import Database from '@adonisjs/lucid/services/db'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 
 export default class Collection extends BaseModel {

@@ -1,0 +1,19 @@
+.table[table-image] {
+  display: block;
+  padding: 2rem;
+  min-width: 50px;
+
+  tbody {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  tr {
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+}

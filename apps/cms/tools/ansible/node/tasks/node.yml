@@ -1,0 +1,61 @@
+# Node.js installation tasks
+- name: Définir le répertoire NVM
+  set_fact:
+    nvm_dir: '/home/{{ ansible_user }}/.nvm'
+    node_version: '22.14.0'
+
+- name: Vérifier si NVM est déjà installé
+  become: yes
+  become_user: '{{ ansible_user }}'
+  stat:
+    path: '{{ nvm_dir }}/nvm.sh'
+  register: nvm_installed
+
+- name: Installer NVM
+  become: yes
+  become_user: '{{ ansible_user }}'
+  shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  args:
+    creates: '{{ nvm_dir }}/nvm.sh'
+  when: not nvm_installed.stat.exists
+
+- name: Installer Node.js v22 via NVM
+  become: yes
+  become_user: '{{ ansible_user }}'
+  shell: |
+    export NVM_DIR="{{ nvm_dir }}"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install {{ node_version }}
+  args:
+    executable: /bin/bash
+  register: node_install
+  changed_when: "'is already installed.' not in node_install.stdout"
+
+- name: Activer pnpm via corepack
+  become: yes
+  become_user: '{{ ansible_user }}'
+  shell: |
+    export NVM_DIR="{{ nvm_dir }}"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    corepack enable pnpm
+  args:
+    executable: /bin/bash
+  register: pnpm_enable
+  changed_when: pnpm_enable.rc == 0
+
+- name: Configurer NVM et pnpm dans .bashrc de l'utilisateur
+  become: yes
+  become_user: '{{ ansible_user }}'
+  blockinfile:
+    path: '/home/{{ ansible_user }}/.bashrc'
+    marker: '# {mark} ANSIBLE MANAGED BLOCK - NVM & NODE CONFIGURATION'
+    block: |
+      export NVM_DIR="{{ nvm_dir }}"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+      # Enable pnpm if Node.js is available
+      if command -v node >/dev/null 2>&1; then
+        corepack enable pnpm >/dev/null 2>&1 || true
+      fi

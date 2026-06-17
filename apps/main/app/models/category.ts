@@ -3,8 +3,6 @@ import { BaseModel, belongsTo, column, manyToMany, scope } from '@adonisjs/lucid
 import Article from './article.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
-import Taxonomy from './taxonomy.js'
-import States from '#enums/state'
 import User from './user.js'
 
 export default class Category extends BaseModel {

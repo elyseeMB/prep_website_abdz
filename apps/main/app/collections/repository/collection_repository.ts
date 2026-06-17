@@ -1,8 +1,6 @@
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import CollectionBuilder from '../builder/collection_builder.js'
-import { Collection } from '#collections/domain/collection'
-import { CollectionIdentifier } from '#collections/domain/collection_identifier'
 
 @inject()
 export default class CollectionRepository {
@@ -13,12 +11,13 @@ export default class CollectionRepository {
   }
 
   builder() {
-    return CollectionBuilder.new(this.user)
+    return CollectionBuilder.new(/*this.user*/)
   }
 
   getList(withArticles: boolean = true, excludeIds: number[] = [], postLimit: number = 3) {
     return this.builder()
       .series()
+      .if(excludeIds, (builder) => builder.exclude(excludeIds))
       .if(withArticles, (builder) => builder.withArticles('root_sort_order', 'desc', postLimit))
       .root()
       .display()

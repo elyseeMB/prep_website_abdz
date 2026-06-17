@@ -5,10 +5,14 @@
   "type": "module",
   "license": "UNLICENSED",
   "exports": {
-    "./api": "./.adonisjs/index.ts"
+    "./api": "./.adonisjs/index.ts",
+    "./entity": "./app/core/domain/entity.ts",
+    "./identifier": "./app/core/domain/identifier.ts",
+    "./value_object": "./app/core/domain/value_object.ts"
   },
   "types": "./adonisrc.ts",
   "scripts": {
+    "prestart": "node ace check:articles",
     "start": "node bin/server.js",
     "build": "node ace build",
     "dev": "node ace serve --hmr",
@@ -30,6 +34,7 @@
     "#collections/view_models/*": "./app/collections/view_models/*.js",
     "#controllers/*": "./app/controllers/*.js",
     "#exceptions/*": "./app/exceptions/*.js",
+    "#commands/*": "./app/commands/*.js",
     "#models/*": "./app/models/*.js",
     "#mails/*": "./app/mails/*.js",
     "#services/*": "./app/services/*.js",
@@ -74,19 +79,20 @@
     "@adonisjs/auth": "^9.2.4",
     "@adonisjs/core": "^6.17.0",
     "@adonisjs/cors": "^2.2.1",
-    "@adonisjs/inertia": "^2.1.0",
+    "@adonisjs/drive": "^3.2.0",
     "@adonisjs/lucid": "^21.5.1",
+    "@adonisjs/redis": "^9.2.0",
     "@adonisjs/session": "^7.5.0",
     "@adonisjs/shield": "^8.1.1",
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^4.0.0",
-    "@inertiajs/react": "^2.0.1",
-    "@website/rpc": "workspace:*",
-    "@website/design-system": "workspace:*",
     "@packages/tooling": "workspace:*",
     "@tuyau/client": "^0.2.3",
     "@tuyau/core": "^0.3.0",
     "@vinejs/vine": "^3.0.0",
+    "@website/design-system": "workspace:*",
+    "@website/rpc": "workspace:*",
+    "bentocache": "^1.2.1",
     "better-sqlite3": "^11.8.0",
     "edge.js": "^6.2.0",
     "luxon": "^3.5.0",
@@ -94,7 +100,8 @@
     "pg": "^8.13.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "sharp": "^0.33.5"
   },
   "hotHook": {
     "boundaries": [
